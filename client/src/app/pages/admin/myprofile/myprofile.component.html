@@ -1,0 +1,102 @@
+<form autocomplete="off">
+  <div class="card">
+    <h6 class="card-header"><i class="material-icons">person</i> My Profile</h6>
+    <div class="card-body">
+      <form>
+        <div class="row g-3">
+          <div class="col-sm-12 col-md-4 col-lg-4 col-xl-3">
+            <div class="row g-3">
+              <!-- Name -->
+              <div
+                class="col-sm-12 col-md-12 col-lg-12 col-xl-12 d-flex align-items-center"
+              >
+                <label for="txtName" class="w150">Name:</label>
+                <input
+                  type="text"
+                  class="form-control form-control-sm"
+                  id="txtName"
+                  [(ngModel)]="name"
+                  name="name"
+                  readonly
+                />
+              </div>
+
+              <!-- Login ID -->
+              <div
+                class="col-sm-12 col-md-12 col-lg-12 col-xl-12 d-flex align-items-center"
+              >
+                <label for="txtLoginID" class="w150">Login ID:</label>
+                <input
+                  type="text"
+                  class="form-control form-control-sm"
+                  id="txtLoginID"
+                  [(ngModel)]="loginid"
+                  name="loginid"
+                  readonly
+                />
+              </div>
+
+              <!-- Current Password -->
+              <div
+                class="col-12 col-md-12 col-lg-12 col-xl-12 d-flex align-items-center"
+              >
+                <label for="txtCurrentPassword" class="w150"
+                  >Current Password:</label
+                >
+                <input
+                  type="password"
+                  class="form-control form-control-sm"
+                  id="txtCurrentPassword"
+                  [(ngModel)]="currentpassword"
+                  name="currentpassword"
+                />
+              </div>
+
+              <!-- New Password -->
+              <div
+                class="col-12 col-md-12 col-lg-12 col-xl-12 d-flex align-items-center"
+              >
+                <label for="txtNewPassword" class="w150">New Password:</label>
+                <input
+                  type="password"
+                  class="form-control form-control-sm"
+                  id="txtNewPassword"
+                  [(ngModel)]="newpassword"
+                  name="newpassword"
+                />
+              </div>
+
+              <!-- Confirm Password -->
+              <div
+                class="col-12 col-md-12 col-lg-12 col-xl-12 d-flex align-items-center"
+              >
+                <label for="txtConfirmPassword" class="w150"
+                  >Confirm Password:</label
+                >
+                <input
+                  type="password"
+                  class="form-control form-control-sm"
+                  id="txtConfirmPassword"
+                  [(ngModel)]="confirmpassword"
+                  name="confirmpassword"
+                />
+              </div>
+            </div>
+            <div class="row div-center mt5">
+              <button
+                id="btnChange"
+                type="button"
+                class="btn w150 btn-success btn-sm mr5"
+                (click)="changepassword()"
+                [disabled]="isSubmitting"
+              >
+                Change Password
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+      <hr />
+    </div>
+  </div>
+</form>

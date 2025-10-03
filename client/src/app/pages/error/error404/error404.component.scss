@@ -1,0 +1,14 @@
+.full-screen-wrapper {
+  width: calc(100vw - 20px);
+  height: calc(100vh - 60px);
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.full-screen-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}

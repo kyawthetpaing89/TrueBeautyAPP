@@ -1,0 +1,42 @@
+# Angular
+client/node_modules/
+client/dist/
+client/.angular/
+client/.env
+
+# .NET Core
+server/bin/
+server/obj/
+server/wwwroot/lib/
+server/*.user
+server/*.suo
+server/*.db
+server/publish/
+server/node_modules/
+
+# IDE / OS
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Flutter / Dart
+.dart_tool/
+.packages
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+build/
+ios/Flutter/Flutter.framework
+ios/Flutter/Flutter.podspec
+ios/Flutter/Generated.xcconfig
+ios/Flutter/ephemeral/
+.android/
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Android Studio / IntelliJ
+*.idea/
+*.iml
+*.hprof

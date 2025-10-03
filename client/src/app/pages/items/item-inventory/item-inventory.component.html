@@ -1,0 +1,612 @@
+<form autocomplete="off">
+  <div class="card">
+    <h6 class="card-header">
+      <i class="material-icons">dashboard</i> Item Inventory
+    </h6>
+    <div class="card-body">
+      <div class="row g-3">
+        <div
+          class="col-sm-12 col-md-4 col-lg-3 col-xl-2 d-flex align-items-center"
+        >
+          <label for="txtSItemCD" class="w150">Item Code:</label>
+          <input
+            type="text"
+            class="form-control form-control-sm"
+            id="txtSItemCD"
+            tabindex="-1"
+            [(ngModel)]="search_itemcode"
+            name="search_itemcode"
+          />
+        </div>
+        <div
+          class="col-sm-12 col-md-4 col-lg-3 col-xl-2 d-flex align-items-center"
+        >
+          <label for="txtSItemName" class="w150">Item Name:</label>
+          <input
+            type="text"
+            class="form-control form-control-sm"
+            id="txtSItemName"
+            [(ngModel)]="search_itemname"
+            name="search_itemname"
+            autofocus
+          />
+        </div>
+      </div>
+      <div class="row div-center mt10">
+        <button
+          id="btnsearch"
+          type="button"
+          (click)="loadItemList()"
+          class="btn w100 btn-info btn-sm mr5"
+        >
+          Search
+        </button>
+        <button
+          id="btnclear"
+          type="button"
+          (click)="clear()"
+          class="btn w100 btn-dark btn-sm"
+        >
+          Clear
+        </button>
+      </div>
+      <hr />
+      <div class="row g-3">
+        <ul class="nav nav-tabs" id="customTab" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link active"
+              id="medicine-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#medicine-tab-pane"
+              type="button"
+              role="tab"
+              aria-controls="medicine-tab-pane"
+              aria-selected="true"
+              (click)="onTabChange('M')"
+            >
+              Medicine
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link"
+              id="skincare-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#skincare-tab-pane"
+              type="button"
+              role="tab"
+              aria-controls="skincare-tab-pane"
+              aria-selected="false"
+              (click)="onTabChange('S')"
+            >
+              Skin Care
+            </button>
+          </li>
+
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link"
+              id="others-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#others-tab-pane"
+              type="button"
+              role="tab"
+              aria-controls="others-tab-pane"
+              aria-selected="false"
+              (click)="onTabChange('O')"
+            >
+              Others
+            </button>
+          </li>
+        </ul>
+        <div class="tab-content">
+          <div
+            class="tab-pane fade show active"
+            id="medicine-tab-pane"
+            role="tabpanel"
+            aria-labelledby="medicine-tab"
+            tabindex="0"
+          >
+            <div class="table-responsive-scroll" #medicineScroll>
+              <table
+                id="tblMedicine"
+                class="table table-sm table-hover table-striped table-bordered w-100"
+              >
+                <thead class="table-header">
+                  <tr>
+                    <th class="text-center w150">Item Code</th>
+                    <th (click)="onSort('ItemName')">
+                      Item Name
+                      <mat-icon
+                        class="sort-icon float-end"
+                        [ngClass]="{ active: sortColumn === 'ItemName' }"
+                      >
+                        {{
+                          sortColumn === "ItemName" && !sortAsc
+                            ? "keyboard_double_arrow_down"
+                            : "keyboard_double_arrow_up"
+                        }}
+                      </mat-icon>
+                    </th>
+                    <th class="text-end" (click)="onSort('QtyBalance')">
+                      Stock Balance
+                      <mat-icon
+                        class="sort-icon float-end"
+                        [ngClass]="{ active: sortColumn === 'QtyBalance' }"
+                      >
+                        {{
+                          sortColumn === "QtyBalance" && !sortAsc
+                            ? "keyboard_double_arrow_down"
+                            : "keyboard_double_arrow_up"
+                        }}
+                      </mat-icon>
+                    </th>
+                    <th class="text-end" (click)="onSort('PurachasedQty')">
+                      Purchased Quantity
+                      <mat-icon
+                        class="sort-icon float-end"
+                        [ngClass]="{ active: sortColumn === 'PurachasedQty' }"
+                      >
+                        {{
+                          sortColumn === "PurachasedQty" && !sortAsc
+                            ? "keyboard_double_arrow_down"
+                            : "keyboard_double_arrow_up"
+                        }}
+                      </mat-icon>
+                    </th>
+                    <th
+                      class="text-center"
+                      (click)="onSort('LastPurchaseDate')"
+                    >
+                      Last Purchased Date
+                      <mat-icon
+                        class="sort-icon float-end"
+                        [ngClass]="{
+                          active: sortColumn === 'LastPurchaseDate'
+                        }"
+                      >
+                        {{
+                          sortColumn === "LastPurchaseDate" && !sortAsc
+                            ? "keyboard_double_arrow_down"
+                            : "keyboard_double_arrow_up"
+                        }}
+                      </mat-icon>
+                    </th>
+                    <th class="text-end" (click)="onSort('TotalUsageQty')">
+                      Usage Quantity
+                      <mat-icon
+                        class="sort-icon float-end"
+                        [ngClass]="{ active: sortColumn === 'TotalUsageQty' }"
+                      >
+                        {{
+                          sortColumn === "TotalUsageQty" && !sortAsc
+                            ? "keyboard_double_arrow_down"
+                            : "keyboard_double_arrow_up"
+                        }}
+                      </mat-icon>
+                    </th>
+                    <th class="text-end" (click)="onSort('SalesQty')">
+                      Sales Quantity
+                      <mat-icon
+                        class="sort-icon float-end"
+                        [ngClass]="{ active: sortColumn === 'SalesQty' }"
+                      >
+                        {{
+                          sortColumn === "SalesQty" && !sortAsc
+                            ? "keyboard_double_arrow_down"
+                            : "keyboard_double_arrow_up"
+                        }}
+                      </mat-icon>
+                    </th>
+                    <th class="text-center" (click)="onSort('LastSalesDate')">
+                      Last Sales Date
+                      <mat-icon
+                        class="sort-icon float-end"
+                        [ngClass]="{ active: sortColumn === 'LastSalesDate' }"
+                      >
+                        {{
+                          sortColumn === "LastSalesDate" && !sortAsc
+                            ? "keyboard_double_arrow_down"
+                            : "keyboard_double_arrow_up"
+                        }}
+                      </mat-icon>
+                    </th>
+                  </tr>
+                </thead>
+                <!-- Replaced *ngIf with @if / @else if / @else blocks. -->
+                @if (itemLoading) {
+                <tbody>
+                  <tr>
+                    <td colspan="8" class="text-center">
+                      <div
+                        class="spinner-border spinner-border-sm text-primary"
+                        role="status"
+                      ></div>
+                      <span class="ms-2">Loading data...</span>
+                    </td>
+                  </tr>
+                </tbody>
+                } @else if (medicineData.length === 0) {
+                <tbody>
+                  <tr>
+                    <td colspan="8" class="text-center text-muted">
+                      There is no data to display.
+                    </td>
+                  </tr>
+                </tbody>
+                } @else {
+                <tbody>
+                  <!-- Replaced *ngFor with @for block. -->
+                  @for (row of medicineData; track row.ItemCD) {
+                  <tr>
+                    <td class="text-center">{{ row.ItemCD }}</td>
+                    <td>{{ row.ItemName }}</td>
+                    <td class="text-end">{{ row.QtyBalance }}</td>
+                    <td class="text-end">{{ row.PurachasedQty }}</td>
+                    <td class="text-center">
+                      {{
+                        row.LastPurchaseDate
+                          ? generalservice.getFormattedDate(
+                              row.LastPurchaseDate
+                            )
+                          : ""
+                      }}
+                    </td>
+                    <td class="text-end">{{ row.TotalUsageQty }}</td>
+                    <td class="text-end">{{ row.SalesQty }}</td>
+                    <td class="text-center">
+                      {{
+                        row.LastSalesDate
+                          ? generalservice.getFormattedDate(row.LastSalesDate)
+                          : ""
+                      }}
+                    </td>
+                  </tr>
+                  }
+                </tbody>
+                }
+              </table>
+            </div>
+          </div>
+          <div
+            class="tab-pane fade"
+            id="skincare-tab-pane"
+            role="tabpanel"
+            aria-labelledby="skincare-tab"
+            tabindex="0"
+          >
+            <div class="table-responsive-scroll" #skincareScroll>
+              <table
+                id="tblSkinCare"
+                class="table table-sm table-hover table-striped table-bordered w-100"
+              >
+                <thead class="table-header">
+                  <tr>
+                    <th class="text-center w150">Item Code</th>
+                    <th (click)="onSort('ItemName')">
+                      Item Name
+                      <mat-icon
+                        class="sort-icon float-end"
+                        [ngClass]="{ active: sortColumn === 'ItemName' }"
+                      >
+                        {{
+                          sortColumn === "ItemName" && !sortAsc
+                            ? "keyboard_double_arrow_down"
+                            : "keyboard_double_arrow_up"
+                        }}
+                      </mat-icon>
+                    </th>
+                    <th class="text-end" (click)="onSort('QtyBalance')">
+                      Stock Balance
+                      <mat-icon
+                        class="sort-icon float-end"
+                        [ngClass]="{ active: sortColumn === 'QtyBalance' }"
+                      >
+                        {{
+                          sortColumn === "QtyBalance" && !sortAsc
+                            ? "keyboard_double_arrow_down"
+                            : "keyboard_double_arrow_up"
+                        }}
+                      </mat-icon>
+                    </th>
+                    <th class="text-end" (click)="onSort('PurachasedQty')">
+                      Purchased Quantity
+                      <mat-icon
+                        class="sort-icon float-end"
+                        [ngClass]="{ active: sortColumn === 'PurachasedQty' }"
+                      >
+                        {{
+                          sortColumn === "PurachasedQty" && !sortAsc
+                            ? "keyboard_double_arrow_down"
+                            : "keyboard_double_arrow_up"
+                        }}
+                      </mat-icon>
+                    </th>
+                    <th
+                      class="text-center"
+                      (click)="onSort('LastPurchaseDate')"
+                    >
+                      Last Purchased Date
+                      <mat-icon
+                        class="sort-icon float-end"
+                        [ngClass]="{
+                          active: sortColumn === 'LastPurchaseDate'
+                        }"
+                      >
+                        {{
+                          sortColumn === "LastPurchaseDate" && !sortAsc
+                            ? "keyboard_double_arrow_down"
+                            : "keyboard_double_arrow_up"
+                        }}
+                      </mat-icon>
+                    </th>
+                    <th class="text-end" (click)="onSort('TotalUsageQty')">
+                      Usage Quantity
+                      <mat-icon
+                        class="sort-icon float-end"
+                        [ngClass]="{ active: sortColumn === 'TotalUsageQty' }"
+                      >
+                        {{
+                          sortColumn === "TotalUsageQty" && !sortAsc
+                            ? "keyboard_double_arrow_down"
+                            : "keyboard_double_arrow_up"
+                        }}
+                      </mat-icon>
+                    </th>
+                    <th class="text-end" (click)="onSort('SalesQty')">
+                      Sales Quantity
+                      <mat-icon
+                        class="sort-icon float-end"
+                        [ngClass]="{ active: sortColumn === 'SalesQty' }"
+                      >
+                        {{
+                          sortColumn === "SalesQty" && !sortAsc
+                            ? "keyboard_double_arrow_down"
+                            : "keyboard_double_arrow_up"
+                        }}
+                      </mat-icon>
+                    </th>
+                    <th class="text-center" (click)="onSort('LastSalesDate')">
+                      Last Sales Date
+                      <mat-icon
+                        class="sort-icon float-end"
+                        [ngClass]="{ active: sortColumn === 'LastSalesDate' }"
+                      >
+                        {{
+                          sortColumn === "LastSalesDate" && !sortAsc
+                            ? "keyboard_double_arrow_down"
+                            : "keyboard_double_arrow_up"
+                        }}
+                      </mat-icon>
+                    </th>
+                  </tr>
+                </thead>
+                <!-- Replaced *ngIf with @if / @else if / @else blocks. -->
+                @if (itemLoading) {
+                <tbody>
+                  <tr>
+                    <td colspan="8" class="text-center">
+                      <div
+                        class="spinner-border spinner-border-sm text-primary"
+                        role="status"
+                      ></div>
+                      <span class="ms-2">Loading data...</span>
+                    </td>
+                  </tr>
+                </tbody>
+                } @else if (skincareData.length === 0) {
+                <tbody>
+                  <tr>
+                    <td colspan="8" class="text-center text-muted">
+                      There is no data to display.
+                    </td>
+                  </tr>
+                </tbody>
+                } @else {
+                <tbody>
+                  <!-- Replaced *ngFor with @for block. -->
+                  @for (row of skincareData; track row.ItemCD) {
+                  <tr>
+                    <td class="text-center">{{ row.ItemCD }}</td>
+                    <td>{{ row.ItemName }}</td>
+                    <td class="text-end">{{ row.QtyBalance }}</td>
+                    <td class="text-end">{{ row.PurachasedQty }}</td>
+                    <td class="text-center">
+                      {{
+                        row.LastPurchaseDate
+                          ? generalservice.getFormattedDate(
+                              row.LastPurchaseDate
+                            )
+                          : ""
+                      }}
+                    </td>
+                    <td class="text-end">{{ row.TotalUsageQty }}</td>
+                    <td class="text-end">{{ row.SalesQty }}</td>
+                    <td class="text-center">
+                      {{
+                        row.LastSalesDate
+                          ? generalservice.getFormattedDate(row.LastSalesDate)
+                          : ""
+                      }}
+                    </td>
+                  </tr>
+                  }
+                </tbody>
+                }
+              </table>
+            </div>
+          </div>
+          <div
+            class="tab-pane fade"
+            id="others-tab-pane"
+            role="tabpanel"
+            aria-labelledby="others-tab"
+            tabindex="0"
+          >
+            <div class="table-responsive-scroll" #othersScroll>
+              <table
+                id="tblOthers"
+                class="table table-sm table-hover table-striped table-bordered w-100"
+              >
+                <thead class="table-header">
+                  <tr>
+                    <th class="text-center w150">Item Code</th>
+                    <th (click)="onSort('ItemName')">
+                      Item Name
+                      <mat-icon
+                        class="sort-icon float-end"
+                        [ngClass]="{ active: sortColumn === 'ItemName' }"
+                      >
+                        {{
+                          sortColumn === "ItemName" && !sortAsc
+                            ? "keyboard_double_arrow_down"
+                            : "keyboard_double_arrow_up"
+                        }}
+                      </mat-icon>
+                    </th>
+                    <th class="text-end" (click)="onSort('QtyBalance')">
+                      Stock Balance
+                      <mat-icon
+                        class="sort-icon float-end"
+                        [ngClass]="{ active: sortColumn === 'QtyBalance' }"
+                      >
+                        {{
+                          sortColumn === "QtyBalance" && !sortAsc
+                            ? "keyboard_double_arrow_down"
+                            : "keyboard_double_arrow_up"
+                        }}
+                      </mat-icon>
+                    </th>
+                    <th class="text-end" (click)="onSort('PurachasedQty')">
+                      Purchased Quantity
+                      <mat-icon
+                        class="sort-icon float-end"
+                        [ngClass]="{ active: sortColumn === 'PurachasedQty' }"
+                      >
+                        {{
+                          sortColumn === "PurachasedQty" && !sortAsc
+                            ? "keyboard_double_arrow_down"
+                            : "keyboard_double_arrow_up"
+                        }}
+                      </mat-icon>
+                    </th>
+                    <th
+                      class="text-center"
+                      (click)="onSort('LastPurchaseDate')"
+                    >
+                      Last Purchased Date
+                      <mat-icon
+                        class="sort-icon float-end"
+                        [ngClass]="{
+                          active: sortColumn === 'LastPurchaseDate'
+                        }"
+                      >
+                        {{
+                          sortColumn === "LastPurchaseDate" && !sortAsc
+                            ? "keyboard_double_arrow_down"
+                            : "keyboard_double_arrow_up"
+                        }}
+                      </mat-icon>
+                    </th>
+                    <th class="text-end" (click)="onSort('TotalUsageQty')">
+                      Usage Quantity
+                      <mat-icon
+                        class="sort-icon float-end"
+                        [ngClass]="{ active: sortColumn === 'TotalUsageQty' }"
+                      >
+                        {{
+                          sortColumn === "TotalUsageQty" && !sortAsc
+                            ? "keyboard_double_arrow_down"
+                            : "keyboard_double_arrow_up"
+                        }}
+                      </mat-icon>
+                    </th>
+                    <th class="text-end" (click)="onSort('SalesQty')">
+                      Sales Quantity
+                      <mat-icon
+                        class="sort-icon float-end"
+                        [ngClass]="{ active: sortColumn === 'SalesQty' }"
+                      >
+                        {{
+                          sortColumn === "SalesQty" && !sortAsc
+                            ? "keyboard_double_arrow_down"
+                            : "keyboard_double_arrow_up"
+                        }}
+                      </mat-icon>
+                    </th>
+                    <th class="text-center" (click)="onSort('LastSalesDate')">
+                      Last Sales Date
+                      <mat-icon
+                        class="sort-icon float-end"
+                        [ngClass]="{ active: sortColumn === 'LastSalesDate' }"
+                      >
+                        {{
+                          sortColumn === "LastSalesDate" && !sortAsc
+                            ? "keyboard_double_arrow_down"
+                            : "keyboard_double_arrow_up"
+                        }}
+                      </mat-icon>
+                    </th>
+                  </tr>
+                </thead>
+                <!-- Replaced *ngIf with @if / @else if / @else blocks. -->
+                @if (itemLoading) {
+                <tbody>
+                  <tr>
+                    <td colspan="8" class="text-center">
+                      <div
+                        class="spinner-border spinner-border-sm text-primary"
+                        role="status"
+                      ></div>
+                      <span class="ms-2">Loading data...</span>
+                    </td>
+                  </tr>
+                </tbody>
+                } @else if (othersData.length === 0) {
+                <tbody>
+                  <tr>
+                    <td colspan="8" class="text-center text-muted">
+                      There is no data to display.
+                    </td>
+                  </tr>
+                </tbody>
+                } @else {
+                <tbody>
+                  <!-- Replaced *ngFor with @for block. -->
+                  @for (row of othersData; track row.ItemCD) {
+                  <tr>
+                    <td class="text-center">{{ row.ItemCD }}</td>
+                    <td>{{ row.ItemName }}</td>
+                    <td class="text-end">{{ row.QtyBalance }}</td>
+                    <td class="text-end">{{ row.PurachasedQty }}</td>
+                    <td class="text-center">
+                      {{
+                        row.LastPurchaseDate
+                          ? generalservice.getFormattedDate(
+                              row.LastPurchaseDate
+                            )
+                          : ""
+                      }}
+                    </td>
+                    <td class="text-end">{{ row.TotalUsageQty }}</td>
+                    <td class="text-end">{{ row.SalesQty }}</td>
+                    <td class="text-center">
+                      {{
+                        row.LastSalesDate
+                          ? generalservice.getFormattedDate(row.LastSalesDate)
+                          : ""
+                      }}
+                    </td>
+                  </tr>
+                  }
+                </tbody>
+                }
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

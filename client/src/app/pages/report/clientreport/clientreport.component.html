@@ -1,0 +1,125 @@
+<div class="card">
+  <h6 class="card-header">
+    <i class="material-icons">supervised_user_circle</i> Client Report
+  </h6>
+  <div class="card-body">
+    <div class="row g-3 mb15">
+      <!-- Year -->
+      <div class="col-12 col-md-4 col-lg-4 col-xl-3 d-flex align-items-center">
+        <label for="ddlSYear" class="w150">Year:</label>
+        <select
+          id="ddlSYear"
+          class="form-control form-control-sm"
+          (change)="loadReport()"
+          [(ngModel)]="selectedyear"
+        >
+          <option class="text-center" [value]="0">All</option>
+          @for (year of years; track year) {
+          <option class="text-center" [value]="year">
+            {{ year }}
+          </option>
+          }
+        </select>
+      </div>
+      <div
+        class="col-sm-12 col-md-4 col-lg-3 col-xl-3 d-flex align-items-center"
+      >
+        <label for="ddlSMonth" class="w150">Month:</label>
+        <select
+          id="ddlSMonth"
+          class="form-control form-control-sm"
+          [(ngModel)]="selectedmonth"
+          (change)="loadReport()"
+        >
+          @for (month of months; track month.value) {
+          <option class="text-center" [value]="month.value">
+            {{ month.name }}
+          </option>
+          }
+        </select>
+      </div>
+    </div>
+    <div class="row g-3">
+      <div
+        class="col-sm-12 col-md-4 col-lg-3 col-xl-3 d-flex align-items-center"
+      >
+        <label for="rdoReportType" class="w150">Report Type:</label>
+        <div class="d-flex align-items-start">
+          <div class="form-check me-3">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="rdoReportType"
+              id="rdoTopVisitors"
+              [(ngModel)]="reportType"
+              (change)="loadReport()"
+              value="1"
+            />
+            <label class="form-check-label" for="rdoTopVisitors"
+              >Most Frequent Visitors</label
+            >
+          </div>
+          <div class="form-check me-3">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="rdoReportType"
+              id="rdoTopClient"
+              [(ngModel)]="reportType"
+              (change)="loadReport()"
+              value="2"
+            />
+            <label class="form-check-label" for="rdoTopClient"
+              >Top Client</label
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr />
+    <div class="table-responsive-scroll" #scrollContainer>
+      <table
+        id="tblTopVisitors"
+        class="table table-sm table-hover table-striped table-bordered w100p"
+      >
+        <thead>
+          <tr>
+            <th class="text-center">ClientID</th>
+            <th>Name</th>
+            <th>Phone No</th>
+            <th class="text-end">
+              {{ reportType === "1" ? "Total Frequent" : "Total Spending" }}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          @if (clientLoading) {
+          <tr>
+            <td colspan="4" class="text-center">
+              <div
+                class="spinner-border spinner-border-sm text-primary"
+                role="status"
+              ></div>
+              <span class="ms-2">Loading data...</span>
+            </td>
+          </tr>
+          }@else{ @for (row of clientReportData; track row.ClientID) {
+          <tr>
+            <td class="text-center">{{ row.ClientID }}</td>
+            <td>{{ row.Name }}</td>
+
+            <td>{{ row.PhoneNo }}</td>
+            <td class="text-end">{{ row.Total | number }}</td>
+          </tr>
+          }@empty {
+          <tr>
+            <td colspan="4" class="text-center text-muted">
+              There is no data to display.
+            </td>
+          </tr>
+          } }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

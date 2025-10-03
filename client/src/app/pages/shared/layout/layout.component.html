@@ -1,0 +1,156 @@
+<mat-sidenav-container class="sidenav-container">
+  <!-- Sidebar Menu -->
+  <mat-sidenav #drawer class="sidenav" mode="over" [opened]="false">
+    <mat-nav-list>
+      <a mat-list-item routerLink="/dashboard">Dashboard</a>
+      <a mat-list-item routerLink="/client/clientlist">Client List</a>
+      <a mat-list-item routerLink="/client/treatmentcheckin">
+        Treatment Check-in
+      </a>
+      <a mat-list-item routerLink="/items/itemlist">Items List</a>
+      <a mat-list-item routerLink="/items/itempurchasing">Items Purchasing</a>
+      <a mat-list-item routerLink="/invoice/invoicelist">Invoice</a>
+      <a mat-list-item routerLink="/salesreport">Sales Report</a>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <!-- Main Content -->
+  <mat-sidenav-content>
+    <mat-toolbar color="primary" class="topbar">
+      <button mat-icon-button (click)="drawer.toggle()" class="hide-desktop">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <img
+        src="assets/system-images/tb-white.webp"
+        alt="Logo"
+        class="logo-img"
+      />
+      <span class="logo-text me-2">True Beauty System v-2.0</span>
+
+      <!-- Desktop Navigation -->
+      <div class="toolbar-links hide-mobile">
+        @if (role === 'admin') {
+        <a mat-button routerLink="/dashboard" routerLinkActive="active-link">
+          <i class="material-icons">pie_chart</i> Dashboard
+        </a>
+        }
+
+        <a
+          mat-button
+          [matMenuTriggerFor]="clientMenu"
+          [ngClass]="{ 'active-link': isClientRouteActive() }"
+        >
+          <i class="material-icons">people_alt</i> Client
+          <i class="fa-solid fa-caret-down ms-1"></i>
+        </a>
+
+        <mat-menu #clientMenu="matMenu">
+          <a mat-menu-item routerLink="/client/clientlist">
+            <i class="material-icons">person</i> Client List
+          </a>
+          <a mat-menu-item routerLink="/client/treatmentcheckin">
+            <i class="material-icons">alarm</i> Treatment Check-in
+          </a>
+          <a mat-menu-item routerLink="/client/clientbooking">
+            <i class="fa-solid fa-address-book fa-lg me-1"></i> Client Booking
+          </a>
+        </mat-menu>
+
+        <a
+          mat-button
+          [matMenuTriggerFor]="itemMenu"
+          [ngClass]="{ 'active-link': isItemRouteActive() }"
+        >
+          <i class="material-icons">dashboard</i> Items
+          <i class="fa-solid fa-caret-down ms-1"></i>
+        </a>
+
+        <mat-menu #itemMenu="matMenu">
+          <a mat-menu-item routerLink="/items/itemlist">
+            <i class="material-icons">list_alt</i> Item List
+          </a>
+          <a mat-menu-item routerLink="/items/iteminventory">
+            <i class="fa-solid fa-boxes-stacked"></i> Item Inventory
+          </a>
+
+          @if (role === 'admin') {
+          <a mat-menu-item routerLink="/items/itempurchasing">
+            <i class="fa-solid fa-sack-dollar fa-lg"></i> Item Purchasing
+          </a>
+          } @if (role === 'admin') {
+          <a mat-menu-item routerLink="/items/itemusage">
+            <i class="fa-solid fa-layer-group fa-lg"></i> Item Usage
+          </a>
+          }
+        </mat-menu>
+
+        <a
+          mat-button
+          routerLink="/invoice/invoicelist"
+          routerLinkActive="active-link"
+        >
+          <i class="material-icons">receipt_long</i> Invoice
+        </a>
+
+        @if(role === 'admin') {
+
+        <a
+          mat-button
+          [matMenuTriggerFor]="reportMenu"
+          [ngClass]="{ 'active-link': isReportRouteActive() }"
+        >
+          <i class="material-icons">bar_chart</i> Reports
+          <i class="fa-solid fa-caret-down ms-1"></i>
+        </a>
+
+        <mat-menu #reportMenu="matMenu">
+          <a mat-menu-item routerLink="/reports/salesreport">
+            <i class="material-icons">monetization_on</i> Sales Report
+          </a>
+          <a mat-menu-item routerLink="/reports/clientreport">
+            <i class="material-icons">supervised_user_circle</i> Client Report
+          </a>
+          <a mat-menu-item routerLink="/reports/itemreport">
+            <i class="material-icons">dashboard</i> Item Report
+          </a>
+        </mat-menu>
+
+        }
+
+        <a
+          mat-button
+          routerLink="/holidays/holidaylist"
+          routerLinkActive="active-link"
+        >
+          <i class="fa-solid fa-calendar-check fa-lg"></i> Holidays
+        </a>
+
+        <span style="margin-left: auto"></span>
+
+        <a
+          mat-button
+          [matMenuTriggerFor]="userMenu"
+          [ngClass]="{ 'active-link': isClientRouteActive() }"
+        >
+          <i class="material-icons">verified_user</i>
+          {{ generalservcie.getLoginID() }}
+          <i class="fa-solid fa-caret-down ms-1"></i>
+        </a>
+
+        <mat-menu #userMenu="matMenu">
+          <a mat-menu-item routerLink="/admin/myprofile">
+            <i class="material-icons">person</i> My Profile
+          </a>
+          <a mat-menu-item (click)="logout()">
+            <i class="material-icons">lock_open</i> Log-out
+          </a>
+        </mat-menu>
+      </div>
+    </mat-toolbar>
+
+    <!-- Routed content -->
+    <div class="content">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

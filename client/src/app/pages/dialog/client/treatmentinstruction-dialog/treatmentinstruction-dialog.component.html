@@ -1,0 +1,243 @@
+<form autocomplete="off">
+  <h3 mat-dialog-title>
+    <span
+      ><i class="material-icons">follow_the_signs</i> Treatment/Medicine
+      Instruction</span
+    >
+    <a (click)="closeDialog()" aria-label="Close">
+      <mat-icon>close</mat-icon>
+    </a>
+  </h3>
+  <mat-dialog-content>
+    <div class="row mb10">
+      <div
+        class="col-12 col-md-12 col-lg-12 col-xl-12 d-flex align-items-center"
+      >
+        <label for="txtNotes" class="w150">Add Notes:</label>
+        <textarea
+          id="txtNotes"
+          class="form-control form-control-sm h100"
+          [(ngModel)]="notes"
+          name="notes"
+          [readonly]="mode === 'Delete'"
+        ></textarea>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12 col-md-12 col-lg-6 col-xl-6">
+        <h6 class="title"><label>Treatment</label></h6>
+        <div class="table-responsive-scroll">
+          <table
+            id="tblTreatment"
+            class="table table-sm table-hover table-striped table-bordered w100p"
+          >
+            <thead class="table-header">
+              <tr>
+                <th></th>
+                <th class="text-center">Item Code</th>
+                <th (click)="onTreatmentSort('ItemName')">
+                  Name
+                  <mat-icon
+                    class="sort-icon float-end"
+                    [ngClass]="{
+                      active: sortTreatmentColumn === 'ItemName'
+                    }"
+                  >
+                    {{
+                      sortTreatmentColumn === "ItemName" && !sortTreatmentAsc
+                        ? "keyboard_double_arrow_down"
+                        : "keyboard_double_arrow_up"
+                    }}
+                  </mat-icon>
+                </th>
+                <th class="text-end" (click)="onTreatmentSort('Price')">
+                  Price
+                  <mat-icon
+                    class="sort-icon float-end"
+                    [ngClass]="{
+                      active: sortTreatmentColumn === 'Price'
+                    }"
+                  >
+                    {{
+                      sortTreatmentColumn === "Price" && !sortTreatmentAsc
+                        ? "keyboard_double_arrow_down"
+                        : "keyboard_double_arrow_up"
+                    }}
+                  </mat-icon>
+                </th>
+              </tr>
+            </thead>
+            <!-- Replaced *ngIf with @if / @else if / @else blocks -->
+            @if (itemLoading) {
+            <tbody>
+              <tr>
+                <td colspan="12" class="text-center">
+                  <div
+                    class="spinner-border spinner-border-sm text-primary"
+                    role="status"
+                  ></div>
+                  <span class="ms-2">Loading data...</span>
+                </td>
+              </tr>
+            </tbody>
+            } @else if (treatmentData.length === 0) {
+            <tbody>
+              <tr>
+                <td colspan="12" class="text-center text-muted">
+                  There is no data to display.
+                </td>
+              </tr>
+            </tbody>
+            } @else {
+            <tbody>
+              <!-- Replaced *ngFor with @for block. Added a 'track' function for performance. -->
+              @for (row of treatmentData; track row.ItemCD) {
+              <tr>
+                <td class="text-center w50" (click)="toggleInstruction(row)">
+                  <input
+                    type="checkbox"
+                    [checked]="row.IsInstruction === '1'"
+                    (click)="$event.stopPropagation()"
+                    (change)="
+                      row.IsInstruction = row.IsInstruction === '1' ? '0' : '1'
+                    "
+                    name="chk{{ row.ItemCD }}"
+                    [disabled]="mode === 'Delete'"
+                  />
+                </td>
+                <td class="text-center w150">{{ row.ItemCD }}</td>
+                <td>{{ row.ItemName }}</td>
+                <td class="text-end">{{ row.Price?.toLocaleString() }}</td>
+              </tr>
+              }
+            </tbody>
+            }
+          </table>
+        </div>
+      </div>
+      <div class="col-12 col-md-12 col-lg-6 col-xl-6">
+        <h6 class="title"><label>Medicine</label></h6>
+        <div class="table-responsive-scroll">
+          <table
+            id="tblMedicine"
+            class="table table-sm table-hover table-striped table-bordered w100p"
+          >
+            <thead class="table-header">
+              <tr>
+                <th></th>
+                <th class="text-center">Item Code</th>
+                <th (click)="onMedicineSort('ItemName')">
+                  Name
+                  <mat-icon
+                    class="sort-icon float-end"
+                    [ngClass]="{
+                      active: sortMedicineColumn === 'ItemName'
+                    }"
+                  >
+                    {{
+                      sortMedicineColumn === "ItemName" && !sortMedicineAsc
+                        ? "keyboard_double_arrow_down"
+                        : "keyboard_double_arrow_up"
+                    }}
+                  </mat-icon>
+                </th>
+                <th class="text-end" (click)="onMedicineSort('Price')">
+                  Price
+                  <mat-icon
+                    class="sort-icon float-end"
+                    [ngClass]="{
+                      active: sortMedicineColumn === 'Price'
+                    }"
+                  >
+                    {{
+                      sortMedicineColumn === "Price" && !sortMedicineAsc
+                        ? "keyboard_double_arrow_down"
+                        : "keyboard_double_arrow_up"
+                    }}
+                  </mat-icon>
+                </th>
+              </tr>
+            </thead>
+            <!-- Replaced *ngIf with @if / @else if / @else blocks -->
+            @if (itemLoading) {
+            <tbody>
+              <tr>
+                <td colspan="12" class="text-center">
+                  <div
+                    class="spinner-border spinner-border-sm text-primary"
+                    role="status"
+                  ></div>
+                  <span class="ms-2">Loading data...</span>
+                </td>
+              </tr>
+            </tbody>
+            } @else if (medicineData.length === 0) {
+            <tbody>
+              <tr>
+                <td colspan="12" class="text-center text-muted">
+                  There is no data to display.
+                </td>
+              </tr>
+            </tbody>
+            } @else {
+            <tbody>
+              <!-- Replaced *ngFor with @for block. Added a 'track' function for performance. -->
+              @for (row of medicineData; track row.ItemCD) {
+              <tr>
+                <td class="text-center w50" (click)="toggleInstruction(row)">
+                  <input
+                    type="checkbox"
+                    [checked]="row.IsInstruction === '1'"
+                    (click)="$event.stopPropagation()"
+                    (change)="
+                      row.IsInstruction = row.IsInstruction === '1' ? '0' : '1'
+                    "
+                    name="chk{{ row.ItemCD }}"
+                    [disabled]="mode === 'Delete'"
+                  />
+                </td>
+                <td class="text-center w150">{{ row.ItemCD }}</td>
+                <td>{{ row.ItemName }}</td>
+                <td class="text-end">{{ row.Price?.toLocaleString() }}</td>
+              </tr>
+              }
+            </tbody>
+            }
+          </table>
+        </div>
+      </div>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button
+      id="btncancel"
+      type="button"
+      (click)="closeDialog()"
+      class="btn w100 btn-dark btn-sm mr5"
+    >
+      Cancel
+    </button>
+    <button
+      type="button"
+      id="btnSaveInvoice"
+      class="btn w100 btn-sm mr5"
+      [ngClass]="{
+        'btn-success': mode === 'New',
+        'btn-info': mode === 'Edit',
+        'btn-danger': mode === 'Delete'
+      }"
+      (click)="save()"
+      [disabled]="isSubmitting"
+    >
+      {{
+        mode === "New"
+          ? "Save"
+          : mode === "Edit"
+          ? "Update"
+          : mode === "Delete"
+          ? "Delete"
+          : "Submit"
+      }}
+    </button>
+  </mat-dialog-actions>
+</form>

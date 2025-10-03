@@ -1,0 +1,45 @@
+<form class="form-login" autocomplete="off">
+  <div class="login-container">
+    <div class="login-form">
+      <div class="div-logo mb-3">
+        <img src="assets/system-images/truebeauty-logo.webp" />
+        <hr />
+        <p class="logintitle">True Beauty Login v-2.0</p>
+        <hr />
+      </div>
+      <div class="mb-3 mt-5">
+        <label for="userID" class="form-label"> User ID </label>
+        <input
+          type="text"
+          [(ngModel)]="userid"
+          name="userid"
+          class="form-control"
+          id="userID"
+          maxLength="10"
+          autofocus
+        />
+      </div>
+      <div class="mb-5">
+        <label for="password" class="form-label"> Password </label>
+        <input
+          type="password"
+          [(ngModel)]="password"
+          name="password"
+          class="form-control"
+          id="password"
+          maxlength="20"
+        />
+      </div>
+      <div class="div-button">
+        <button
+          type="submit"
+          (click)="loginAction()"
+          class="btn btn-md btn-dark"
+          [disabled]="isSubmitting"
+        >
+          Log in
+        </button>
+      </div>
+    </div>
+  </div>
+</form>

@@ -1,0 +1,145 @@
+/* Top Toolbar Styling */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0 16px;
+  background: linear-gradient(
+    to bottom,
+    var(--primary-color),
+    var(--secondary-color)
+  );
+  color: #fff;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}
+
+/* Logo */
+.logo-img {
+  height: 40px;
+  margin-right: 8px;
+  border-radius: 10px;
+}
+.logo-text {
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: white;
+}
+
+/* Navigation Links */
+.toolbar-links {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  width: 100%;
+  a {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 16px;
+    color: white;
+    text-transform: none;
+    transition: background-color 0.3s ease;
+  }
+}
+
+/* Active Link Highlight */
+a.active-link {
+  background-color: rgba(255, 255, 255, 0.15);
+  padding: 6px 12px;
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2);
+}
+
+/* Hover Style */
+a[mat-button]:hover {
+  background-color: rgb(118, 148, 247) !important;
+}
+
+/* Icon Colors */
+a .fa-chart-pie {
+  color: #00d4ff;
+}
+a .fa-users {
+  color: #0bffcf;
+}
+a .fa-prescription-bottle-medical {
+  color: #e5e3a3;
+}
+a .fa-receipt {
+  color: #ffc800;
+}
+a .fa-money-bill-trend-up {
+  color: #91ffdb;
+}
+
+/* Sidenav Layout */
+.sidenav-container {
+  height: 100vh;
+}
+.sidenav {
+  width: 220px;
+}
+
+/* Mat Button Text Colors */
+.mat-toolbar .mat-mdc-button-base.mat-unthemed {
+  --mat-button-text-label-text-color: white;
+  --mat-button-outlined-label-text-color: white;
+}
+.mat-mdc-button:not(:disabled) {
+  color: white;
+}
+
+/* Mat Menu Background */
+::ng-deep .mat-mdc-menu-panel {
+  --mdc-theme-surface: var(--primary-color) !important;
+  background-color: var(--primary-color) !important;
+}
+
+::ng-deep .mat-mdc-menu-content {
+  background-color: var(--primary-color) !important;
+  background: var(--primary-color) !important;
+}
+
+::ng-deep .mat-mdc-menu-item-text {
+  color: white;
+  font-size: 15px !important;
+}
+
+::ng-deep .material-icons {
+  vertical-align: middle !important;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Responsive Design */
+.hide-mobile {
+  display: flex;
+}
+.hide-desktop {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .hide-mobile {
+    display: none !important;
+  }
+
+  .hide-desktop {
+    display: flex !important;
+  }
+}
+
+/* Page Content Area */
+.content {
+  padding: 1rem;
+  margin-top: 60px;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}

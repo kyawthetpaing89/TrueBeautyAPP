@@ -1,0 +1,194 @@
+<div class="row g-3">
+  <!-- Year -->
+  <div class="col-12 col-md-4 col-lg-4 col-xl-3 d-flex align-items-center">
+    <label for="ddlSYear" class="w150">Year:</label>
+    <select
+      id="ddlSYear"
+      class="form-control form-control-sm"
+      [(ngModel)]="selectedyear"
+      (change)="loadCharts()"
+    >
+      <!-- Updated *ngFor to @for block -->
+      @for (year of years; track year) {
+      <option class="text-center" [value]="year">
+        {{ year }}
+      </option>
+      }
+    </select>
+  </div>
+
+  <!-- Month -->
+  <div class="col-12 col-md-4 col-lg-4 col-xl-3 d-flex align-items-center">
+    <label for="ddlSMonth" class="w150">Month:</label>
+    <select
+      id="ddlSMonth"
+      class="form-control form-control-sm"
+      [(ngModel)]="selectedmonth"
+      (change)="onMonthChange($event)"
+    >
+      <!-- Updated *ngFor to @for block -->
+      @for (month of months; track month.value) {
+      <option [value]="month.value">
+        {{ month.name }}
+      </option>
+      }
+    </select>
+  </div>
+</div>
+
+<hr />
+
+<div class="row g-3 mt10">
+  <div class="col-sm-12 col-md-6 col-lg-6 col-xl-4">
+    <div class="card">
+      <h6 class="card-header">Item List</h6>
+      <div class="card-body">
+        <google-chart
+          [type]="itemchart.type"
+          [columns]="itemchart.columns"
+          [data]="itemchart.data"
+          [options]="itemchart.options"
+          [height]="itemchart.options.height"
+        ></google-chart>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-12 col-md-6 col-lg-6 col-xl-4">
+    <div class="card">
+      <h6 class="card-header">Monthly Sales ({{ selectedyear }})</h6>
+      <div class="card-body">
+        <google-chart
+          [type]="monthlysaleschart.type"
+          [columns]="monthlysaleschart.columns"
+          [data]="monthlysaleschart.data"
+          [options]="monthlysaleschart.options"
+          [height]="monthlysaleschart.options.height"
+        ></google-chart>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-12 col-md-6 col-lg-6 col-xl-4">
+    <div class="card">
+      <h6 class="card-header">Client Treatment ({{ selectedyear }})</h6>
+      <div class="card-body">
+        <google-chart
+          [type]="clientdatachart.type"
+          [columns]="clientdatachart.columns"
+          [data]="clientdatachart.data"
+          [options]="clientdatachart.options"
+          [height]="clientdatachart.options.height"
+        ></google-chart>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-12 col-md-6 col-lg-6 col-xl-4">
+    <div class="card">
+      <h6 class="card-header">
+        Top Selling Treatments ({{ selectedyear }} - {{ selectedmonthtext }})
+      </h6>
+      <div class="card-body">
+        <google-chart
+          [type]="topsellingtreatmentchart.type"
+          [columns]="topsellingtreatmentchart.columns"
+          [data]="topsellingtreatmentchart.data"
+          [options]="topsellingtreatmentchart.options"
+        ></google-chart>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-12 col-md-6 col-lg-6 col-xl-4">
+    <div class="card">
+      <h6 class="card-header">
+        Top Selling Medicines ({{ selectedyear }} - {{ selectedmonthtext }})
+      </h6>
+      <div class="card-body">
+        <google-chart
+          [type]="topsellingmedicinechart.type"
+          [columns]="topsellingmedicinechart.columns"
+          [data]="topsellingmedicinechart.data"
+          [options]="topsellingmedicinechart.options"
+        ></google-chart>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-12 col-md-6 col-lg-6 col-xl-4">
+    <div class="card">
+      <h6 class="card-header">
+        Top Selling Skin Cares ({{ selectedyear }} - {{ selectedmonthtext }})
+      </h6>
+      <div class="card-body">
+        <google-chart
+          [type]="topsellingskincarechart.type"
+          [columns]="topsellingskincarechart.columns"
+          [data]="topsellingskincarechart.data"
+          [options]="topsellingskincarechart.options"
+        ></google-chart>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-12 col-md-6 col-lg-6 col-xl-4">
+    <div class="card">
+      <h6 class="card-header">Most Frequent Visitors</h6>
+      <div class="card-body">
+        <google-chart
+          [type]="topvisitors.type"
+          [columns]="topvisitors.columns"
+          [data]="topvisitors.data"
+          [options]="topvisitors.options"
+        ></google-chart>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-12 col-md-6 col-lg-6 col-xl-4">
+    <div class="card">
+      <h6 class="card-header">Top-spending Client</h6>
+      <div class="card-body">
+        <google-chart
+          [type]="topspending.type"
+          [columns]="topspending.columns"
+          [data]="topspending.data"
+          [options]="topspending.options"
+        ></google-chart>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-12 col-md-6 col-lg-6 col-xl-4">
+    <div class="card">
+      <h6 class="card-header">Invoice Delete Request (Awaiting Approval)</h6>
+      <div class="card-body">
+        <table class="google-visualization-table-table">
+          <thead>
+            <tr class="google-visualization-table-tr-head">
+              <th class="gradient text-center">Invoice No</th>
+              <th class="gradient text-center">Invoice Date</th>
+              <th class="gradient">Notes</th>
+              <th class="gradient text-center">Requested Date</th>
+              <th class="gradient">Requested By</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Updated *ngFor to @for block -->
+            @for (row of invoiceData; track row.InvoiceNo) {
+            <tr>
+              <td>
+                <a (click)="gotoInvoiceDeleteApproval(row.InvoiceNo)">{{
+                  row.InvoiceNo
+                }}</a>
+              </td>
+              <td>
+                {{ generalservice.getFormattedDate(row.LastTreatmentDate) }}
+              </td>
+              <td>{{ row.Notes }}</td>
+              <td>{{ row.DeleteRequestBy }}</td>
+              <td>{{ row.FDeleteRequest }}</td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

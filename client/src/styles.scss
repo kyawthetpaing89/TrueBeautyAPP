@@ -1,0 +1,634 @@
+:root {
+  --primary-color: #df8284;
+  --secondary-color: #c66567;
+  --active-color: #fdfd96;
+  --cardheader-color: #ebf8f7;
+  --table-header-color: #f8edeb;
+  --label-color: #800000;
+  --default-font: 13px;
+  --lg-font: 14px;
+  --xl-font: 16px;
+  --xxl-font: 25px;
+}
+
+body {
+  font-family: "Comfortaa", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-size: var(--lg-font) !important;
+}
+
+.profile-image {
+  width: 42px;
+  height: 42px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+}
+
+#loginid {
+  margin-left: 10px; /* Adds space between the profile image and login ID */
+}
+
+.title label {
+  color: blue;
+  text-decoration: underline;
+}
+
+label {
+  color: var(--label-color);
+  font-weight: 700;
+}
+
+hr {
+  color: var(--label-color);
+}
+
+.title {
+  font-size: var(--xl-font);
+  font-weight: bold;
+  color: var(--primary-color);
+}
+
+#alertContainer {
+  min-width: 400px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+}
+
+#alertContainer p {
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  margin-bottom: 0;
+}
+
+.alert-success {
+  background-color: greenyellow;
+}
+
+.alink {
+  color: var(--primary-color);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+input.form-control:focus,
+textarea.form-control:focus,
+select:focus {
+  background-color: var(--cardheader-color);
+  outline: none; /* Optional: removes the default outline */
+  border: 1px solid #00796b; /* Optional: change border color when focused */
+}
+
+input[readonly].form-control,
+textarea[readonly].form-control {
+  background-color: var(--cardheader-color);
+  cursor: not-allowed;
+}
+
+.form-control,
+.form-select {
+  border-radius: 15px;
+  border-color: #5695aa;
+}
+
+.navbar-brand img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--active-color);
+}
+
+.systitle {
+  font-size: var(--lg-font);
+  font-weight: bolder;
+  color: white;
+}
+
+.navbar-nav .nav-link.active,
+.navbar-nav .nav-link.show,
+.nav-link {
+  color: white;
+}
+
+.nav-link {
+  color: white !important;
+}
+
+.nav-link.active {
+  color: var(--active-color) !important;
+}
+
+.nav-link:hover {
+  color: var(--active-color);
+}
+
+.dropdown-menu {
+  background-color: #f2a5a6;
+  color: white;
+}
+
+.dropdown-item {
+  color: white;
+  font-size: var(--default-font);
+}
+
+.dropdown-item.active {
+  color: var(--active-color);
+  background-color: var(--secondary-color);
+}
+
+.card-header,
+.modal-header {
+  background-color: var(--cardheader-color);
+  font-weight: 700;
+}
+
+.card-header1 {
+  background-color: #f5ebf8;
+  font-weight: 700;
+}
+
+.card-header2 {
+  background-color: #f8f8eb;
+  font-weight: 700;
+}
+
+.bg-nav {
+  background-color: var(--primary-color) !important;
+}
+
+.page-body {
+  padding: 10px;
+}
+
+.loading-icon i {
+  font-size: 24px; /* Adjust size */
+  color: #3e5590; /* Adjust color */
+  animation: blink 1s infinite; /* Blink animation */
+}
+
+loading-icon i {
+  padding: 10px;
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+}
+
+optgroup {
+  color: blue;
+}
+
+optgroup option {
+  color: black;
+}
+
+.div-center {
+  display: flex;
+  justify-content: center;
+}
+
+.div-right {
+  display: flex;
+  justify-content: right;
+}
+
+.tdarea {
+  word-wrap: break-word !important; /* For legacy support */
+  white-space: normal !important; /* Allows text wrapping */
+}
+
+.h100 {
+  height: 100px;
+}
+
+.h130 {
+  height: 130px;
+}
+
+.h200 {
+  height: 200px;
+}
+
+.w100p {
+  width: 100%;
+}
+
+.maxw500 {
+  max-width: 500px;
+}
+
+.w40 {
+  width: 40px;
+}
+
+.w50 {
+  width: 50px;
+}
+
+.w100 {
+  width: 100px;
+}
+
+.w130 {
+  width: 130px;
+}
+
+.w150 {
+  width: 150px;
+}
+
+.w200 {
+  width: 200px;
+}
+
+.w33p {
+  width: 33%;
+}
+
+.w34p {
+  width: 34%;
+}
+
+.mw80 {
+  min-width: 80px;
+}
+
+.mw100 {
+  min-width: 100px;
+}
+
+.mw130 {
+  min-width: 130px;
+}
+
+.mw150 {
+  min-width: 150px;
+}
+
+.mx150 {
+  max-width: 150px;
+}
+
+.mr2 {
+  margin-right: 2px;
+}
+
+.mr5 {
+  margin-right: 5px;
+}
+
+.mr10 {
+  margin-right: 10px;
+}
+
+.mr20 {
+  margin-right: 20px;
+}
+
+.mt10 {
+  margin-top: 10px;
+}
+
+.mt5 {
+  margin-top: 5px;
+}
+
+.mb5 {
+  margin-bottom: 5px;
+}
+
+.mb10 {
+  margin-bottom: 10px;
+}
+
+.mb15 {
+  margin-bottom: 15px;
+}
+
+.btn-info {
+  color: white;
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+}
+
+.table {
+  width: 100%;
+}
+
+.table thead tr th {
+  color: var(--label-color) !important;
+  background-color: var(--table-header-color);
+  font-weight: 700;
+}
+
+table.dataTable > tbody > tr.selected > * {
+  color: black;
+  box-shadow: inset 0 0 0 9999px #fefff0 !important;
+}
+
+.table-icon {
+  font-size: 16px;
+}
+
+.table tfoot tr td {
+  font-weight: bold;
+  background-color: #cffffd !important;
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) > * {
+  background-color: honeydew;
+}
+
+.table-striped > tbody > tr:nth-of-type(even) > * {
+  background-color: white;
+}
+
+.table-print {
+  color: blue;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.table-history {
+  color: #0023ff;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.table-checkin {
+  color: red;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.table-edit {
+  color: #bc07f4;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.table-delete {
+  color: red;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.table-select {
+  color: #6a00ff;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.modal-2xl {
+  max-width: 80% !important;
+}
+
+.modal-title {
+  font-weight: bold;
+}
+
+.text-right {
+  text-align: right !important;
+}
+
+#confirmmodal .modal-body {
+  background-color: white;
+}
+
+#confirmmodal .modal-footer {
+  background-color: white;
+}
+
+.datepicker-days > .dow,
+.day,
+.old day {
+  padding: 15px !important;
+}
+
+#confirmmodal .modal-content {
+  background-color: cornsilk;
+}
+
+.dtrg-level-0 td {
+  background-color: white !important;
+  text-align: right !important;
+  font-weight: bold;
+}
+
+.hint {
+  border: 1px solid grey;
+  padding: 5px 10px 5px 10px;
+  border-radius: 10px;
+  color: grey;
+  cursor: pointer;
+}
+
+.f-right {
+  float: right;
+}
+
+.f-left {
+  float: left;
+}
+
+.custom-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Dark backdrop */
+  display: flex;
+  justify-content: center; /* Horizontally center */
+  align-items: center; /* Vertically center */
+  z-index: 9999; /* Ensure it's above other elements */
+}
+
+.spinner-container {
+  text-align: center;
+}
+
+#processingSpinner img {
+  width: 100px; /* Adjust size as needed */
+  height: auto;
+}
+
+.fixedfooter {
+  position: fixed;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  width: 100%;
+  padding: 8px;
+  z-index: 999;
+  background-color: #f9ffd8;
+}
+
+.div-centerbtn {
+  display: flex;
+  justify-content: center;
+}
+
+#customTab .nav-link {
+  color: gray !important;
+}
+
+#customTab .nav-link.active {
+  color: blue !important;
+  font-weight: 700;
+}
+
+.treatment-color {
+  background-color: #d8e8ff !important;
+}
+
+.medicine-color {
+  background-color: #fffbd8 !important;
+}
+
+.skincare-color {
+  background-color: #ffd8ec !important;
+}
+
+.form-check {
+  min-height: 0 !important;
+}
+
+.mat-mdc-dialog-container .mat-mdc-dialog-title {
+  font-family: "Comfortaa", sans-serif !important;
+  color: var(--primary-color) !important;
+  font-weight: 700 !important;
+}
+
+.mat-mdc-dialog-container .mat-mdc-dialog-content {
+  font-family: "Comfortaa", sans-serif !important;
+  color: var(--label-color) !important;
+  font-weight: 700 !important;
+}
+
+.mdc-button__label {
+  font-family: "Comfortaa", sans-serif !important;
+  font-weight: 700 !important;
+}
+
+button {
+  border-radius: 20px !important;
+  cursor: pointer !important;
+}
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.mat-mdc-dialog-title {
+  background-color: var(--cardheader-color);
+}
+
+.table-sm > :not(caption) > * > * {
+  padding: 7px !important;
+}
+
+.action-icon {
+  cursor: pointer;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.action-icon:hover {
+  transform: scale(1.2);
+  opacity: 0.8;
+}
+
+.table-responsive-scroll {
+  max-height: 700px;
+  overflow-y: auto;
+  position: relative;
+}
+
+.table-header th {
+  position: sticky;
+  top: 0;
+  background-color: #fff;
+  z-index: 10;
+  box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.1);
+}
+
+.mat-mdc-dialog-title {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  margin-top: 1px !important;
+}
+
+.mat-mdc-dialog-content {
+  padding-top: 10px !important;
+  margin-bottom: 10px !important;
+}
+
+mat-dialog-actions {
+  justify-content: flex-end !important;
+  padding: 1rem !important;
+  border-top: 1px solid var(--label-color) !important;
+}
+
+.fixed-close-btn {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 10px;
+  background-color: #fff;
+}
+
+.sort-icon {
+  font-size: 18px;
+  margin-left: 4px;
+  vertical-align: middle;
+  color: rgb(208, 206, 206); // default inactive color
+  transition: color 0.3s ease;
+  height: auto !important;
+}
+
+.sort-icon.active {
+  color: var(
+    --label-color
+  ); // highlight active column (or use your primary color)
+}
+
+a .material-icons {
+  cursor: pointer !important;
+}
+
+.form-control:disabled {
+  background-color: var(--cardheader-color);
+}
+
+.link {
+  text-decoration: underline;
+  color: var(--primary-color);
+  font-weight: bold;
+  cursor: pointer;
+}

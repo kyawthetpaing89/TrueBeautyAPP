@@ -1,0 +1,216 @@
+<form autocomplete="off">
+  <div class="card">
+    <h6 class="card-header">
+      <i class="material-icons">fact_check</i> Client Treatment Check-in
+    </h6>
+    <div class="card-body">
+      <div class="row g-3">
+        <div
+          class="col-sm-12 col-md-4 col-lg-3 col-xl-2 d-flex align-items-center"
+        >
+          <label for="txtSInvoiceNo" class="w150">Invoice No:</label>
+          <input
+            type="text"
+            class="form-control form-control-sm"
+            id="txtSInvoiceNo"
+            name="invoiceNo"
+            [(ngModel)]="search_invoiceNo"
+          />
+        </div>
+        <div
+          class="col-sm-12 col-md-4 col-lg-3 col-xl-2 d-flex align-items-center"
+        >
+          <label for="txtSClientID" class="w150">Client ID:</label>
+          <input
+            type="text"
+            class="form-control form-control-sm"
+            id="txtSClientID"
+            name="clientID"
+            [(ngModel)]="search_clientID"
+          />
+        </div>
+        <div
+          class="col-sm-12 col-md-4 col-lg-3 col-xl-2 d-flex align-items-center"
+        >
+          <label for="txtSClientName" class="w150">Client Name:</label>
+          <input
+            type="text"
+            class="form-control form-control-sm"
+            id="txtSClientName"
+            name="clientName"
+            [(ngModel)]="search_clientName"
+          />
+        </div>
+        <div
+          class="col-sm-12 col-md-4 col-lg-3 col-xl-2 d-flex align-items-center"
+        >
+          <label for="txtSPhoneNo" class="w150">Phone No:</label>
+          <input
+            type="text"
+            class="form-control form-control-sm"
+            id="txtSPhoneNo"
+            name="phoneNo"
+            [(ngModel)]="search_phoneNo"
+          />
+        </div>
+        <div
+          class="col-sm-12 col-md-4 col-lg-4 col-xl-3 d-flex align-items-center"
+        >
+          <label for="ddlSTreatmentBalance" class="w150">Balance:</label>
+          <select
+            id="ddlSTreatmentBalance"
+            class="form-select form-select-sm"
+            name="balance"
+            [(ngModel)]="search_balance"
+          >
+            <option value="">All</option>
+            <option value="1" selected>Treatment Balance Remaining</option>
+            <option value="2">Completed Treatment</option>
+          </select>
+        </div>
+      </div>
+      <div class="row div-center mt10">
+        <button
+          id="btnsearch"
+          type="button"
+          class="btn w100 btn-info btn-sm mr5"
+          (click)="loadTreatmentCheckin()"
+        >
+          Search
+        </button>
+        <button
+          id="btnclear"
+          type="button"
+          class="btn w100 btn-dark btn-sm"
+          (click)="clearsearch()"
+        >
+          Clear
+        </button>
+      </div>
+      <hr />
+      <div class="table-responsive-scroll" #scrollContainer>
+        <table
+          id="tblClientTreatment"
+          class="table table-sm table-hover table-striped table-bordered w100p"
+        >
+          <thead class="table-header">
+            <tr>
+              <th class="text-center" (click)="onSort('InvoiceNo')">
+                Invoice No
+                <mat-icon
+                  class="sort-icon float-end"
+                  [ngClass]="{
+                    active: sortColumn === 'InvoiceNo'
+                  }"
+                >
+                  {{
+                    sortColumn === "InvoiceNo" && !sortAsc
+                      ? "keyboard_double_arrow_down"
+                      : "keyboard_double_arrow_up"
+                  }}
+                </mat-icon>
+              </th>
+              <th class="text-center">Client ID</th>
+              <th (click)="onSort('ClientName')">
+                Client Name
+                <mat-icon
+                  class="sort-icon float-end"
+                  [ngClass]="{
+                    active: sortColumn === 'ClientName'
+                  }"
+                >
+                  {{
+                    sortColumn === "ClientName" && !sortAsc
+                      ? "keyboard_double_arrow_down"
+                      : "keyboard_double_arrow_up"
+                  }}
+                </mat-icon>
+              </th>
+              <th (click)="onSort('ItemName')">
+                Treatment
+                <mat-icon
+                  class="sort-icon float-end"
+                  [ngClass]="{
+                    active: sortColumn === 'ItemName'
+                  }"
+                >
+                  {{
+                    sortColumn === "ItemName" && !sortAsc
+                      ? "keyboard_double_arrow_down"
+                      : "keyboard_double_arrow_up"
+                  }}
+                </mat-icon>
+              </th>
+              <th class="text-end">Total Sessions</th>
+              <th class="text-end">Used Sessions</th>
+              <th class="text-end" (click)="onSort('Balance')">
+                Balance
+                <mat-icon
+                  class="sort-icon float-end"
+                  [ngClass]="{
+                    active: sortColumn === 'Balance'
+                  }"
+                >
+                  {{
+                    sortColumn === "Balance" && !sortAsc
+                      ? "keyboard_double_arrow_down"
+                      : "keyboard_double_arrow_up"
+                  }}
+                </mat-icon>
+              </th>
+              <th class="text-center"></th>
+            </tr>
+          </thead>
+          <!-- Replaced *ngIf with @if / @else if / @else blocks -->
+          @if (clientLoading) {
+          <tbody>
+            <tr>
+              <td colspan="12" class="text-center">
+                <div
+                  class="spinner-border spinner-border-sm text-primary"
+                  role="status"
+                ></div>
+                <span class="ms-2">Loading data...</span>
+              </td>
+            </tr>
+          </tbody>
+          } @else if (clientData.length === 0) {
+          <tbody>
+            <tr>
+              <td colspan="12" class="text-center text-muted">
+                There is no data to display.
+              </td>
+            </tr>
+          </tbody>
+          } @else {
+          <tbody>
+            <!-- Replaced *ngFor with @for block. Added a 'track' function for performance. -->
+            @for (row of clientData; track row.InvoiceNo) {
+            <tr>
+              <td class="text-center">{{ row.InvoiceNo }}</td>
+              <td class="text-center">{{ row.ClientID }}</td>
+              <td>{{ row.ClientName }}</td>
+              <td>{{ row.ItemName }}</td>
+              <td class="text-end">{{ row.TotalQuantity }}</td>
+              <td class="text-end">{{ row.UsedTreatment }}</td>
+              <td class="text-end">{{ row.Balance }}</td>
+              <td class="text-center">
+                <a (click)="openTreatmentHistoryDialog(row)"
+                  ><i class="material-icons text-primary me-2">history</i></a
+                >
+                <!-- Replaced nested *ngIf with @if block -->
+                @if (row.Balance > 0) {
+                <a (click)="openTreatmentCheckinDialog(row)"
+                  ><i class="material-icons text-danger">fact_check</i></a
+                >
+                }
+              </td>
+            </tr>
+            }
+          </tbody>
+          }
+        </table>
+      </div>
+    </div>
+  </div>
+</form>

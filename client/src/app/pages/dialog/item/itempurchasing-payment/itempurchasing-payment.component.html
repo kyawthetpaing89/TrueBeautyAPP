@@ -1,0 +1,131 @@
+<h3 mat-dialog-title>
+  <span>Item Purchasing Payment</span>
+  <a (click)="closeDialog()" aria-label="Close">
+    <mat-icon>close</mat-icon>
+  </a>
+</h3>
+<mat-dialog-content>
+  <div class="row">
+    <div class="col-lg-12 col-xl-12 mb-3">
+      <label for="txtTransactionID" class="form-label">Transaction ID</label>
+      <input
+        type="text"
+        class="form-control form-control-sm"
+        readonly
+        id="txtTransactionID"
+        [(ngModel)]="transactionID"
+        name="transactionID"
+        tabindex="-1"
+      />
+    </div>
+    <div class="col-lg-12 col-xl-12 mb-3">
+      <label for="txtPurchaseID" class="form-label">Purchase ID</label>
+      <input
+        type="text"
+        class="form-control form-control-sm"
+        id="txtPurchaseID"
+        [(ngModel)]="purchaseID"
+        name="purchaseID"
+        disabled
+      />
+    </div>
+    <div class="col-lg-12 col-xl-12 mb-3">
+      <label for="txtPaymentDate" class="form-label">Payment Date</label>
+      <input
+        type="text"
+        class="form-control form-control-sm text-center"
+        id="txtPaymentDate"
+        #txtPaymentDate
+        [(ngModel)]="paymentDate"
+        name="paymentDate"
+      />
+    </div>
+    <div class="col-lg-12 col-xl-12 mb-3">
+      <label for="txtTotalAmount" class="form-label">Total Amount</label>
+      <input
+        type="text"
+        class="form-control form-control-sm text-end"
+        id="txtTotalAmount"
+        [(ngModel)]="totalamount"
+        name="totalamount"
+        disabled
+      />
+    </div>
+    <div class="col-lg-12 col-xl-12 mb-3">
+      <label for="txtPaidAmount" class="form-label">Paid Amount</label>
+      <input
+        type="text"
+        class="form-control form-control-sm text-end"
+        id="txtPaidAmount"
+        [(ngModel)]="paidamount"
+        name="paidamount"
+        disabled
+      />
+    </div>
+    <div class="col-lg-12 col-xl-12 mb-3">
+      <label for="txtAmount" class="form-label">Amount</label>
+      <input
+        type="text"
+        class="form-control form-control-sm text-end"
+        id="txtAmount"
+        [(ngModel)]="amount"
+        name="amount"
+        [disabled]="mode === 'Delete'"
+        (ngModelChange)="amountChange()"
+        (keydown)="generalservice.allowNumbersOnly($event)"
+      />
+    </div>
+    <div class="col-lg-12 col-xl-12 mb-3">
+      <label for="txtPhoneNo" class="form-label">Balance</label>
+      <input
+        type="text"
+        class="form-control form-control-sm text-end"
+        id="txtBalance"
+        [(ngModel)]="balance"
+        name="balance"
+        disabled
+      />
+    </div>
+    <div class="col-lg-12 col-xl-12 mb-3">
+      <label for="txtAddress" class="form-label">Notes</label>
+      <textarea
+        id="txtNotes"
+        class="form-control form-control-sm"
+        [(ngModel)]="notes"
+        name="notes"
+      ></textarea>
+    </div>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button
+    id="btncancel"
+    type="button"
+    (click)="closeDialog()"
+    class="btn w100 btn-dark btn-sm mr5"
+  >
+    Cancel
+  </button>
+  <button
+    type="button"
+    id="btnSaveInvoice"
+    class="btn w100 btn-sm mr5"
+    [ngClass]="{
+      'btn-success': mode === 'New',
+      'btn-info': mode === 'Edit',
+      'btn-danger': mode === 'Delete'
+    }"
+    (click)="save()"
+    [disabled]="isSubmitting"
+  >
+    {{
+      mode === "New"
+        ? "Save"
+        : mode === "Edit"
+        ? "Update"
+        : mode === "Delete"
+        ? "Delete"
+        : "Submit"
+    }}
+  </button>
+</mat-dialog-actions>

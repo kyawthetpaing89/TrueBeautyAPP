@@ -1,0 +1,7 @@
+<div class="divalert">
+  <h2 mat-dialog-title>{{ data.title }}</h2>
+  <mat-dialog-content [innerHTML]="sanitizedHtml"></mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-button (click)="onClose()">OK</button>
+  </mat-dialog-actions>
+</div>

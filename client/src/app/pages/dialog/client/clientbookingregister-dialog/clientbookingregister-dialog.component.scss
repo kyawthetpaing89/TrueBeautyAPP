@@ -1,0 +1,33 @@
+.slot-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  max-width: 500px;
+  margin: auto;
+}
+
+.slot {
+  background-color: #eeeeee;
+  padding: 15px;
+  border: 1px solid #cccccc;
+  text-align: center;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.slot:hover {
+  background-color: #dddddd;
+}
+
+.slot.disabled {
+  pointer-events: none;
+  background-color: #ccc;
+  color: #999;
+}
+
+.slot.selected {
+  background-color: #4caf50;
+  color: white;
+  border-color: #4caf50;
+}

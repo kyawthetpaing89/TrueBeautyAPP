@@ -1,0 +1,132 @@
+<form autocomplete="off">
+  <h3 mat-dialog-title>
+    <span>Item Usage Register</span>
+    <a (click)="closeDialog()" aria-label="Close">
+      <mat-icon>close</mat-icon>
+    </a>
+  </h3>
+  <mat-dialog-content>
+    <div class="row">
+      <div class="col-lg-12 col-xl-12 mb-3">
+        <label for="txtUsageID" class="form-label">Usage ID</label>
+        <input
+          type="text"
+          class="form-control form-control-sm"
+          readonly
+          id="txtUsageID"
+          [(ngModel)]="usageid"
+          name="usageid"
+          tabindex="-1"
+        />
+      </div>
+      <!-- Used Date -->
+      <div class="col-lg-12 col-xl-12 mb-3">
+        <label id="lblItem" for="ddlItem" class="w150 col-form-label"
+          >Date Used:</label
+        >
+        <input
+          type="text"
+          class="form-control form-control-sm text-center"
+          id="txtDateUsed"
+          [(ngModel)]="dateused"
+          name="dateused"
+          [disabled]="mode === 'Delete' || mode === 'Detail'"
+          #txtDateUsed
+        />
+      </div>
+      <div class="col-lg-12 col-xl-12 mb-3">
+        <label id="lblItem" for="ddlItem" class="w150 col-form-label"
+          >Item Type:</label
+        >
+        <div class="col-lg-12 col-xl-12 mb-3">
+          <select
+            id="ddlItemType"
+            class="form-control form-control-sm"
+            [(ngModel)]="itemtype"
+            (ngModelChange)="onItemTypeChange()"
+            name="itemtype"
+            [disabled]="mode === 'Delete'"
+          >
+            <option value="M">Medicine</option>
+            <option value="S">Skin Care</option>
+            <option value="O">Others</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-lg-12 col-xl-12 mb-3">
+        <label id="lblItem" for="ddlItem" class="w150 col-form-label itemtype"
+          >Item:</label
+        >
+        <div class="col-lg-12 col-xl-12 mb10">
+          <select
+            id="ddlItem"
+            class="form-control form-control-sm"
+            [(ngModel)]="itemcd"
+            name="itemCD"
+            [disabled]="mode === 'Delete'"
+          >
+            <option *ngFor="let item of selectedData" [value]="item.ItemCD">
+              {{ item.ItemName }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="col-lg-12 col-xl-12 mb-3">
+        <label for="txtClientName" class="form-label">Quantity</label>
+        <input
+          type="text"
+          class="form-control form-control-sm text-right"
+          id="txtClientName"
+          [(ngModel)]="quantity"
+          name="ClientName"
+          [disabled]="mode === 'Delete'"
+          maxlength="2"
+          (keydown)="generalservice.allowNumbersOnly($event)"
+          autofocus
+        />
+      </div>
+      <div class="col-lg-12 col-xl-12 mb-3">
+        <label for="txtNotes" class="form-label">Notes</label>
+        <textarea
+          id="txtNotes"
+          class="form-control form-control-sm"
+          [(ngModel)]="notes"
+          name="notes"
+          [disabled]="mode === 'Delete'"
+        ></textarea>
+      </div>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button
+      id="btncancel"
+      type="button"
+      (click)="closeDialog()"
+      class="btn w100 btn-dark btn-sm mr5"
+    >
+      Cancel
+    </button>
+    <button
+      type="button"
+      id="btnSaveInvoice"
+      class="btn w100 btn-sm mr5"
+      [ngClass]="{
+        'btn-success': mode === 'New',
+        'btn-info': mode === 'Edit',
+        'btn-danger': mode === 'Delete'
+      }"
+      (click)="save()"
+      [disabled]="isSubmitting"
+    >
+      {{
+        mode === "New"
+          ? "Save"
+          : mode === "Edit"
+          ? "Update"
+          : mode === "Delete"
+          ? "Delete"
+          : "Submit"
+      }}
+    </button>
+  </mat-dialog-actions>
+</form>

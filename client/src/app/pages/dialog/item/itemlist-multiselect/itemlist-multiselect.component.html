@@ -1,0 +1,316 @@
+<form autocomplete="off">
+  <h3 mat-dialog-title>
+    Add Items
+    <a (click)="closeDialog()" aria-label="Close">
+      <mat-icon>close</mat-icon>
+    </a>
+  </h3>
+  <mat-dialog-content>
+    <!-- Replaced *ngIf with @if block -->
+    @if (step === '1') {
+    <div class="row">
+      <div class="col-lg-4 col-xl-3">
+        <label for="txtSClientID" class="form-label">Item Code</label>
+        <input
+          type="text"
+          class="form-control form-control-sm"
+          id="txtItemCD"
+          [(ngModel)]="itemCD"
+          name="itemCD"
+        />
+      </div>
+      <div class="col-lg-4 col-xl-3">
+        <label for="txtSClientName" class="form-label">Item Name</label>
+        <input
+          type="text"
+          class="form-control form-control-sm"
+          id="txtSItemName"
+          [(ngModel)]="itemName"
+          name="itemName"
+        />
+      </div>
+    </div>
+    }
+    <!-- Replaced *ngIf with @if block -->
+    @if (step === '1') {
+    <div class="row div-center mt5">
+      <button
+        id="btnClientSearch"
+        type="button"
+        class="btn w100 btn-info btn-sm mr2"
+        (click)="loadItemList()"
+      >
+        Search
+      </button>
+      <button
+        id="btnClientSearchClear"
+        type="button"
+        class="btn w100 btn-dark btn-sm"
+        (click)="clearSearch()"
+      >
+        Clear
+      </button>
+    </div>
+    }
+    <hr />
+    <div class="row">
+      <div class="col-lg-4 col-xl-3">
+        <label for="txtPurchaseID" class="form-label">Purchase ID</label>
+        <input
+          type="text"
+          class="form-control form-control-sm"
+          id="txtPurchaseID"
+          [(ngModel)]="purchaseID"
+          name="purchaseID"
+          readonly
+        />
+      </div>
+      <div class="col-lg-4 col-xl-3">
+        <label for="txtPurchaseDate" class="form-label">Purchase Date</label>
+        <input
+          type="text"
+          class="form-control form-control-sm text-center"
+          id="txtPurchaseDate"
+          [(ngModel)]="purchaseDate"
+          name="purchaseDate"
+          [disabled]="mode === 'Delete' || mode == 'Detail'"
+          #purchaseDate
+        />
+      </div>
+      <div class="col-lg-4 col-xl-6">
+        <label for="txtNotes" class="form-label">Note</label>
+        <textarea
+          class="form-control form-control-sm"
+          id="txtNote"
+          [(ngModel)]="notes"
+          name="notes"
+          [disabled]="mode === 'Delete' || mode == 'Detail'"
+        ></textarea>
+      </div>
+    </div>
+
+    <hr />
+    <div class="table-responsive-scroll">
+      <table
+        id="tblClient"
+        class="table table-sm table-hover table-striped table-bordered"
+      >
+        <thead class="table-header">
+          <tr>
+            <!-- Replaced *ngIf with @if block -->
+            @if (step === '1') {
+            <th class="text-center" (click)="onSort('selected')">
+              <mat-icon
+                class="sort-icon float-end"
+                [ngClass]="{
+                  active: sortColumn === 'selected'
+                }"
+              >
+                {{
+                  sortColumn === "selected" && !sortAsc
+                    ? "keyboard_double_arrow_down"
+                    : "keyboard_double_arrow_up"
+                }}
+              </mat-icon>
+            </th>
+            }
+            <th class="text-center" (click)="onSort('ItemCD')">
+              Item Code<mat-icon
+                class="sort-icon float-end"
+                [ngClass]="{
+                  active: sortColumn === 'ItemCD'
+                }"
+              >
+                {{
+                  sortColumn === "ItemCD" && !sortAsc
+                    ? "keyboard_double_arrow_down"
+                    : "keyboard_double_arrow_up"
+                }}
+              </mat-icon>
+            </th>
+            <th (click)="onSort('ItemName')">
+              Item Name<mat-icon
+                class="sort-icon float-end"
+                [ngClass]="{
+                  active: sortColumn === 'ItemName'
+                }"
+              >
+                {{
+                  sortColumn === "ItemName" && !sortAsc
+                    ? "keyboard_double_arrow_down"
+                    : "keyboard_double_arrow_up"
+                }}
+              </mat-icon>
+            </th>
+            <th class="text-center" (click)="onSort('ItemTypeName')">
+              Item Type<mat-icon
+                class="sort-icon float-end"
+                [ngClass]="{
+                  active: sortColumn === 'ItemTypeName'
+                }"
+              >
+                {{
+                  sortColumn === "ItemTypeName" && !sortAsc
+                    ? "keyboard_double_arrow_down"
+                    : "keyboard_double_arrow_up"
+                }}
+              </mat-icon>
+            </th>
+            <th class="text-end w100">Quantity</th>
+            <th class="text-center">Total Amount</th>
+            <th class="text-center">Registered By</th>
+            <th class="text-center" (click)="onSort('CreatedDate')">
+              Registrered Date<mat-icon
+                class="sort-icon float-end"
+                [ngClass]="{
+                  active: sortColumn === 'CreatedDate'
+                }"
+              >
+                {{
+                  sortColumn === "CreatedDate" && !sortAsc
+                    ? "keyboard_double_arrow_down"
+                    : "keyboard_double_arrow_up"
+                }}
+              </mat-icon>
+            </th>
+          </tr>
+        </thead>
+        <!-- Replaced *ngIf with @if / @else if / @else blocks -->
+        @if (itemLoading) {
+        <tbody>
+          <tr>
+            <td colspan="8" class="text-center">
+              <div
+                class="spinner-border spinner-border-sm text-primary"
+                role="status"
+              ></div>
+              <span class="ms-2">Loading data...</span>
+            </td>
+          </tr>
+        </tbody>
+        } @else if (itemData.length === 0) {
+        <tbody>
+          <tr>
+            <td colspan="8" class="text-center text-muted">
+              There is no data to display.
+            </td>
+          </tr>
+        </tbody>
+        } @else {
+        <tbody>
+          <!-- Replaced *ngFor with @for block. Added a 'track' function for performance. -->
+          @for (row of itemData; track row.ItemCD) {
+          <tr>
+            <!-- Replaced *ngIf with @if block -->
+            @if (step === '1') {
+            <td class="text-center align-middle" (click)="toggleSelection(row)">
+              <i
+                class="fa"
+                [ngClass]="{
+                  'fa-square-check text-primary': row.selected,
+                  'fa-square text-dark': !row.selected,
+                  'fa-regular fa-lg': true
+                }"
+              ></i>
+            </td>
+            }
+            <td class="text-center align-middle">{{ row.ItemCD }}</td>
+            <td class="align-middle">{{ row.ItemName }}</td>
+            <td class="text-center align-middle">{{ row.ItemTypeName }}</td>
+            <td class="text-center align-middle">
+              <!-- Replaced *ngIf with @if block -->
+              @if (row.selected) {
+              <input
+                type="text"
+                class="form-control form-control-sm text-end w100"
+                name="qty_{{ row.ItemCD }}"
+                maxlength="4"
+                [ngModel]="selectedMap[row.ItemCD].qty"
+                (ngModelChange)="onQtyChange(row.ItemCD, $event)"
+                (keydown)="generalservice.allowNumbersOnly($event)"
+                [disabled]="mode === 'Delete' || mode == 'Detail'"
+              />
+              }
+            </td>
+            <td class="text-center align-middle">
+              <!-- Replaced *ngIf with @if block -->
+              @if (row.selected) {
+              <input
+                type="text"
+                class="form-control form-control-sm text-end"
+                name="amt_{{ row.ItemCD }}"
+                [ngModel]="
+                  generalservice.formatWithThousandSeparator(
+                    selectedMap[row.ItemCD].amt ?? ''
+                  )
+                "
+                (ngModelChange)="onFormattedAmtChange(row.ItemCD, $event)"
+                (keydown)="generalservice.allowNumbersOnly($event)"
+                [disabled]="mode === 'Delete' || mode == 'Detail'"
+              />
+              }
+            </td>
+            <td class="text-center align-middle">{{ row.CreatedBy }}</td>
+            <td class="text-center align-middle">
+              {{ generalservice.getFormattedDate(row.CreatedDate) }}
+            </td>
+          </tr>
+          }
+        </tbody>
+        }
+      </table>
+    </div>
+  </mat-dialog-content>
+  <div class="fixed-close-btn">
+    <mat-dialog-actions align="end">
+      <button
+        id="btncancel"
+        type="button"
+        (click)="closeDialog()"
+        class="btn w100 btn-dark btn-sm mr5"
+      >
+        Close
+      </button>
+      <!-- Replaced *ngIf with @if block -->
+      @if (step === '2' && mode !== 'Detail' && mode !== 'Delete') {
+      <button
+        id="btnback"
+        type="button"
+        (click)="back()"
+        class="btn w100 btn-secondary btn-sm mr5"
+      >
+        Back
+      </button>
+      }
+      <!-- Replaced *ngIf with @if block -->
+      @if (step === '1') {
+      <button
+        id="btnsave"
+        type="button"
+        (click)="next()"
+        class="btn w100 btn-success btn-sm mr5"
+      >
+        Next
+      </button>
+      }
+      <!-- Replaced *ngIf with @if block -->
+      @if (step === '2' && mode !== 'Detail') {
+      <button
+        id="btnsave"
+        type="button"
+        (click)="save()"
+        class="btn w100 btn-sm mr5"
+        [ngClass]="
+          mode === 'New'
+            ? 'btn-success'
+            : mode === 'Edit'
+            ? 'btn-info'
+            : 'btn-danger'
+        "
+      >
+        {{ mode === "New" ? "Save" : mode === "Edit" ? "Update" : "Delete" }}
+      </button>
+      }
+    </mat-dialog-actions>
+  </div>
+</form>

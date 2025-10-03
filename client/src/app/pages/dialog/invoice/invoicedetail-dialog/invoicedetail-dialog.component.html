@@ -1,0 +1,211 @@
+<form autocomplete="off">
+  <h3 mat-dialog-title>
+    {{ title1 }} {{ title2 }}
+    <a (click)="closeDialog()" aria-label="Close">
+      <mat-icon>close</mat-icon>
+    </a>
+  </h3>
+  <mat-dialog-content>
+    <form>
+      <input
+        type="text"
+        id="txtSEQ"
+        style="display: none"
+        class="form-control form-control-sm text-right"
+      />
+      <div class="row">
+        <!-- Treatment -->
+        <label id="lblItem" for="ddlItem" class="w150 col-form-label itemtype"
+          >Item Name:</label
+        >
+        <div class="col-lg-12 col-xl-12 mb10">
+          <select
+            id="ddlItem"
+            class="form-control form-control-sm"
+            [(ngModel)]="itemCD"
+            name="itemCD"
+            (change)="onItemChange()"
+            [disabled]="mode === 'Delete'"
+          >
+            <!-- Replaced *ngFor with @for block. Added a 'track' function for performance. -->
+            @for (item of itemData; track item.ItemCD) {
+            <option [value]="item.ItemCD">
+              {{ item.ItemName }}
+            </option>
+            }
+          </select>
+        </div>
+
+        <!-- Unit Price -->
+        <label for="txtUnitPrice" class="w150 col-form-label">Price:</label>
+        <div class="col-lg-12 col-xl-12 mb10">
+          <input
+            type="text"
+            class="form-control form-control-sm text-right"
+            id="txtUnitPrice"
+            readonly
+            [(ngModel)]="price"
+            name="price"
+          />
+        </div>
+
+        <!-- Sessions -->
+        <label for="txtPackageQuantity" class="w200 col-form-label"
+          >Package Quantity:</label
+        >
+        <div class="col-lg-12 col-xl-12 mb10">
+          <input
+            type="text"
+            maxlength="2"
+            class="form-control form-control-sm text-right"
+            id="txtPackageQuantity"
+            readonly
+            [(ngModel)]="packagequantity"
+            name="packagequantity"
+          />
+        </div>
+
+        <!-- Quantity -->
+        <label for="txtQuantity" class="w200 col-form-label">Quantity:</label>
+        <div class="col-lg-12 col-xl-12 mb10">
+          <input
+            type="text"
+            maxlength="2"
+            class="form-control form-control-sm text-right"
+            id="txtQuantity"
+            [(ngModel)]="quantity"
+            name="quantity"
+            (ngModelChange)="calculatedata()"
+            (keydown)="generalservice.allowNumbersOnly($event)"
+            [readonly]="mode === 'Delete'"
+          />
+        </div>
+
+        <!-- Total Quantity -->
+        <label for="txtTotalQuantity" class="w200 col-form-label"
+          >Total Quantity:</label
+        >
+        <div class="col-lg-12 col-xl-12 mb10">
+          <input
+            type="text"
+            maxlength="2"
+            class="form-control form-control-sm text-right"
+            id="txtTotalQuantity"
+            readonly
+            [(ngModel)]="totalquantity"
+            name="totalquantity"
+          />
+        </div>
+
+        <!-- Total Price -->
+        <label for="txtTotalPrice" class="w150 col-form-label"
+          >Total Price:</label
+        >
+        <div class="col-lg-12 col-xl-12 mb10">
+          <input
+            type="text"
+            class="form-control form-control-sm text-right"
+            id="txtTotalPrice"
+            readonly
+            [(ngModel)]="totalprice"
+            name="totalprice"
+          />
+        </div>
+
+        <!-- Discount Percent -->
+        <label for="txtDiscountPercent" class="w150 col-form-label"
+          >Discount (%):</label
+        >
+        <div class="col-lg-12 col-xl-12 mb10">
+          <input
+            type="text"
+            class="form-control form-control-sm text-right"
+            maxlength="3"
+            id="txtDiscountPercent"
+            [(ngModel)]="discountpercent"
+            name="discountpercent"
+            (keydown)="generalservice.allowNumbersOnly($event)"
+            [readonly]="mode === 'Delete'"
+          />
+        </div>
+
+        <!-- Total Price -->
+        <label for="txtDiscountAmount" class="w150 col-form-label"
+          >Discount Amount:</label
+        >
+        <div class="col-lg-12 col-xl-12 mb10">
+          <input
+            type="text"
+            class="form-control form-control-sm text-right"
+            id="txtDiscountAmount"
+            readonly
+            [(ngModel)]="discountamount"
+            name="discountamount"
+          />
+        </div>
+
+        <label for="txtAdditionalAmount" class="col-form-label"
+          >Additional Discount:</label
+        >
+        <div class="col-lg-12 col-xl-12 mb10">
+          <input
+            type="text"
+            class="form-control form-control-sm text-right"
+            id="txtAdditionalAmount"
+            [(ngModel)]="additionaldiscount"
+            name="additionaldiscount"
+          />
+        </div>
+
+        <!-- After Discount -->
+        <label for="txtAfterDiscount" class="w150 col-form-label"
+          >After Discount:</label
+        >
+        <div class="col-lg-12 col-xl-12 mb10">
+          <input
+            type="text"
+            class="form-control form-control-sm text-right"
+            id="txtAfterDiscount"
+            readonly
+            [(ngModel)]="afterdiscount"
+            name="afterdiscount"
+          />
+        </div>
+      </div>
+    </form>
+  </mat-dialog-content>
+  <div class="fixed-close-btn">
+    <mat-dialog-actions align="end">
+      <button
+        id="btncancel"
+        type="button"
+        (click)="closeDialog()"
+        class="btn w100 btn-dark btn-sm mr5"
+      >
+        Close
+      </button>
+      <button
+        type="button"
+        id="btnSaveInvoice"
+        class="btn w100 btn-sm mr5"
+        [ngClass]="{
+          'btn-success': mode === 'New',
+          'btn-info': mode === 'Edit',
+          'btn-danger': mode === 'Delete'
+        }"
+        (click)="save()"
+        [disabled]="isSubmitting"
+      >
+        {{
+          mode === "New"
+            ? "Save"
+            : mode === "Edit"
+            ? "Update"
+            : mode === "Delete"
+            ? "Delete"
+            : "Submit"
+        }}
+      </button>
+    </mat-dialog-actions>
+  </div>
+</form>

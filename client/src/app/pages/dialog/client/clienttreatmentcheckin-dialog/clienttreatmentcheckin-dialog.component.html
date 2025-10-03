@@ -1,0 +1,86 @@
+<form autocomplete="off">
+  <h3 mat-dialog-title>
+    <span><i class="material-icons">fact_check</i> Treatment Check-in</span>
+    <a (click)="closeDialog()" aria-label="Close">
+      <mat-icon>close</mat-icon>
+    </a>
+  </h3>
+  <mat-dialog-content>
+    <div class="row">
+      <div class="col-lg-12 col-xl-12 mb-3">
+        <label for="txtInvoiceNo" class="form-label">Invoice No</label>
+        <input
+          type="text"
+          class="form-control form-control-sm"
+          readonly
+          id="txtInvoiceNo"
+          name="invoiceNo"
+          [(ngModel)]="invoiceNo"
+        />
+        <input type="hidden" id="hfSEQ" />
+      </div>
+      <div class="col-lg-12 col-xl-12 mb-3">
+        <label for="txtClientID" class="form-label">ClientID</label>
+        <input
+          type="text"
+          class="form-control form-control-sm"
+          readonly
+          id="txtClientID"
+          name="clientID"
+          [(ngModel)]="clientID"
+        />
+      </div>
+      <div class="col-lg-12 col-xl-12 mb-3">
+        <label for="txtClientName" class="form-label">Name</label>
+        <input
+          type="text"
+          class="form-control form-control-sm"
+          id="txtClientName"
+          name="clientName"
+          [(ngModel)]="clientname"
+          readonly
+        />
+      </div>
+      <div class="col-lg-12 col-xl-12 mb-3">
+        <label for="txtTreatment" class="form-label">Treatment</label>
+        <input
+          type="tel"
+          class="form-control form-control-sm"
+          id="txtTreatment"
+          name="treatment"
+          [(ngModel)]="itemName"
+          readonly
+        />
+      </div>
+      <div class="col-lg-12 col-xl-12 mb-3">
+        <label for="txtTreatmentDate" class="form-label">Check-in Date</label>
+        <input
+          type="tel"
+          class="form-control form-control-sm text-center"
+          id="txtCheckinDate"
+          name="checkinDate"
+          [(ngModel)]="checkinDate"
+          #txtCheckinDate
+        />
+      </div>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button
+      id="btncancel"
+      type="button"
+      (click)="closeDialog()"
+      class="btn w100 btn-dark btn-sm mr5"
+    >
+      Close
+    </button>
+    <button
+      id="btnsave"
+      type="button"
+      (click)="save()"
+      class="btn w100 btn-success btn-sm"
+    >
+      Save
+    </button>
+  </mat-dialog-actions>
+</form>

@@ -1,0 +1,136 @@
+<div class="card">
+  <h6 class="card-header">
+    <i class="material-icons">dashboard</i> Item Report
+  </h6>
+  <div class="card-body">
+    <div class="row g-3 mb15">
+      <!-- Year -->
+      <div class="col-12 col-md-4 col-lg-4 col-xl-3 d-flex align-items-center">
+        <label for="ddlSYear" class="w150">Year:</label>
+        <select
+          id="ddlSYear"
+          class="form-control form-control-sm"
+          (change)="loadReport()"
+          [(ngModel)]="selectedyear"
+        >
+          <option class="text-center" [value]="0">All</option>
+          @for (year of years; track year) {
+          <option class="text-center" [value]="year">
+            {{ year }}
+          </option>
+          }
+        </select>
+      </div>
+      <div
+        class="col-sm-12 col-md-4 col-lg-3 col-xl-3 d-flex align-items-center"
+      >
+        <label for="ddlSMonth" class="w150">Month:</label>
+        <select
+          id="ddlSMonth"
+          class="form-control form-control-sm"
+          [(ngModel)]="selectedmonth"
+          (change)="loadReport()"
+        >
+          @for (month of months; track month.value) {
+          <option class="text-center" [value]="month.value">
+            {{ month.name }}
+          </option>
+          }
+        </select>
+      </div>
+    </div>
+    <div class="row g-3">
+      <div
+        class="col-sm-12 col-md-4 col-lg-3 col-xl-3 d-flex align-items-center"
+      >
+        <label for="rdoReportType" class="w150">Report Type:</label>
+        <div class="d-flex align-items-start">
+          <div class="form-check me-3">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="rdoReportType"
+              id="rdoTopTreatments"
+              [(ngModel)]="reportType"
+              (change)="loadReport()"
+              value="T"
+            />
+            <label class="form-check-label" for="rdoTopTreatments"
+              >Treatments</label
+            >
+          </div>
+          <div class="form-check me-3">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="rdoReportType"
+              id="rdoTopMedicine"
+              [(ngModel)]="reportType"
+              (change)="loadReport()"
+              value="M"
+            />
+            <label class="form-check-label" for="rdoTopMedicine"
+              >Medicines</label
+            >
+          </div>
+          <div class="form-check me-3">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="rdoReportType"
+              id="rdoTopSkincare"
+              [(ngModel)]="reportType"
+              (change)="loadReport()"
+              value="S"
+            />
+            <label class="form-check-label" for="rdoTopSkincare"
+              >Skin Cares</label
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr />
+    <div class="table-responsive-scroll" #scrollContainer>
+      <table
+        id="tblTopSellingItems"
+        class="table table-sm table-hover table-striped table-bordered w100p"
+      >
+        <thead>
+          <tr>
+            <th class="text-center">Item Code</th>
+            <th>Item Name</th>
+            <th class="text-end">Total Quantity</th>
+            <th class="text-end">Total Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          @if (itemLoading) {
+          <tr>
+            <td colspan="4" class="text-center">
+              <div
+                class="spinner-border spinner-border-sm text-primary"
+                role="status"
+              ></div>
+              <span class="ms-2">Loading data...</span>
+            </td>
+          </tr>
+          } @else { @for (row of itemData; track row.ItemCD) {
+          <tr>
+            <td class="text-center">{{ row.ItemCD }}</td>
+            <td>{{ row.ItemName }}</td>
+            <td class="text-end">{{ row.TotalQty | number }}</td>
+            <td class="text-end">{{ row.TotalAmount | number }}</td>
+          </tr>
+          }@empty {
+          <tr>
+            <td colspan="4" class="text-center text-muted">
+              There is no data to display.
+            </td>
+          </tr>
+          } }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

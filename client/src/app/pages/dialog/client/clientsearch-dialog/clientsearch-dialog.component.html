@@ -1,0 +1,151 @@
+<form autocomplete="off">
+  <h3 mat-dialog-title>
+    Client Search
+    <a (click)="closeDialog()" aria-label="Close">
+      <mat-icon>close</mat-icon>
+    </a>
+  </h3>
+  <mat-dialog-content>
+    <div class="row">
+      <div class="col-lg-4 col-xl-3">
+        <label for="txtSClientID" class="form-label">Client ID</label>
+        <input
+          type="text"
+          class="form-control form-control-sm"
+          id="txtSClientID"
+          [(ngModel)]="clientID"
+          name="clientID"
+        />
+      </div>
+      <div class="col-lg-4 col-xl-3">
+        <label for="txtSClientName" class="form-label">Client Name</label>
+        <input
+          type="text"
+          class="form-control form-control-sm"
+          id="txtSClientName"
+          [(ngModel)]="clientName"
+          name="clientName"
+        />
+      </div>
+      <div class="col-lg-4 col-xl-3">
+        <label for="ddlSGender" class="form-label">Gender</label>
+        <select
+          class="form-select form-select-sm"
+          id="ddlSGender"
+          [(ngModel)]="gender"
+          name="gender"
+        >
+          <option value="">All</option>
+          <option value="1">Male</option>
+          <option value="2">Female</option>
+        </select>
+      </div>
+      <div class="col-lg-4 col-xl-3">
+        <label for="txtSPhoneNo" class="form-label">Phone No.</label>
+        <input
+          type="text"
+          class="form-control form-control-sm"
+          id="txtSPhoneNo"
+          [(ngModel)]="phoneNo"
+          name="phoneNo"
+        />
+      </div>
+    </div>
+    <div class="row div-center mt5">
+      <button
+        id="btnClientSearch"
+        type="button"
+        class="btn w100 btn-info btn-sm mr2"
+        (click)="loadClientList()"
+      >
+        Search
+      </button>
+      <button
+        id="btnClientSearchClear"
+        type="button"
+        class="btn w100 btn-dark btn-sm"
+        (click)="clearSearch()"
+      >
+        Clear
+      </button>
+    </div>
+    <hr />
+    <div class="table-responsive-scroll">
+      <table
+        id="tblClient"
+        class="table table-sm table-hover table-striped table-bordered"
+      >
+        <thead class="table-header">
+          <tr>
+            <th class="text-center">Client ID</th>
+            <th>Client Name</th>
+            <th>Gender</th>
+            <th class="text-center">Age</th>
+            <th>Phone Number</th>
+            <th class="text-center">Registered Date</th>
+            <th class="text-center"></th>
+          </tr>
+        </thead>
+        <!-- Replaced *ngIf with @if / @else if / @else blocks -->
+        @if (clientLoading) {
+        <tbody>
+          <tr>
+            <td colspan="7" class="text-center">
+              <div
+                class="spinner-border spinner-border-sm text-primary"
+                role="status"
+              ></div>
+              <span class="ms-2">Loading data...</span>
+            </td>
+          </tr>
+        </tbody>
+        } @else if (clientData.length === 0) {
+        <tbody>
+          <tr>
+            <td colspan="7" class="text-center text-muted">
+              There is no data to display.
+            </td>
+          </tr>
+        </tbody>
+        } @else {
+        <tbody>
+          <!-- Replaced *ngFor with @for block. Added a 'track' function for performance. -->
+          @for (row of clientData; track row.ClientID) {
+          <tr>
+            <td class="text-center align-middle">{{ row.ClientID }}</td>
+            <td class="align-middle">{{ row.Name }}</td>
+            <td class="text-center align-middle">{{ row.GenderText }}</td>
+            <td class="text-center align-middle">{{ row.Age }}</td>
+            <td class="align-middle">{{ row.PhoneNo }}</td>
+            <td class="text-center align-middle">
+              {{ generalservice.getFormattedDate(row.CreatedDate) }}
+            </td>
+            <td class="text-center align-middle">
+              <button
+                class="btn btn-sm btn-secondary"
+                (click)="clientSelect(row)"
+              >
+                <i class="fa-solid fa-circle-check fa-lg action-icon me-1"></i>
+                Select
+              </button>
+            </td>
+          </tr>
+          }
+        </tbody>
+        }
+      </table>
+    </div>
+  </mat-dialog-content>
+  <div class="fixed-close-btn">
+    <mat-dialog-actions align="end">
+      <button
+        id="btncancel"
+        type="button"
+        (click)="closeDialog()"
+        class="btn w100 btn-dark btn-sm mr5"
+      >
+        Close
+      </button>
+    </mat-dialog-actions>
+  </div>
+</form>

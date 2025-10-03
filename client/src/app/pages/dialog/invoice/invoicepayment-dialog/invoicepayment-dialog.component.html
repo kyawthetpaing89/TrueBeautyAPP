@@ -1,0 +1,89 @@
+<form autocomplete="off">
+  <h3 mat-dialog-title>
+    <span>Client Payment</span>
+    <a (click)="closeDialog()" aria-label="Close">
+      <mat-icon>close</mat-icon>
+    </a>
+  </h3>
+  <mat-dialog-content>
+    <div class="row">
+      <!-- Transaction ID -->
+      <label for="txtTransactionID" class="w150 col-form-label"
+        >Transaction ID:</label
+      >
+      <div class="col-lg-12 col-xl-12 mb10">
+        <input
+          type="text"
+          class="form-control form-control-sm text-center"
+          id="txtTransactionID"
+          readonly
+          [(ngModel)]="transactionID"
+          name="transactionID"
+        />
+      </div>
+
+      <!-- Payment Date -->
+      <label for="txtPaymentDate" class="w150 col-form-label"
+        >Payment Date:</label
+      >
+      <div class="col-lg-12 col-xl-12 mb10">
+        <input
+          type="text"
+          class="form-control form-control-sm text-center"
+          id="txtPaymentDate"
+          #txtPaymentDate
+          [(ngModel)]="paymentdate"
+          name="paymentdate"
+          [readonly]="mode === 'Delete'"
+        />
+      </div>
+
+      <!-- Amount -->
+      <label for="txtAmount" class="w200 col-form-label">Amount:</label>
+      <div class="col-lg-12 col-xl-12 mb10">
+        <input
+          type="text"
+          class="form-control form-control-sm text-right"
+          id="txtAmount"
+          autocomplete="off"
+          [(ngModel)]="amount"
+          name="amount"
+          (keydown)="generalservice.allowNumbersOnly($event)"
+          [readonly]="mode === 'Delete'"
+        />
+      </div>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button
+      id="btncancel"
+      type="button"
+      (click)="closeDialog()"
+      class="btn w100 btn-dark btn-sm mr5"
+    >
+      Cancel
+    </button>
+    <button
+      type="button"
+      id="btnSaveInvoice"
+      class="btn w100 btn-sm mr5"
+      [ngClass]="{
+        'btn-success': mode === 'New',
+        'btn-info': mode === 'Edit',
+        'btn-danger': mode === 'Delete'
+      }"
+      (click)="save()"
+      [disabled]="isSubmitting"
+    >
+      {{
+        mode === "New"
+          ? "Save"
+          : mode === "Edit"
+          ? "Update"
+          : mode === "Delete"
+          ? "Delete"
+          : "Submit"
+      }}
+    </button>
+  </mat-dialog-actions>
+</form>
