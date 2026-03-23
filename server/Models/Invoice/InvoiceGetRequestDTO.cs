@@ -1,13 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 namespace server.Models.Invoice
 {
     public class InvoiceGetRequestDTO
     {
         public string InvoiceNo { get; set; } = "";
+        public string ShopID { get; set; } = "";
         public string InvoiceDateFrom { get; set; } = "";
         public string InvoiceDateTo { get; set; } = "";
         public string ClientID { get; set; } = "";

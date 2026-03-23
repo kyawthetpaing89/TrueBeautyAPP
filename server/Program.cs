@@ -49,6 +49,7 @@ builder.Services.AddControllersWithViews();
 // Add Swagger services (optional)
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddMemoryCache();
 builder.Services.AddScoped(typeof(ITokenService), typeof(TokenService));
 builder.Services.AddScoped(typeof(IDataRepository<>), typeof(DataRepository<>));
 

@@ -45,6 +45,7 @@ export class InvoicedetailDialogComponent {
   itemData: any[] = this.data.ItemData;
   mode: string = this.data.Mode;
   itemType: string = this.data.ItemType;
+  shopID: string = this.data.ShopID;
 
   title1: string =
     this.mode === 'New' ? 'Add' : this.mode === 'Edit' ? 'Update' : 'Delete';
@@ -52,12 +53,12 @@ export class InvoicedetailDialogComponent {
     this.itemType === 'T'
       ? 'Treatment'
       : this.itemType === 'M'
-      ? 'Medicine'
-      : 'Skin Care';
+        ? 'Medicine'
+        : 'Skin Care';
 
   constructor(
     private dialogRef: MatDialogRef<InvoicedetailDialogComponent>,
-    private dialog: MatDialog
+    private dialog: MatDialog,
   ) {}
 
   get price(): string {
@@ -151,7 +152,7 @@ export class InvoicedetailDialogComponent {
 
   discountChange() {
     this._discountamount = Math.round(
-      (this._totalprice * this.discountpercent) / 100
+      (this._totalprice * this.discountpercent) / 100,
     );
     this._afterdiscount =
       this._totalprice - (this._discountamount + this._additionaldiscount);
@@ -169,6 +170,7 @@ export class InvoicedetailDialogComponent {
 
     const model = invoicedetail_process_model({
       InvoiceNo: this.data.InvoiceNo,
+      ShopID: this.shopID,
       InvoiceDate: this.data.InvoiceDate,
       ClientID: this.data.ClientID,
       Notes: this.data.Notes || '',
@@ -193,14 +195,14 @@ export class InvoicedetailDialogComponent {
       .pipe(
         finalize(() => {
           this.isSubmitting = false;
-        })
+        }),
       )
       .subscribe({
         next: (response) => {
           if (response.status) {
             this.dialogservice.showMessage(
               'Success',
-              response.data?.data?.[0]?.MessageText
+              response.data?.data?.[0]?.MessageText,
             );
             this.dialogRef.close({
               success: true,

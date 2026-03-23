@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
@@ -57,54 +57,69 @@
             <th>Particular</th>
             <th class="text-right">Qty</th>
             <th class="text-right">Price</th>
+            <th class="text-right">Discount</th>
             <th class="text-right">Amount</th>
           </tr>
         </thead>
         <tbody>
           <!-- Replaced *ngIf and *ngFor with @if and @for blocks -->
           @if (invoiceDetailData.length > 0) {
-          <!-- Display invoice details -->
-          @for (row of invoiceDetailData; track i; let i = $index) {
-          <tr [style.background-color]="i % 2 === 0 ? '#FFF' : '#c665671c'">
-            <td class="text-center">{{ i + 1 }}</td>
-            <td>{{ row.ItemName }}</td>
-            <td class="text-right">{{ row.Quantity }}</td>
-            <td class="text-right">
-              {{ row.UnitPrice | number : "1.0-0" }}
-            </td>
-            <td class="text-right">
-              {{ row.TotalPrice | number : "1.0-0" }}
-            </td>
-          </tr>
-          }
-          <!-- Fill up to 10 rows -->
-          @for ( blank of [].constructor(10 - invoiceDetailData.length); track
-          j; let j = $index ) {
-          <tr
-            [style.background-color]="
-              (invoiceDetailData.length + j) % 2 === 0 ? '#FFF' : '#c665671c'
-            "
-          >
-            <td class="text-center">
-              {{ invoiceDetailData.length + j + 1 }}
-            </td>
-            <td></td>
-            <td class="text-right"></td>
-            <td class="text-right"></td>
-            <td class="text-right"></td>
-          </tr>
-          } } @else {
-          <!-- If no data -->
-          <tr>
-            <td colspan="5" class="text-center">No data available</td>
-          </tr>
+            <!-- Display invoice details -->
+            @for (row of invoiceDetailData; track i; let i = $index) {
+              <tr [style.background-color]="i % 2 === 0 ? '#FFF' : '#c665671c'">
+                <td class="text-center">{{ i + 1 }}</td>
+                <td>{{ row.ItemName }}</td>
+                <td class="text-right">{{ row.Quantity }}</td>
+                <td class="text-right">
+                  {{ row.UnitPrice | number: "1.0-0" }}
+                </td>
+                <td class="text-right">
+                  {{
+                    row.DiscountAmount !== 0
+                      ? (row.DiscountAmount | number: "1.0-0")
+                      : ""
+                  }}
+                </td>
+                <td class="text-right">
+                  {{ row.AfterDiscount | number: "1.0-0" }}
+                </td>
+              </tr>
+            }
+            <!-- Fill up to 10 rows -->
+            @for (
+              blank of [].constructor(10 - invoiceDetailData.length);
+              track j;
+              let j = $index
+            ) {
+              <tr
+                [style.background-color]="
+                  (invoiceDetailData.length + j) % 2 === 0
+                    ? '#FFF'
+                    : '#c665671c'
+                "
+              >
+                <td class="text-center">
+                  {{ invoiceDetailData.length + j + 1 }}
+                </td>
+                <td></td>
+                <td class="text-right"></td>
+                <td class="text-right"></td>
+                <td class="text-right"></td>
+                <td class="text-right"></td>
+              </tr>
+            }
+          } @else {
+            <!-- If no data -->
+            <tr>
+              <td colspan="5" class="text-center">No data available</td>
+            </tr>
           }
         </tbody>
         <tfoot>
           <tr>
-            <td class="text-right bold" colspan="4">Total</td>
+            <td class="text-right bold" colspan="5">Total</td>
             <td class="text-right bold">
-              {{ invoiceData.FTotalPrice ?? "0" }}
+              {{ invoiceData.AfterDiscount | number: "1.0-0" }}
             </td>
           </tr>
         </tfoot>
@@ -124,16 +139,16 @@
         <tbody>
           <!-- Replaced *ngFor and *ngIf with @for and @empty blocks -->
           @for (row of paymentDetailData; track i; let i = $index) {
-          <tr [style.background-color]="i % 2 === 0 ? '#FFF' : '#c665671c'">
-            <td class="text-center">{{ i + 1 }}</td>
-            <td class="text-center">{{ row.TransactionID }}</td>
-            <td class="text-center">{{ row.FPaymentDate }}</td>
-            <td class="text-right">{{ row.FAmount }}</td>
-          </tr>
+            <tr [style.background-color]="i % 2 === 0 ? '#FFF' : '#c665671c'">
+              <td class="text-center">{{ i + 1 }}</td>
+              <td class="text-center">{{ row.TransactionID }}</td>
+              <td class="text-center">{{ row.FPaymentDate }}</td>
+              <td class="text-right">{{ row.FAmount }}</td>
+            </tr>
           } @empty {
-          <tr>
-            <td colspan="4">No data available</td>
-          </tr>
+            <tr>
+              <td colspan="4">No data available</td>
+            </tr>
           }
         </tbody>
         <tfoot>
@@ -160,7 +175,16 @@
           <label class="bold pl20">Aung Myay Thar Zan Township, Mandalay</label
           ><br />
           <i class="fa-solid fa-mobile-screen-button"></i
-          ><label class="bold pl5">09-957222177</label>
+          ><label class="bold pl5">09-957222177</label> <br />
+          <hr />
+          <i class="fa-solid fa-location-dot"></i
+          ><label class="bold pl5"
+            >No. (Zya)4/94, Corner of 109 & 61(B) Streets,</label
+          ><br />
+          <label class="bold pl20">Chan Mya Thar Zi Township, Mandalay</label
+          ><br />
+          <i class="fa-solid fa-mobile-screen-button"></i
+          ><label class="bold pl5">09-782827103</label>
         </div>
         <div
           class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-3 align-items-center text-right"
@@ -172,11 +196,11 @@
             }}</label></span
           ><br />
           <!-- Replaced *ngIf with @if block -->
-          @if (invoiceData?.Discount && invoiceData.FDiscount !== '0') {
-          <span class="bold colorfooter">
-            Discount: <label class="w100">{{ invoiceData.FDiscount }}</label>
-          </span>
-          <br />
+          @if (invoiceData?.Discount && invoiceData.FDiscount !== "0") {
+            <span class="bold colorfooter">
+              Discount: <label class="w100">{{ invoiceData.FDiscount }}</label>
+            </span>
+            <br />
           }
 
           <span class="bold colorfooter"

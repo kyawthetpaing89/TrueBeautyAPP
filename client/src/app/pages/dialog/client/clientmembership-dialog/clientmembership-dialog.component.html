@@ -1,0 +1,313 @@
+<form autocomplete="off">
+  <h3 mat-dialog-title>
+    <span>Membership</span>
+    <a (click)="closeDialog()" aria-label="Close">
+      <mat-icon>close</mat-icon>
+    </a>
+  </h3>
+  <mat-dialog-content>
+    <mat-dialog-content>
+      <div class="row">
+        <div class="col-sm-12 col-lg-6 col-xl-6">
+          <div class="row">
+            <div class="col-sm-12 col-lg-6 mb-3">
+              <label for="txtClientID" class="form-label">ClientID</label>
+              <input
+                type="text"
+                class="form-control form-control-sm"
+                readonly
+                id="txtClientID"
+                [(ngModel)]="clientID"
+                name="ClientID"
+                tabindex="-1"
+              />
+            </div>
+
+            <div class="col-sm-12 col-lg-6 mb-3">
+              <label for="txtClientName" class="form-label">Name</label>
+              <input
+                type="text"
+                class="form-control form-control-sm"
+                id="txtClientName"
+                [(ngModel)]="clientName"
+                name="ClientName"
+                disabled
+              />
+            </div>
+          </div>
+          <div class="row">
+            @if (currentMembership) {
+              <div class="col-sm-12 col-lg-12 col-xl-12 mb-3">
+                <div class="card">
+                  <h6 class="card-header card-header1">Current Membership</h6>
+                  <div class="card-body">
+                    <div class="row align-items-end">
+                      <div class="col-sm-12 col-lg-6 mb-3">
+                        <label for="txtCurrentMembership" class="form-label"
+                          >Membership</label
+                        >
+                        <input
+                          type="text"
+                          class="form-control form-control-sm text-center"
+                          id="txtCurrentMembership"
+                          [(ngModel)]="currentMembership"
+                          name="currentMembership"
+                          disabled
+                        />
+                      </div>
+                      <div class="col-sm-12 col-lg-6 mb-3">
+                        <label for="txtMembershipBalance" class="form-label"
+                          >Membership Balance</label
+                        >
+                        <input
+                          type="text"
+                          class="form-control form-control-sm text-right"
+                          id="txtMembershipBalance"
+                          [(ngModel)]="membershipBalance"
+                          name="membershipBalance"
+                          disabled
+                        />
+                      </div>
+                      <div
+                        class="col-sm-12 col-lg-12 mb-3 d-flex justify-content-end"
+                      >
+                        <button
+                          id="btnCancelMembership"
+                          class="btn btn-sm btn-danger w150"
+                          type="button"
+                          (click)="processMembership('Cancel')"
+                          [disabled]="isSubmitting"
+                        >
+                          Cancel Membership
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            }
+            <div class="col-sm-12 col-lg-12 col-xl-12 mb-3">
+              <div class="card">
+                <h6 class="card-header card-header1">Joined New Membership</h6>
+                <div class="card-body">
+                  <div class="row align-items-end">
+                    <div class="col-sm-12 col-lg-6 mb-3">
+                      <label for="txtMembershipType" class="form-label"
+                        >Membership Type</label
+                      >
+                      <select
+                        id="ddlMembershipType"
+                        class="form-control form-control-sm"
+                        (ngModelChange)="loadCardAmount($event)"
+                        [(ngModel)]="selectedCard"
+                        name="selectedCard"
+                      >
+                        <!-- Updated *ngFor to @for block -->
+                        @for (card of memberCardData; track card.MemberCardCD) {
+                          <option
+                            class="text-center"
+                            [value]="card.MemberCardCD"
+                          >
+                            {{ card.Membership }}
+                          </option>
+                        }
+                      </select>
+                    </div>
+
+                    <div class="col-sm-12 col-lg-6 mb-3">
+                      <label for="txtMembershipAmount" class="form-label"
+                        >Membership Amount</label
+                      >
+                      <input
+                        type="text"
+                        class="form-control form-control-sm text-right"
+                        id="txtMembershipAmount"
+                        [(ngModel)]="membershipAmount"
+                        name="membershipAmount"
+                        disabled
+                      />
+                    </div>
+
+                    <div
+                      class="col-sm-12 col-lg-12 mb-3 d-flex justify-content-end"
+                    >
+                      <button
+                        id="btnJoinMembership"
+                        class="btn btn-sm btn-success w150 mr5 addbtn"
+                        type="button"
+                        (click)="processMembership('Join')"
+                        [disabled]="isSubmitting"
+                      >
+                        Join Membership
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12 col-lg-6 col-xl-6">
+          <div class="card mb-3">
+            <h6 class="card-header card-header1">Membership History</h6>
+            <div class="card-body">
+              <table
+                id="tblMembership"
+                class="table table-sm table-hover table-striped table-bordered w100p"
+              >
+                <thead class="table-header">
+                  <tr>
+                    <th class="text-center">Membership</th>
+                    <th class="text-center">Joined Date</th>
+                    <th class="text-center">Status</th>
+                  </tr>
+                </thead>
+                @if (membershipDataLoading) {
+                  <tbody>
+                    <tr>
+                      <td colspan="3" class="text-center">
+                        <div
+                          class="spinner-border spinner-border-sm text-primary"
+                          role="status"
+                        ></div>
+                        <span class="ms-2">Loading data...</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                } @else if (membershipData.length === 0) {
+                  <tbody>
+                    <tr>
+                      <td colspan="3" class="text-center text-muted">
+                        There is no data to display.
+                      </td>
+                    </tr>
+                  </tbody>
+                } @else {
+                  <tbody>
+                    @for (
+                      membership of membershipData;
+                      track membership.ClientMemberCardID
+                    ) {
+                      <tr
+                        style="cursor: pointer"
+                        [class.selected-row]="
+                          selectedClientMemberCardID ===
+                          membership.ClientMemberCardID
+                        "
+                        (click)="
+                          loadTransactions(membership.ClientMemberCardID)
+                        "
+                      >
+                        <td class="text-center">
+                          {{ membership.Membership }}
+                        </td>
+                        <td class="text-center">
+                          {{ membership.JoinedDate | date: "dd MMM yyyy" }}
+                        </td>
+                        <td class="text-center">
+                          <span
+                            class="badge w100 status-badge"
+                            [class.bg-success]="membership.Balance > 0"
+                            [class.bg-secondary]="membership.Balance <= 0"
+                          >
+                            {{ membership.Balance > 0 ? "Active" : "Inactive" }}
+                          </span>
+                        </td>
+                      </tr>
+                    }
+                  </tbody>
+                }
+              </table>
+            </div>
+          </div>
+
+          <div class="card">
+            <div
+              class="card-header card-header1 d-flex justify-content-between align-items-center"
+            >
+              <h6 class="card-header1 mb-0">Membership Transactions</h6>
+              <span class="fw-semibold">
+                Balance: {{ totalTransactionsAmount | number }}
+              </span>
+            </div>
+            <div class="card-body">
+              <table
+                id="tblMembershipTransactions"
+                class="table table-sm table-hover table-striped table-bordered w100p"
+              >
+                <thead class="table-header">
+                  <tr>
+                    <th class="text-center">Transaction No</th>
+                    <th class="text-center">Date</th>
+                    <th class="text-right">Amount</th>
+                    <th>Remark</th>
+                  </tr>
+                </thead>
+                @if (membershipTransactionsDataLoading) {
+                  <tbody>
+                    <tr>
+                      <td colspan="4" class="text-center">
+                        <div
+                          class="spinner-border spinner-border-sm text-primary"
+                          role="status"
+                        ></div>
+                        <span class="ms-2">Loading data...</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                } @else if (membershipTransactionsData.length === 0) {
+                  <tbody>
+                    <tr>
+                      <td colspan="4" class="text-center text-muted">
+                        There is no data to display.
+                      </td>
+                    </tr>
+                  </tbody>
+                } @else {
+                  <tbody>
+                    @for (
+                      transaction of membershipTransactionsData;
+                      track transaction.TransactionCD
+                    ) {
+                      <tr>
+                        <td class="text-center">
+                          {{ transaction.TransactionCD }}
+                        </td>
+                        <td class="text-center">
+                          {{
+                            transaction.TransactionDate
+                              | date: "dd MMM yyyy hh:mm:ss a"
+                          }}
+                        </td>
+                        <td
+                          class="text-end fw-semibold"
+                          [class.text-primary]="transaction.Amount > 0"
+                          [class.text-danger]="transaction.Amount < 0"
+                        >
+                          {{ transaction.Amount | number }}
+                        </td>
+                        <td>
+                          {{ transaction.Remark }}
+                        </td>
+                      </tr>
+                    }
+                  </tbody>
+                }
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-dialog-content>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button
+      id="btncancel"
+      type="button"
+      (click)="closeDialog()"
+      class="btn w100 btn-dark btn-sm mr5"
+    >
+      Close
+    </button>
+  </mat-dialog-actions>
+</form>

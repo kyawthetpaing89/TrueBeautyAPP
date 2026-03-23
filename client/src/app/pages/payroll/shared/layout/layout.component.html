@@ -1,0 +1,110 @@
+<mat-sidenav-container class="sidenav-container">
+  <!-- Sidebar Menu -->
+  <mat-sidenav #drawer class="sidenav" mode="over" [opened]="false">
+    <mat-nav-list>
+      <a mat-list-item routerLink="/payroll/employee/employeelist"
+        >Employee List</a
+      >
+      <a mat-list-item routerLink="/payroll/employee/"> Employee Position </a>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <!-- Main Content -->
+  <mat-sidenav-content>
+    <mat-toolbar color="primary" class="topbar">
+      <button mat-icon-button (click)="drawer.toggle()" class="hide-desktop">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <img
+        src="assets/system-images/tb-white.webp"
+        alt="Logo"
+        class="logo-img"
+      />
+      <span class="logo-text me-2">Payroll System v-1.0</span>
+
+      <!-- Desktop Navigation -->
+      <div class="toolbar-links hide-mobile">
+        @if (role === 'admin') {
+        <a
+          mat-button
+          [matMenuTriggerFor]="employeeMenu"
+          [ngClass]="{ 'active-link': isEmployeeRouteActive() }"
+        >
+          <i class="material-icons">people_alt</i> Employee
+          <i class="fa-solid fa-caret-down ms-1"></i>
+        </a>
+
+        <mat-menu #employeeMenu="matMenu">
+          <a mat-menu-item routerLink="payroll/employee/employeelist">
+            <i class="material-icons">groups</i> Employee List
+          </a>
+          <a mat-menu-item routerLink="/client/treatmentcheckin">
+            <i class="material-icons">work </i> Position List
+          </a>
+        </mat-menu>
+        }
+
+        <span style="margin-left: auto"></span>
+
+        <!-- Menu Icon -->
+        <div class="system-menu-wrapper">
+          <button
+            class="system-menu-button"
+            mat-icon-button
+            (click)="toggleSystemList(); $event.stopPropagation()"
+          >
+            <mat-icon>layers</mat-icon>
+          </button>
+
+          <!-- System Panel -->
+          @if(showSystemList) {
+          <div class="system-box">
+            <!-- Icons Row -->
+            <div class="system-icons">
+              <button
+                mat-icon-button
+                *ngFor="let system of systems"
+                (click)="switchSystem(system)"
+                [ngStyle]="{ 'background-color': system.background }"
+              >
+                <mat-icon>{{ system.icon }}</mat-icon>
+              </button>
+            </div>
+
+            <!-- Names Row -->
+            <div class="system-names">
+              @for (system of systems; track system.id) {
+              <span
+                [ngStyle]="{ color: system.background }"
+                (click)="switchSystem(system)"
+              >
+                {{ system.name }}
+              </span>
+              }
+            </div>
+          </div>
+          }
+        </div>
+        <a mat-button [matMenuTriggerFor]="userMenu">
+          <i class="material-icons">verified_user</i>
+          {{ generalservcie.getLoginID() }}
+          <i class="fa-solid fa-caret-down ms-1"></i>
+        </a>
+
+        <mat-menu #userMenu="matMenu">
+          <a mat-menu-item routerLink="/admin/myprofile">
+            <i class="material-icons">person</i> My Profile
+          </a>
+          <a mat-menu-item (click)="logout()">
+            <i class="material-icons">lock_open</i> Log-out
+          </a>
+        </mat-menu>
+      </div>
+    </mat-toolbar>
+
+    <!-- Routed content -->
+    <div class="content">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

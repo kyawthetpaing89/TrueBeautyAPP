@@ -35,17 +35,19 @@ export class ItemregisterDialogComponent {
   itemType: string = this.data.ItemType || 'T';
   mode: string = '';
   itemTypeName: string =
-    this.data.ItemType === 'T'
-      ? 'Treatment'
-      : this.data.ItemType === 'M'
-      ? 'Medicine'
-      : 'Skin Care';
+    this.data.ItemType === 'C'
+      ? 'Membership'
+      : this.data.ItemType === 'T'
+        ? 'Treatment'
+        : this.data.ItemType === 'M'
+          ? 'Medicine'
+          : 'Skin Care';
 
   isSubmitting: boolean = false;
 
   constructor(
     private dialog: MatDialog,
-    private dialogRef: MatDialogRef<ItemregisterDialogComponent>
+    private dialogRef: MatDialogRef<ItemregisterDialogComponent>,
   ) {}
 
   ngOnInit(): void {
@@ -125,14 +127,14 @@ export class ItemregisterDialogComponent {
       .pipe(
         finalize(() => {
           this.isSubmitting = false;
-        })
+        }),
       )
       .subscribe({
         next: (response) => {
           if (response.status) {
             this.dialogservice.showMessage(
               'Success',
-              response.data?.data?.[0]?.MessageText
+              response.data?.data?.[0]?.MessageText,
             );
             this.dialogRef.close(true);
           } else {

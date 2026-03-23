@@ -1,10 +1,5 @@
 import { CommonModule } from '@angular/common';
-import {
-  Component,
-  ElementRef,
-  inject,
-  ViewChild,
-} from '@angular/core';
+import { Component, ElementRef, inject, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import flatpickr from 'flatpickr';
 import {
@@ -20,6 +15,7 @@ import { DialogService } from '../../../../services/dialog-service';
 import { Validator } from '../../../../utilities/validator';
 import { finalize, firstValueFrom } from 'rxjs';
 import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
+import { client_get_model } from '../../../../models/client-model';
 
 @Component({
   selector: 'app-clientregister-dialog',
@@ -49,15 +45,16 @@ export class ClientregisterDialogComponent {
 
   constructor(
     private dialogRef: MatDialogRef<ClientregisterDialogComponent>,
-    private dialog: MatDialog
+    private dialog: MatDialog,
   ) {}
 
   ngAfterViewInit(): void {
-    this.flatpickrInstance = flatpickr(this.datePickerRef.nativeElement, {
-      dateFormat: 'd M Y',
-      altFormat: 'F j, Y',
-      defaultDate: '',
-      allowInput: true,
+    setTimeout(() => {
+      this.flatpickrInstance = flatpickr(this.datePickerRef.nativeElement, {
+        dateFormat: 'd M Y',
+        altFormat: 'F j, Y',
+        allowInput: true,
+      });
     });
   }
 
@@ -81,12 +78,13 @@ export class ClientregisterDialogComponent {
   }
 
   getClientInfo() {
-    const model = {
+    const model = client_get_model({
       ClientID: this.data.ClientID,
       Name: '',
       Gender: '',
+      ShopID: '',
       PhoneNo: '',
-    };
+    });
 
     this.clientservice.getClient(model).subscribe({
       next: (response) => {
@@ -141,14 +139,14 @@ export class ClientregisterDialogComponent {
       .pipe(
         finalize(() => {
           this.isSubmitting = false;
-        })
+        }),
       )
       .subscribe({
         next: (response) => {
           if (response.status) {
             this.dialogservice.showMessage(
               'Success',
-              response.data?.data?.[0]?.MessageText
+              response.data?.data?.[0]?.MessageText,
             );
             this.dialogRef.close(true);
           } else {

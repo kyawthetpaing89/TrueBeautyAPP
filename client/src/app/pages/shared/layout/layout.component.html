@@ -25,14 +25,14 @@
         alt="Logo"
         class="logo-img"
       />
-      <span class="logo-text me-2">True Beauty System v-2.0</span>
+      <span class="logo-text me-2">True Beauty System v-4.2.1</span>
 
       <!-- Desktop Navigation -->
       <div class="toolbar-links hide-mobile">
-        @if (role === 'admin') {
-        <a mat-button routerLink="/dashboard" routerLinkActive="active-link">
-          <i class="material-icons">pie_chart</i> Dashboard
-        </a>
+        @if (role === "admin") {
+          <a mat-button routerLink="/dashboard" routerLinkActive="active-link">
+            <i class="material-icons">pie_chart</i> Dashboard
+          </a>
         }
 
         <a
@@ -58,6 +58,24 @@
 
         <a
           mat-button
+          [matMenuTriggerFor]="membershipMenu"
+          [ngClass]="{ 'active-link': isMembershipRouteActive() }"
+        >
+          <i class="material-icons">card_giftcard</i> Membership
+          <i class="fa-solid fa-caret-down ms-1"></i>
+        </a>
+
+        <mat-menu #membershipMenu="matMenu">
+          <a mat-menu-item routerLink="/membership/membershiptype">
+            <i class="material-icons">credit_card</i> Membership Type
+          </a>
+          <a mat-menu-item routerLink="/membership/membershiplist">
+            <i class="material-icons">card_giftcard</i> Membership List
+          </a>
+        </mat-menu>
+
+        <a
+          mat-button
           [matMenuTriggerFor]="itemMenu"
           [ngClass]="{ 'active-link': isItemRouteActive() }"
         >
@@ -73,14 +91,15 @@
             <i class="fa-solid fa-boxes-stacked"></i> Item Inventory
           </a>
 
-          @if (role === 'admin') {
-          <a mat-menu-item routerLink="/items/itempurchasing">
-            <i class="fa-solid fa-sack-dollar fa-lg"></i> Item Purchasing
-          </a>
-          } @if (role === 'admin') {
-          <a mat-menu-item routerLink="/items/itemusage">
-            <i class="fa-solid fa-layer-group fa-lg"></i> Item Usage
-          </a>
+          @if (role === "admin") {
+            <a mat-menu-item routerLink="/items/itempurchasing">
+              <i class="fa-solid fa-sack-dollar fa-lg"></i> Item Purchasing
+            </a>
+          }
+          @if (role === "admin") {
+            <a mat-menu-item routerLink="/items/itemusage">
+              <i class="fa-solid fa-layer-group fa-lg"></i> Item Usage
+            </a>
           }
         </mat-menu>
 
@@ -92,29 +111,27 @@
           <i class="material-icons">receipt_long</i> Invoice
         </a>
 
-        @if(role === 'admin') {
-
-        <a
-          mat-button
-          [matMenuTriggerFor]="reportMenu"
-          [ngClass]="{ 'active-link': isReportRouteActive() }"
-        >
-          <i class="material-icons">bar_chart</i> Reports
-          <i class="fa-solid fa-caret-down ms-1"></i>
-        </a>
-
-        <mat-menu #reportMenu="matMenu">
-          <a mat-menu-item routerLink="/reports/salesreport">
-            <i class="material-icons">monetization_on</i> Sales Report
+        @if (role === "admin") {
+          <a
+            mat-button
+            [matMenuTriggerFor]="reportMenu"
+            [ngClass]="{ 'active-link': isReportRouteActive() }"
+          >
+            <i class="material-icons">bar_chart</i> Reports
+            <i class="fa-solid fa-caret-down ms-1"></i>
           </a>
-          <a mat-menu-item routerLink="/reports/clientreport">
-            <i class="material-icons">supervised_user_circle</i> Client Report
-          </a>
-          <a mat-menu-item routerLink="/reports/itemreport">
-            <i class="material-icons">dashboard</i> Item Report
-          </a>
-        </mat-menu>
 
+          <mat-menu #reportMenu="matMenu">
+            <a mat-menu-item routerLink="/reports/salesreport">
+              <i class="material-icons">monetization_on</i> Sales Report
+            </a>
+            <a mat-menu-item routerLink="/reports/clientreport">
+              <i class="material-icons">supervised_user_circle</i> Client Report
+            </a>
+            <a mat-menu-item routerLink="/reports/itemreport">
+              <i class="material-icons">dashboard</i> Item Report
+            </a>
+          </mat-menu>
         }
 
         <a
@@ -126,6 +143,47 @@
         </a>
 
         <span style="margin-left: auto"></span>
+
+        <!-- Menu Icon -->
+        <div class="system-menu-wrapper">
+          <button
+            class="system-menu-button"
+            mat-icon-button
+            (click)="toggleSystemList(); $event.stopPropagation()"
+          >
+            <mat-icon>layers</mat-icon>
+          </button>
+
+          <!-- System Panel -->
+          <!-- System Panel -->
+          @if (showSystemList) {
+            <div class="system-box">
+              <!-- Icons Row -->
+              <div class="system-icons">
+                <button
+                  mat-icon-button
+                  *ngFor="let system of systems"
+                  (click)="switchSystem(system)"
+                  [ngStyle]="{ 'background-color': system.background }"
+                >
+                  <mat-icon>{{ system.icon }}</mat-icon>
+                </button>
+              </div>
+
+              <!-- Names Row -->
+              <div class="system-names">
+                @for (system of systems; track system.id) {
+                  <span
+                    [ngStyle]="{ color: system.background }"
+                    (click)="switchSystem(system)"
+                  >
+                    {{ system.name }}
+                  </span>
+                }
+              </div>
+            </div>
+          }
+        </div>
 
         <a
           mat-button

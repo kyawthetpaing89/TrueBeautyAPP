@@ -4,85 +4,184 @@
   </h6>
   <div class="card-body">
     <div class="row g-3 mb15">
-      <!-- Year -->
-      <div class="col-12 col-md-4 col-lg-4 col-xl-3 d-flex align-items-center">
-        <label for="ddlSYear" class="w150">Year:</label>
-        <select
-          id="ddlSYear"
-          class="form-control form-control-sm"
-          (change)="loadReport()"
-          [(ngModel)]="selectedyear"
+      <div class="row g-3">
+        <div
+          class="col-sm-12 col-md-4 col-lg-3 col-xl-3 d-flex align-items-center"
         >
-          @for (year of years; track year) {
-          <option class="text-center" [value]="year">
-            {{ year }}
-          </option>
-          }
-        </select>
-      </div>
-      <div
-        class="col-sm-12 col-md-4 col-lg-3 col-xl-3 d-flex align-items-center"
-      >
-        <label for="ddlSMonth" class="w150">Month:</label>
-        <select
-          id="ddlSMonth"
-          class="form-control form-control-sm"
-          [(ngModel)]="selectedmonth"
-          (change)="loadReport()"
+          <label class="w150">Report Type:</label>
+          <div
+            class="d-flex align-items-start justify-content-center flex-grow-1 form-control form-control-sm"
+          >
+            <div class="form-check me-3">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="rdoReportType"
+                id="rdoDaily"
+                [(ngModel)]="reportType"
+                (change)="loadReport()"
+                value="1"
+              />
+              <label class="form-check-label" for="rdoDaily">Daily</label>
+            </div>
+            <div class="form-check me-3">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="rdoReportType"
+                id="rdoMonthly"
+                [(ngModel)]="reportType"
+                (change)="loadReport()"
+                value="2"
+              />
+              <label class="form-check-label" for="rdoMonthly">Monthly</label>
+            </div>
+            <div class="form-check me-3">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="rdoReportType"
+                id="rdoYearly"
+                [(ngModel)]="reportType"
+                (change)="loadReport()"
+                value="3"
+              />
+              <label class="form-check-label" for="rdoYearly">Yearly</label>
+            </div>
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="rdoReportType"
+                id="rdoCustom"
+                [(ngModel)]="reportType"
+                (change)="loadReport()"
+                value="4"
+              />
+              <label class="form-check-label" for="rdoCustom">Custom</label>
+            </div>
+          </div>
+        </div>
+        <div
+          class="col-sm-12 col-md-4 col-lg-4 col-xl-3 d-flex align-items-center radio-group"
         >
-          @for (month of months; track month.value) {
-          <option [value]="month.value">
-            {{ month.name }}
-          </option>
-          }
-        </select>
-      </div>
-    </div>
-    <div class="row g-3">
-      <div
-        class="col-sm-12 col-md-4 col-lg-3 col-xl-3 d-flex align-items-center"
-      >
-        <label for="rdoReportType" class="w150">Report Type:</label>
-        <div class="d-flex align-items-start">
-          <div class="form-check me-3">
-            <input
-              class="form-check-input"
-              type="radio"
-              name="rdoReportType"
-              id="rdoDaily"
-              [(ngModel)]="reportType"
-              (change)="loadReport()"
-              value="1"
-            />
-            <label class="form-check-label" for="rdoDaily">Daily</label>
-          </div>
-          <div class="form-check me-3">
-            <input
-              class="form-check-input"
-              type="radio"
-              name="rdoReportType"
-              id="rdoMonthly"
-              [(ngModel)]="reportType"
-              (change)="loadReport()"
-              value="2"
-            />
-            <label class="form-check-label" for="rdoMonthly">Monthly</label>
-          </div>
-          <div class="form-check">
-            <input
-              class="form-check-input"
-              type="radio"
-              name="rdoReportType"
-              id="rdoYearly"
-              [(ngModel)]="reportType"
-              (change)="loadReport()"
-              value="3"
-            />
-            <label class="form-check-label" for="rdoYearly">Yearly</label>
+          <label class="w150">Shop:</label>
+
+          <div
+            class="d-flex align-items-center justify-content-center flex-grow-1 form-control form-control-sm"
+          >
+            <div class="form-check me-3">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="rdoShop"
+                id="rdoAll"
+                [(ngModel)]="shopid"
+                (change)="loadReport()"
+                value=""
+              />
+              <label class="form-check-label" for="rdoAll">All</label>
+            </div>
+
+            <div class="form-check me-3">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="rdoShop"
+                id="rdoShop1"
+                [(ngModel)]="shopid"
+                (change)="loadReport()"
+                value="001"
+              />
+              <label class="form-check-label" for="rdoShop1">Shop 1</label>
+            </div>
+
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="rdoShop"
+                id="rdoShop2"
+                [(ngModel)]="shopid"
+                (change)="loadReport()"
+                value="002"
+              />
+              <label class="form-check-label" for="rdoShop2">Shop 2</label>
+            </div>
           </div>
         </div>
       </div>
+      @if (reportType == "1") {
+        <div
+          class="col-sm-12 col-md-4 col-lg-3 col-xl-3 d-flex align-items-center"
+        >
+          <label for="ddlSMonth" class="w150">Month:</label>
+          <select
+            id="ddlSMonth"
+            class="form-control form-control-sm"
+            [(ngModel)]="selectedmonth"
+            (change)="loadReport()"
+          >
+            @for (month of months; track month.value) {
+              <option [value]="month.value">
+                {{ month.name }}
+              </option>
+            }
+          </select>
+        </div>
+      }
+      @if (reportType == "1" || reportType == "2") {
+        <!-- Year -->
+        <div
+          class="col-12 col-md-4 col-lg-4 col-xl-3 d-flex align-items-center"
+        >
+          <label for="ddlSYear" class="w150">Year:</label>
+          <select
+            id="ddlSYear"
+            class="form-control form-control-sm"
+            (change)="loadReport()"
+            [(ngModel)]="selectedyear"
+          >
+            @for (year of years; track year) {
+              <option class="text-center" [value]="year">
+                {{ year }}
+              </option>
+            }
+          </select>
+        </div>
+      }
+      @if (reportType == "4") {
+        <div
+          class="col-sm-12 col-md-4 col-lg-3 col-xl-3 d-flex align-items-center"
+        >
+          <label for="txtSDateFrom" class="w150">Date From:</label>
+          <input
+            type="text"
+            class="form-control form-control-sm text-center"
+            id="txtSDateFrom"
+            [(ngModel)]="DateFrom"
+            name="DateFrom"
+            (change)="loadReport()"
+            #DateFrom
+          />
+        </div>
+        <div
+          class="col-sm-12 col-md-4 col-lg-3 col-xl-3 d-flex align-items-center"
+        >
+          <label for="txtSDateTo" class="w150">Date To:</label>
+          <input
+            type="text"
+            class="form-control form-control-sm text-center"
+            id="txtSDateTo"
+            [(ngModel)]="DateTo"
+            name="dateTo"
+            (change)="loadReport()"
+            #DateTo
+          />
+        </div>
+      }
     </div>
+
     <hr />
     <table
       id="tblDailySalesReport"
@@ -90,14 +189,24 @@
     >
       <thead>
         <tr>
+          @if (shopid !== "") {
+            <th></th>
+          }
           <th></th>
           <th></th>
           <th class="text-center treatment-color" colspan="2">Treatment</th>
           <th class="text-center medicine-color" colspan="2">Medicine</th>
           <th class="text-center skincare-color" colspan="2">Skin Care</th>
-          <th class="text-center" colspan="3">Total</th>
+          @if (shopid === "") {
+            <th class="text-center s1" colspan="4">Shop 1 Total</th>
+            <th class="text-center s2" colspan="4">Shop 2 Total</th>
+          }
+          <th class="text-center" colspan="4">Total</th>
         </tr>
         <tr>
+          @if (shopid !== "") {
+            <th></th>
+          }
           <th class="text-center">Date</th>
           <th class="text-end">Client</th>
           <th class="text-end treatment-color">Qty</th>
@@ -106,51 +215,166 @@
           <th class="text-end medicine-color">Amount</th>
           <th class="text-end skincare-color">Qty</th>
           <th class="text-end skincare-color">Amount</th>
-          <th class="text-end">Sales Amount</th>
-          <th class="text-end">Discount Amount</th>
+          @if (shopid === "") {
+            <th class="text-end s1">Membership</th>
+            <th class="text-end s1">Sales</th>
+            <th class="text-end s1">Discount</th>
+            <th class="text-end s1">Total Income</th>
+            <th class="text-end s2">Membership</th>
+            <th class="text-end s2">Sales</th>
+            <th class="text-end s2">Discount</th>
+            <th class="text-end s2">Total Income</th>
+          }
+          <th class="text-end">Membership</th>
+          <th class="text-end">Sales</th>
+          <th class="text-end">Discount</th>
           <th class="text-end">Total Income</th>
         </tr>
       </thead>
       <tbody>
         @if (salesLoading) {
-        <tr>
-          <td colspan="11" class="text-center">
-            <div
-              class="spinner-border spinner-border-sm text-primary"
-              role="status"
-            ></div>
-            <span class="ms-2">Loading data...</span>
-          </td>
-        </tr>
-        } @else { @for (row of dailySalesData; track row.InvoiceDate) {
-        <tr>
-          <td class="text-center">{{ row.InvoiceDate }}</td>
-          <td class="text-end">{{ row.TotalClient }}</td>
+          <tr>
+            <td [attr.colspan]="shopid === '' ? 21 : 15" class="text-center">
+              <div
+                class="spinner-border spinner-border-sm text-primary"
+                role="status"
+              ></div>
+              <span class="ms-2">Loading data...</span>
+            </td>
+          </tr>
+        } @else {
+          <tr class="totalrow fw-bold">
+            @if (shopid !== "") {
+              <td class="text-center">TOTAL</td>
+            }
 
-          <td class="text-end">{{ row.TreatmentQty }}</td>
-          <td class="text-end">{{ row.TreatmentAmount | number }}</td>
+            <td class="text-center">TOTAL</td>
+            <td class="text-end">{{ totalRow.TotalClient }}</td>
 
-          <td class="text-end">{{ row.MedicineQty }}</td>
-          <td class="text-end">{{ row.MedicineAmount | number }}</td>
+            <td class="text-end">{{ totalRow.TreatmentQty }}</td>
+            <td class="text-end">{{ totalRow.TreatmentAmount | number }}</td>
 
-          <td class="text-end">{{ row.SkinCareQty }}</td>
-          <td class="text-end">{{ row.SkinCareAmount | number }}</td>
+            <td class="text-end">{{ totalRow.MedicineQty }}</td>
+            <td class="text-end">{{ totalRow.MedicineAmount | number }}</td>
 
-          <td class="text-end">{{ row.TotalSales | number }}</td>
-          <td class="text-end">{{ row.TotalDiscount | number }}</td>
-          <td class="text-end">
-            <a (click)="openIncomeDetail(row)">{{
-              row.TotalPayment | number
-            }}</a>
-          </td>
-        </tr>
-        }@empty {
-        <tr>
-          <td colspan="11" class="text-center text-muted">
-            There is no data to display.
-          </td>
-        </tr>
-        } }
+            <td class="text-end">{{ totalRow.SkinCareQty }}</td>
+            <td class="text-end">{{ totalRow.SkinCareAmount | number }}</td>
+
+            @if (shopid === "") {
+              <td class="text-end">
+                {{ totalRow.S1TotalMembershipSales | number }}
+              </td>
+              <td class="text-end">{{ totalRow.S1TotalSales | number }}</td>
+              <td class="text-end">{{ totalRow.S1TotalDiscount | number }}</td>
+              <td class="text-end">{{ totalRow.S1TotalPayment | number }}</td>
+
+              <td class="text-end">
+                {{ totalRow.S2TotalMembershipSales | number }}
+              </td>
+              <td class="text-end">{{ totalRow.S2TotalSales | number }}</td>
+              <td class="text-end">{{ totalRow.S2TotalDiscount | number }}</td>
+              <td class="text-end">{{ totalRow.S2TotalPayment | number }}</td>
+
+              <td class="text-end">
+                {{ totalRow.TotalMembershipSales | number }}
+              </td>
+              <td class="text-end">{{ totalRow.TotalSales | number }}</td>
+              <td class="text-end">{{ totalRow.TotalDiscount | number }}</td>
+              <td class="text-end">{{ totalRow.TotalPayment | number }}</td>
+            } @else if (shopid === "001") {
+              <td class="text-end">
+                {{ totalRow.S1TotalMembershipSales | number }}
+              </td>
+              <td class="text-end">{{ totalRow.S1TotalSales | number }}</td>
+              <td class="text-end">{{ totalRow.S1TotalDiscount | number }}</td>
+              <td class="text-end">{{ totalRow.S1TotalPayment | number }}</td>
+            } @else {
+              <td class="text-end">
+                {{ totalRow.S2TotalMembershipSales | number }}
+              </td>
+              <td class="text-end">{{ totalRow.S2TotalSales | number }}</td>
+              <td class="text-end">{{ totalRow.S2TotalDiscount | number }}</td>
+              <td class="text-end">{{ totalRow.S2TotalPayment | number }}</td>
+            }
+          </tr>
+          @for (row of dailySalesData; track row.InvoiceDate) {
+            <tr>
+              @if (shopid !== "") {
+                <td class="text-center">{{ row.Shop }}</td>
+              }
+
+              <td class="text-center">{{ row.InvoiceDate }}</td>
+              <td class="text-end">{{ row.TotalClient }}</td>
+
+              <td class="text-end">{{ row.TreatmentQty }}</td>
+              <td class="text-end">{{ row.TreatmentAmount | number }}</td>
+
+              <td class="text-end">{{ row.MedicineQty }}</td>
+              <td class="text-end">{{ row.MedicineAmount | number }}</td>
+
+              <td class="text-end">{{ row.SkinCareQty }}</td>
+              <td class="text-end">{{ row.SkinCareAmount | number }}</td>
+
+              @if (shopid === "") {
+                <td class="text-end">
+                  {{ row.S1TotalMembershipSales | number }}
+                </td>
+                <td class="text-end">{{ row.S1TotalSales | number }}</td>
+                <td class="text-end">{{ row.S1TotalDiscount | number }}</td>
+                <td class="text-end">{{ row.S1TotalPayment | number }}</td>
+
+                <td class="text-end">
+                  {{ row.S2TotalMembershipSales | number }}
+                </td>
+                <td class="text-end">{{ row.S2TotalSales | number }}</td>
+                <td class="text-end">{{ row.S2TotalDiscount | number }}</td>
+                <td class="text-end">{{ row.S2TotalPayment | number }}</td>
+
+                <td class="text-end">
+                  {{ row.TotalMembershipSales | number }}
+                </td>
+                <td class="text-end">{{ row.TotalSales | number }}</td>
+                <td class="text-end">{{ row.TotalDiscount | number }}</td>
+                <td class="text-end">
+                  <a (click)="openIncomeDetail(row)">{{
+                    row.TotalPayment | number
+                  }}</a>
+                </td>
+              } @else if (shopid === "001") {
+                <td class="text-end">
+                  {{ row.S1TotalMembershipSales | number }}
+                </td>
+                <td class="text-end">{{ row.S1TotalSales | number }}</td>
+                <td class="text-end">{{ row.S1TotalDiscount | number }}</td>
+                <td class="text-end">
+                  <a (click)="openIncomeDetail(row)">{{
+                    row.S1TotalPayment | number
+                  }}</a>
+                </td>
+              } @else {
+                <td class="text-end">
+                  {{ row.S2TotalMembershipSales | number }}
+                </td>
+                <td class="text-end">{{ row.S2TotalSales | number }}</td>
+                <td class="text-end">{{ row.S2TotalDiscount | number }}</td>
+                <td class="text-end">
+                  <a (click)="openIncomeDetail(row)">{{
+                    row.S2TotalPayment | number
+                  }}</a>
+                </td>
+              }
+            </tr>
+          } @empty {
+            <tr>
+              <td
+                [attr.colspan]="shopid === '' ? 18 : 12"
+                class="text-center text-muted"
+              >
+                There is no data to display.
+              </td>
+            </tr>
+          }
+        }
       </tbody>
     </table>
   </div>

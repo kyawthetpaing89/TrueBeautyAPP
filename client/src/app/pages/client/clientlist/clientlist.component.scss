@@ -7,3 +7,24 @@ table td {
   color: var(--primary-color);
   font-weight: bold;
 }
+
+.paging button {
+  margin: 0 2px;
+}
+
+.paging button.active {
+  font-weight: bold;
+  background-color: #007bff;
+  color: white;
+  width: 35px;
+  height: 35px;
+}
+
+.btn-prevnext {
+  width: 100px;
+  border-color: var(--bs-btn-disabled-border-color);
+}
+
+.goto-page {
+  padding-left: 30px;
+}

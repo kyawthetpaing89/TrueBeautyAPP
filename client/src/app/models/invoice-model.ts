@@ -1,5 +1,6 @@
 interface invoice_get_model {
   InvoiceNo: string;
+  ShopID: string;
   InvoiceDateFrom: string;
   InvoiceDateTo: string;
   ClientID: string;
@@ -15,6 +16,7 @@ export function invoice_get_model(
 ): invoice_get_model {
   return {
     InvoiceNo: '',
+    ShopID: '',
     InvoiceDateFrom: '',
     InvoiceDateTo: '',
     ClientID: '',
@@ -56,6 +58,7 @@ export function invoice_export_model(
 
 interface invoicedetail_process_model {
   InvoiceNo: string;
+  ShopID: string;
   InvoiceDate: string;
   ClientID: string;
   Notes: string;
@@ -80,6 +83,7 @@ export function invoicedetail_process_model(
 ): invoicedetail_process_model {
   return {
     InvoiceNo: '',
+    ShopID: '',
     InvoiceDate: '',
     ClientID: '',
     Notes: '',

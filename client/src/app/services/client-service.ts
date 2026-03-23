@@ -13,7 +13,7 @@ export class ClientService {
     return this.apiservice.request(
       ApiUrls.endpoints.client_getpaymentdetail,
       ApiUrls.requestType.POST,
-      model
+      model,
     );
   }
 
@@ -21,7 +21,7 @@ export class ClientService {
     return this.apiservice.request(
       ApiUrls.endpoints.client_get,
       ApiUrls.requestType.POST,
-      model
+      model,
     );
   }
 
@@ -29,7 +29,7 @@ export class ClientService {
     return this.apiservice.request(
       ApiUrls.endpoints.client_process,
       ApiUrls.requestType.POST,
-      model
+      model,
     );
   }
 
@@ -37,7 +37,7 @@ export class ClientService {
     return this.apiservice.request(
       ApiUrls.endpoints.client_gettreatmentcheckin,
       ApiUrls.requestType.POST,
-      model
+      model,
     );
   }
 
@@ -45,7 +45,7 @@ export class ClientService {
     return this.apiservice.request(
       ApiUrls.endpoints.client_gettreatment,
       ApiUrls.requestType.POST,
-      model
+      model,
     );
   }
 
@@ -53,7 +53,7 @@ export class ClientService {
     return this.apiservice.request(
       ApiUrls.endpoints.client_treatmentcheckinprocess,
       ApiUrls.requestType.POST,
-      model
+      model,
     );
   }
 
@@ -61,7 +61,7 @@ export class ClientService {
     return this.apiservice.request(
       ApiUrls.endpoints.client_getdoctorinstruction,
       ApiUrls.requestType.POST,
-      model
+      model,
     );
   }
 
@@ -69,7 +69,7 @@ export class ClientService {
     return this.apiservice.request(
       ApiUrls.endpoints.client_processdoctorinstruction,
       ApiUrls.requestType.POST,
-      model
+      model,
     );
   }
 
@@ -77,14 +77,14 @@ export class ClientService {
     return this.apiservice.request(
       ApiUrls.endpoints.client_paymentprocess,
       ApiUrls.requestType.POST,
-      model
+      model,
     );
   }
 
   getClientDashboardInfo(): Observable<any> {
     return this.apiservice.request(
       ApiUrls.endpoints.client_getdashboardinfo,
-      ApiUrls.requestType.GET
+      ApiUrls.requestType.GET,
     );
   }
 
@@ -92,7 +92,7 @@ export class ClientService {
     return this.apiservice.request(
       ApiUrls.endpoints.client_getbooking,
       ApiUrls.requestType.POST,
-      model
+      model,
     );
   }
 
@@ -100,7 +100,39 @@ export class ClientService {
     return this.apiservice.request(
       ApiUrls.endpoints.client_bookinprocess,
       ApiUrls.requestType.POST,
-      model
+      model,
+    );
+  }
+
+  clientMemberCardProcess(model: any): Observable<any> {
+    return this.apiservice.request(
+      ApiUrls.endpoints.client_membercardprocess,
+      ApiUrls.requestType.POST,
+      model,
+    );
+  }
+
+  getClientCurrentMembership(model: any): Observable<any> {
+    return this.apiservice.request(
+      ApiUrls.endpoints.client_getcurrentmembership,
+      ApiUrls.requestType.POST,
+      model,
+    );
+  }
+
+  getClientMemberCard(model: any): Observable<any> {
+    return this.apiservice.request(
+      ApiUrls.endpoints.client_getmembercard,
+      ApiUrls.requestType.POST,
+      model,
+    );
+  }
+
+  getClientMemberCardTransactions(model: any): Observable<any> {
+    return this.apiservice.request(
+      ApiUrls.endpoints.client_getmembercardtransactions,
+      ApiUrls.requestType.POST,
+      model,
     );
   }
 
@@ -108,7 +140,7 @@ export class ClientService {
     return this.apiservice.request(
       ApiUrls.endpoints.client_getreport,
       ApiUrls.requestType.POST,
-      model
+      model,
     );
   }
 }

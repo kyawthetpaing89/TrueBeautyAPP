@@ -44,12 +44,28 @@ namespace server.Models.Client
         public string ClientID { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;
         public string Gender { get; set; } = string.Empty;
+        public string ShopID { get; set; } = string.Empty;
         public string PhoneNo { get; set; } = string.Empty;
+        public string MemberType { get; set; } = string.Empty;
+        public int PageNo { get; set; } = 1;
+        public int PageSize { get; set; } = 100;
+        public required string SortColumn { get; set; }
+        public bool SortAsc { get; set; } = true;
+
     }
 
     public class ClientInfoGetRequestDTO
     {
         public required string ClientID { get; set; }
+    }
+
+    public class ClientInfoUpdateRequestDTO
+    {
+        public required string ClientID { get; set; }
+        public required string ClientName { get; set; }
+        public required string Address { get; set; }
+        public required string DOB { get; set; }
+        public required string Gender { get; set; }
     }
 
     public class ClientProcessRequestDTO
@@ -85,6 +101,7 @@ namespace server.Models.Client
         public string PaymentDate { get; set; } = string.Empty;
         public string PaymentMonth { get; set; } = string.Empty;
         public string PaymentYear { get; set; } = string.Empty;
+        public string ShopID { get; set; } = string.Empty;
     }
     public class ClientPaymentProcessRequestDTO
     {
@@ -92,6 +109,8 @@ namespace server.Models.Client
         public required string InvoiceNo { get; set; }
         public required string ClientID { get; set; }
         public required string PaymentDate { get; set; }
+        public required string MembershipID { get; set; }
+        public required string PaymentType { get; set; }
         public required string Amount { get; set; }
         public required string Mode { get; set; }
         public required string LoginID { get; set; }
@@ -120,5 +139,28 @@ namespace server.Models.Client
         public string YYYY { get; set; } = string.Empty;
         public string MM { get; set; } = string.Empty;
         public required string ReportType { get; set; }
+    }
+
+    public class ClientMemberCardProcessRequuestDTO
+    {
+        public required string ClientID { get; set; }
+        public required string MemberCardCD { get; set; }
+        public required string LoginID { get; set; }
+        public required string Mode { get; set; }
+    }
+
+    public class ClientCurrentMemberShipGetRequestDTO
+    {
+        public required string ClientID { get; set; }
+    }
+
+    public class ClientMemberCardGetRequestDTO
+    {
+        public required string ClientID { get; set; }
+    }
+
+    public class ClientMemberCardTransactionsGetRequestDTO
+    {
+        public required string ClientMemberCardID { get; set; }
     }
 }

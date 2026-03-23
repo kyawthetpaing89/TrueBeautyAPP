@@ -50,7 +50,7 @@ namespace server.Controllers
 
         [HttpPost("clientprocess")]
         [Authorize]
-        public async Task<IActionResult> ItemProcess([FromBody] ClientProcessRequestDTO item)
+        public async Task<IActionResult> ClientProcess([FromBody] ClientProcessRequestDTO item)
         {
             var parameters = Converter.DtoToParam(item);
             var response = await _clientRepo.ExecAsync<object>("truebeauty_Client_Process", parameters, false);
@@ -160,7 +160,7 @@ namespace server.Controllers
 
 
             var parameters = Converter.DtoToParam(client);
-            var response = await _clientRepo.ExecAsync<object>("truebeauty_ClientPayment_Process", parameters, false);
+            var response = await _clientRepo.ExecAsync<object>("truebeauty_ClientPayment_Process", parameters, true);
 
             if (response.Status)
             {
@@ -279,8 +279,7 @@ namespace server.Controllers
             }
         }
 
-        [HttpPost("moblie/getclientinfo")]
-        [Authorize]
+        [HttpPost("mobile/getclientinfo")]
         public async Task<IActionResult> GetClientInfo([FromBody] ClientInfoGetRequestDTO client)
         {
             var parameters = Converter.DtoToParam(client);
@@ -289,6 +288,90 @@ namespace server.Controllers
             if (response.Status == true)
             {
                 return Ok(new ApiResponse<object>(true, "Data Found!", response));
+            }
+            else
+            {
+                return StatusCode(500, response);
+            }
+        }
+
+        [HttpPost("mobile/clientinfoupdate")]
+        public async Task<IActionResult> ClientInfoUpdate([FromBody] ClientInfoUpdateRequestDTO client)
+        {
+            var parameters = Converter.DtoToParam(client);
+            var response = await _clientRepo.ExecAsync<object>("truebeauty_Client_InfoUpdate", parameters, false);
+
+            if (response.Status == true)
+            {
+                return Ok(new ApiResponse<object>(true, "Success!", response));
+            }
+            else
+            {
+                return StatusCode(500, response);
+            }
+        }
+
+        [HttpPost("clientmembercardprocess")]
+        [Authorize]
+        public async Task<IActionResult> ClientMemberCardProcess([FromBody] ClientMemberCardProcessRequuestDTO item)
+        {
+            var parameters = Converter.DtoToParam(item);
+            var response = await _clientRepo.ExecAsync<object>("truebeauty_ClientMemberCard_Process", parameters, true);
+
+            if (response.Status == true)
+            {
+                return Ok(new ApiResponse<object>(true, "Success!", response));
+            }
+            else
+            {
+                return StatusCode(500, response);
+            }
+        }
+
+        [HttpPost("getclientcurrentmembership")]
+        [Authorize]
+        public async Task<IActionResult> GetClientCurrentMemberShip([FromBody] ClientCurrentMemberShipGetRequestDTO request)
+        {
+            var parameters = Converter.DtoToParam(request);
+            var response = await _clientRepo.ExecAsync<object>("truebeauty_Client_CurrentMembershipSelect", parameters, true);
+
+            if (response.Status == true)
+            {
+                return Ok(new ApiResponse<object>(true, "Success!", response));
+            }
+            else
+            {
+                return StatusCode(500, response);
+            }
+        }
+
+        [HttpPost("getclientmembercard")]
+        [Authorize]
+        public async Task<IActionResult> GetClientMemberCard([FromBody] ClientMemberCardGetRequestDTO request)
+        {
+            var parameters = Converter.DtoToParam(request);
+            var response = await _clientRepo.ExecAsync<object>("truebeauty_ClientMemberCard_Select", parameters, true);
+
+            if (response.Status == true)
+            {
+                return Ok(new ApiResponse<object>(true, "Success!", response));
+            }
+            else
+            {
+                return StatusCode(500, response);
+            }
+        }
+
+        [HttpPost("getclientmembercardtransactions")]
+        [Authorize]
+        public async Task<IActionResult> GetClientMemberCardTransactions([FromBody] ClientMemberCardTransactionsGetRequestDTO request)
+        {
+            var parameters = Converter.DtoToParam(request);
+            var response = await _clientRepo.ExecAsync<object>("truebeauty_ClientMemberCardTransactions_Select", parameters, true);
+
+            if (response.Status == true)
+            {
+                return Ok(new ApiResponse<object>(true, "Success!", response));
             }
             else
             {

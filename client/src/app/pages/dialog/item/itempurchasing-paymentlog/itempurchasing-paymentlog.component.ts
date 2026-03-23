@@ -39,7 +39,7 @@ export class ItempurchasingPaymentlogComponent {
   isSubmitting: boolean = false;
   constructor(
     private dialog: MatDialog,
-    private dialogRef: MatDialogRef<ItempurchasingPaymentlogComponent>
+    private dialogRef: MatDialogRef<ItempurchasingPaymentlogComponent>,
   ) {}
 
   ngOnInit(): void {
@@ -58,7 +58,7 @@ export class ItempurchasingPaymentlogComponent {
       .pipe(
         finalize(() => {
           this.paymentLogLoading = false;
-        })
+        }),
       )
       .subscribe({
         next: (response) => {
@@ -88,14 +88,12 @@ export class ItempurchasingPaymentlogComponent {
       LoginID: this.generalservice.getLoginID(),
     });
 
-    debugger;
-
     this.itemservice
       .itemPurchasingPaymentProcess(model)
       .pipe(
         finalize(() => {
           this.isSubmitting = false;
-        })
+        }),
       )
       .subscribe({
         next: (response) => {

@@ -1,0 +1,92 @@
+<form autocomplete="off">
+  <h3 mat-dialog-title>
+    <span>Membership Type Register</span>
+    <a (click)="closeDialog()" aria-label="Close">
+      <mat-icon>close</mat-icon>
+    </a>
+  </h3>
+  <mat-dialog-content>
+    <div class="row">
+      <div class="col-lg-12 col-xl-12 mb-3">
+        <label for="txtMembershipTypeID" class="form-label"
+          >Membership Type ID</label
+        >
+        <input
+          type="text"
+          class="form-control form-control-sm text-center"
+          readonly
+          id="txtMembershipTypeID"
+          [(ngModel)]="membershipTypeID"
+          name="MembershipTypeID"
+          disabled="disabled"
+          tabindex="-1"
+        />
+      </div>
+      <div class="col-lg-12 col-xl-12 mb-3">
+        <label for="txtDescription" class="form-label">Description</label>
+        <input
+          type="text"
+          class="form-control form-control-sm"
+          id="txtDescription"
+          [(ngModel)]="description"
+          name="Description"
+          autofocus
+        />
+      </div>
+      <div class="col-lg-12 col-xl-12 mb-3">
+        <label for="txtDurationMonths" class="form-label"
+          >Duration (Months)</label
+        >
+        <input
+          type="text"
+          class="form-control form-control-sm text-right"
+          id="txtDurationMonths"
+          [(ngModel)]="durationMonths"
+          name="DurationMonths"
+          (keydown)="generalservice.allowNumbersOnly($event)"
+        />
+      </div>
+      <div class="col-lg-12 col-xl-12 mb-3">
+        <label for="txtAmount" class="form-label">Amount</label>
+        <input
+          type="text"
+          class="form-control form-control-sm text-right"
+          id="txtAmount"
+          [(ngModel)]="amount"
+          name="Amount"
+          (keydown)="generalservice.allowNumbersOnly($event)"
+        />
+      </div>
+      <div class="col-lg-12 col-xl-12 mb-3">
+        <label for="txtCashback" class="form-label">Cashback</label>
+        <input
+          type="text"
+          class="form-control form-control-sm text-right"
+          id="txtCashback"
+          [(ngModel)]="cashback"
+          name="Cashback"
+          (keydown)="generalservice.allowNumbersOnly($event)"
+        />
+      </div>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button
+      id="btncancel"
+      type="button"
+      (click)="closeDialog()"
+      class="btn w100 btn-dark btn-sm mr5"
+    >
+      Cancel
+    </button>
+    <button
+      type="button"
+      id="btnSaveInvoice"
+      class="btn w100 btn-sm mr5 btn-info"
+      (click)="save()"
+      [disabled]="isSubmitting"
+    >
+      Update
+    </button>
+  </mat-dialog-actions>
+</form>

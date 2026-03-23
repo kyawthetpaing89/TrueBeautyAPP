@@ -257,5 +257,21 @@ namespace server.Controllers
                 return StatusCode(500, response);
             }
         }
+
+        [HttpPost("moblie/getclientitem")]
+        public async Task<IActionResult> GetClientitem([FromBody] ClientItemRequestDTO item)
+        {
+            var parameters = Converter.DtoToParam(item);
+            var response = await _itemRepo.ExecAsync<object>("truebeauty_Item_Select", parameters, false);
+
+            if (response.Status == true)
+            {
+                return Ok(new ApiResponse<object>(true, "Success!", response));
+            }
+            else
+            {
+                return StatusCode(500, response);
+            }
+        }
     }
 }

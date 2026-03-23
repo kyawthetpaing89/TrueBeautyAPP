@@ -19,6 +19,10 @@ import { HolidaylistComponent } from './pages/holidays/holidaylist/holidaylist.c
 import { ClientbookinglistComponent } from './pages/client/clientbookinglist/clientbookinglist.component';
 import { ClientreportComponent } from './pages/report/clientreport/clientreport.component';
 import { ItemreportComponent } from './pages/report/itemreport/itemreport.component';
+import { PayrollLayoutComponent } from './pages/payroll/shared/layout/layout.component';
+import { EmployeelistComponent } from './pages/payroll/employee/employeelist/employeelist.component';
+import { MembershipTypelistComponent } from './pages/membership/membership-typelist/membership-typelist.component';
+import { MembershipListComponent } from './pages/membership/membership-list/membership-list.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'users/login', pathMatch: 'full' },
@@ -46,12 +50,20 @@ export const routes: Routes = [
     ],
   },
   {
+    path: 'membership',
+    component: LayoutComponent,
+    children: [
+      { path: 'membershiptype', component: MembershipTypelistComponent },
+      { path: 'membershiplist', component: MembershipListComponent },
+    ],
+  },
+  {
     path: 'invoice',
     component: LayoutComponent,
     children: [
       { path: 'invoicelist', component: InvoicelistComponent },
       {
-        path: 'invoice-register',
+        path: 'invoice-register/:shopID',
         component: InvoiceRegisterComponent,
       }, //New
       {
@@ -116,6 +128,11 @@ export const routes: Routes = [
       { path: 'clientreport', component: ClientreportComponent },
       { path: 'itemreport', component: ItemreportComponent },
     ],
+  },
+  {
+    path: 'payroll/employee',
+    component: PayrollLayoutComponent,
+    children: [{ path: 'employeelist', component: EmployeelistComponent }],
   },
   {
     path: '',

@@ -55,7 +55,6 @@ export class ClientreportComponent {
       ReportType: this.reportType,
     };
 
-    debugger;
     this.clientservice.getClientReport(model).subscribe({
       next: (response) => {
         if (response.status) {

@@ -33,6 +33,7 @@ export class PaymentdetailDialogComponent {
       PaymentDate: this.data.PaymentDate,
       PaymentMonth: this.data.PaymentMonth,
       PaymentYear: this.data.PaymentYear,
+      ShopID: this.data.ShopID,
     };
 
     this.clientservice.getPaymentDetail(model).subscribe({

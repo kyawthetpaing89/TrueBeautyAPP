@@ -41,21 +41,9 @@
 <div class="row g-3 mt10">
   <div class="col-sm-12 col-md-6 col-lg-6 col-xl-4">
     <div class="card">
-      <h6 class="card-header">Item List</h6>
-      <div class="card-body">
-        <google-chart
-          [type]="itemchart.type"
-          [columns]="itemchart.columns"
-          [data]="itemchart.data"
-          [options]="itemchart.options"
-          [height]="itemchart.options.height"
-        ></google-chart>
-      </div>
-    </div>
-  </div>
-  <div class="col-sm-12 col-md-6 col-lg-6 col-xl-4">
-    <div class="card">
-      <h6 class="card-header">Monthly Sales ({{ selectedyear }})</h6>
+      <h6 class="card-header">
+        Monthly Total Sales & Income ({{ selectedyear }})
+      </h6>
       <div class="card-body">
         <google-chart
           [type]="monthlysaleschart.type"
@@ -67,9 +55,46 @@
       </div>
     </div>
   </div>
+  <!-- Compare Income -->
   <div class="col-sm-12 col-md-6 col-lg-6 col-xl-4">
     <div class="card">
-      <h6 class="card-header">Client Treatment ({{ selectedyear }})</h6>
+      <h6 class="card-header">
+        Shop 1 & Shop 2 Total Sales ({{ selectedyear }})
+      </h6>
+      <div class="card-body">
+        <google-chart
+          [type]="compareMonthlySalesChart.type"
+          [columns]="compareMonthlySalesChart.columns"
+          [data]="compareMonthlySalesChart.data"
+          [options]="compareMonthlySalesChart.options"
+          [height]="compareMonthlySalesChart.options.height"
+        ></google-chart>
+      </div>
+    </div>
+  </div>
+
+  <!-- Compare Sales -->
+  <div class="col-sm-12 col-md-6 col-lg-6 col-xl-4">
+    <div class="card">
+      <h6 class="card-header">
+        Shop 1 & Shop 2 Total Income ({{ selectedyear }})
+      </h6>
+      <div class="card-body">
+        <google-chart
+          [type]="compareMonthlyIncomeChart.type"
+          [columns]="compareMonthlyIncomeChart.columns"
+          [data]="compareMonthlyIncomeChart.data"
+          [options]="compareMonthlyIncomeChart.options"
+          [height]="compareMonthlyIncomeChart.options.height"
+        ></google-chart>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-12 col-md-6 col-lg-6 col-xl-4">
+    <div class="card">
+      <h6 class="card-header">
+        Client Visits and Sales Count ({{ selectedyear }})
+      </h6>
       <div class="card-body">
         <google-chart
           [type]="clientdatachart.type"
@@ -77,6 +102,52 @@
           [data]="clientdatachart.data"
           [options]="clientdatachart.options"
           [height]="clientdatachart.options.height"
+        ></google-chart>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-12 col-md-6 col-lg-6 col-xl-4">
+    <div class="card">
+      <h6 class="card-header">
+        Shop 1 Client Visits and Sales Count ({{ selectedyear }})
+      </h6>
+      <div class="card-body">
+        <google-chart
+          [type]="s1clientdatachart.type"
+          [columns]="s1clientdatachart.columns"
+          [data]="s1clientdatachart.data"
+          [options]="s1clientdatachart.options"
+          [height]="s1clientdatachart.options.height"
+        ></google-chart>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-12 col-md-6 col-lg-6 col-xl-4">
+    <div class="card">
+      <h6 class="card-header">
+        Shop 2 Client Visits and Sales Count ({{ selectedyear }})
+      </h6>
+      <div class="card-body">
+        <google-chart
+          [type]="s2clientdatachart.type"
+          [columns]="s2clientdatachart.columns"
+          [data]="s2clientdatachart.data"
+          [options]="s2clientdatachart.options"
+          [height]="s2clientdatachart.options.height"
+        ></google-chart>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-12 col-md-6 col-lg-6 col-xl-4">
+    <div class="card">
+      <h6 class="card-header">Item List</h6>
+      <div class="card-body">
+        <google-chart
+          [type]="itemchart.type"
+          [columns]="itemchart.columns"
+          [data]="itemchart.data"
+          [options]="itemchart.options"
+          [height]="itemchart.options.height"
         ></google-chart>
       </div>
     </div>

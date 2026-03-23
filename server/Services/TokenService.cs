@@ -9,13 +9,14 @@ namespace server.Services
     {
         private readonly IConfiguration _configuration = configuration;
 
-        public string GenerateAccessToken(string userID, string userRole, string name)
+        public string GenerateAccessToken(string userID, string userRole, string name, string shopid)
         {
             var claims = new[]
             {
                 new Claim("userid", userID),
                 new Claim("userrole", userRole),
                 new Claim("username", name),
+                new Claim("shopid", shopid),
             };
 
             var secretKey = _configuration["JwtSettings:SecretKey"] ?? throw new InvalidOperationException("Secret key is missing in configuration.");

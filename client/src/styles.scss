@@ -555,7 +555,9 @@ body {
 
 .action-icon {
   cursor: pointer;
-  transition: transform 0.2s ease, color 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    color 0.2s ease;
 }
 
 .action-icon:hover {
@@ -631,4 +633,44 @@ a .material-icons {
   color: var(--primary-color);
   font-weight: bold;
   cursor: pointer;
+}
+
+.silver {
+  color: #6c757d !important;
+  font-size: 15px;
+  font-weight: 900;
+}
+
+.gold {
+  color: #d4af37 !important;
+  font-size: 15px;
+  font-weight: 900;
+}
+
+.diamond {
+  color: #00bfff !important;
+  font-size: 15px;
+  font-weight: 900;
+}
+
+.silver td {
+  color: #6c757d;
+  font-size: 15px;
+  font-weight: 900;
+}
+
+.gold td {
+  color: #d4af37;
+  font-size: 15px;
+  font-weight: 900;
+}
+
+.diamond td {
+  color: #00bfff;
+  font-size: 15px;
+  font-weight: 900;
+}
+
+.card-header h6 {
+  margin-bottom: 0;
 }

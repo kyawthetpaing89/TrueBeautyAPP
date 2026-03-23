@@ -55,45 +55,256 @@ export class DashboardComponent {
   };
 
   monthlysaleschart = {
-    type: ChartType.ColumnChart,
+    type: ChartType.LineChart,
     columns: ['Month', 'Total Sales', 'Total Income'],
     data: [['', 0, 0]],
     options: {
       title: `Monthly Sales (${this.selectedyear})`,
-      height: 250,
-      enableInteractivity: true,
-      bar: {
-        groupWidth: '70%',
+      height: 300,
+      curveType: 'function', // smooth line
+      legend: {
+        position: 'top',
+        alignment: 'center',
+        textStyle: { fontSize: 12, bold: true },
       },
-      colors: ['#42A5F5', '#66BB6A'],
-      legend: { position: 'top' },
+      colors: ['#42A5F5', '#66BB6A'], // blue + green
+      pointSize: 6,
+      lineWidth: 3,
+      series: {
+        0: { pointShape: 'circle' },
+        1: { pointShape: 'triangle' },
+      },
+      backgroundColor: '#fafafa',
+      chartArea: { left: 50, top: 40, width: '85%', height: '70%' },
       hAxis: {
         title: 'Month',
+        slantedText: true,
+        slantedTextAngle: 30,
+        textStyle: { color: '#444' },
+        titleTextStyle: { italic: false, color: '#333' },
       },
       vAxis: {
         title: 'Amount',
+        textStyle: { color: '#555' },
+        gridlines: { color: '#e0e0e0' },
+        format: 'short', // 500k, 1M
+        viewWindow: { min: 0 },
+      },
+      animation: {
+        startup: true,
+        duration: 1200,
+        easing: 'out',
+      },
+    },
+  };
+
+  compareMonthlyIncomeChart = {
+    type: ChartType.LineChart,
+    columns: ['Month', 'Shop 1 Income', 'Shop 2 Income'],
+    data: [['', 0, 0]],
+    options: {
+      title: `Shop 1 vs Shop 2 Income (${this.selectedyear})`,
+      height: 300,
+      curveType: 'function', // smooth lines
+      legend: {
+        position: 'top',
+        alignment: 'center',
+        textStyle: { fontSize: 12, bold: true },
+      },
+      backgroundColor: '#fafafa',
+      chartArea: { left: 50, top: 40, width: '85%', height: '70%' },
+      colors: ['#1E88E5', '#FBC02D'], // blue + yellow
+      pointSize: 6,
+      lineWidth: 3,
+      series: {
+        0: { pointShape: 'circle' },
+        1: { pointShape: 'triangle' },
+      },
+      hAxis: {
+        title: 'Month',
+        slantedText: true,
+        slantedTextAngle: 30,
+        textStyle: { color: '#444' },
+        titleTextStyle: { italic: false, color: '#333' },
+      },
+      vAxis: {
+        title: 'Income',
+        gridlines: { color: '#e0e0e0' },
+        textStyle: { color: '#555' },
+        format: 'short',
+        viewWindow: { min: 0 },
+      },
+      animation: {
+        startup: true,
+        duration: 1200,
+        easing: 'out',
+      },
+    },
+  };
+
+  compareMonthlySalesChart = {
+    type: ChartType.LineChart,
+    columns: ['Month', 'Shop 1 Sales', 'Shop 2 Sales'],
+    data: [['', 0, 0]],
+    options: {
+      title: `Shop 1 vs Shop 2 Sales (${this.selectedyear})`,
+      height: 300,
+      curveType: 'function', // smooth lines
+      legend: {
+        position: 'top',
+        alignment: 'center',
+        textStyle: { fontSize: 12, bold: true },
+      },
+      backgroundColor: '#fafafa',
+      chartArea: { left: 50, top: 40, width: '85%', height: '70%' },
+      colors: ['#1E88E5', '#FBC02D'], // blue + yellow
+      pointSize: 6,
+      lineWidth: 3,
+      series: {
+        0: { pointShape: 'circle' },
+        1: { pointShape: 'triangle' },
+      },
+      hAxis: {
+        title: 'Month',
+        slantedText: true,
+        slantedTextAngle: 30,
+        textStyle: { color: '#444' },
+        titleTextStyle: { italic: false, color: '#333' },
+      },
+      vAxis: {
+        title: 'Sales',
+        gridlines: { color: '#e0e0e0' },
+        textStyle: { color: '#555' },
+        format: 'short',
+        viewWindow: { min: 0 },
+      },
+      animation: {
+        startup: true,
+        duration: 1200,
+        easing: 'out',
       },
     },
   };
 
   clientdatachart = {
-    type: ChartType.ColumnChart,
+    type: ChartType.LineChart,
     columns: ['Month', 'Client', 'Treatment', 'Medicine', 'Skincare'],
     data: [['', 0, 0, 0, 0]],
     options: {
-      title: `Client Treatment Data (${this.selectedyear})`,
-      height: 250,
-      enableInteractivity: true,
-      bar: {
-        groupWidth: '80%',
+      title: `Client Visits / Treatment Sales Count (${this.selectedyear})`,
+      height: 300,
+      curveType: 'function', // smooth lines
+      legend: {
+        position: 'top',
+        alignment: 'center',
+        textStyle: { fontSize: 12, bold: true },
       },
+      backgroundColor: '#fafafa',
+      chartArea: { left: 50, top: 40, width: '85%', height: '70%' },
       colors: ['#4CAF50', '#2196F3', '#FFC107', '#FF5722'],
-      legend: { position: 'top' },
+      pointSize: 6,
+      lineWidth: 3,
+      series: {
+        0: { pointShape: 'circle' },
+        1: { pointShape: 'triangle' },
+      },
       hAxis: {
         title: 'Month',
+        textStyle: { fontSize: 12 },
       },
       vAxis: {
-        title: 'Amount',
+        title: 'Count',
+        gridlines: { color: '#e0e0e0' },
+        textStyle: { color: '#555' },
+        format: 'short',
+        viewWindow: { min: 0 },
+      },
+      animation: {
+        startup: true,
+        duration: 1200,
+        easing: 'out',
+      },
+    },
+  };
+
+  s1clientdatachart = {
+    type: ChartType.LineChart,
+    columns: ['Month', 'Client', 'Treatment', 'Medicine', 'Skincare'],
+    data: [['', 0, 0, 0, 0]],
+    options: {
+      title: `Client Visits / Treatment Sales Count (${this.selectedyear})`,
+      height: 300,
+      curveType: 'function', // smooth lines
+      legend: {
+        position: 'top',
+        alignment: 'center',
+        textStyle: { fontSize: 12, bold: true },
+      },
+      backgroundColor: '#fafafa',
+      chartArea: { left: 50, top: 40, width: '85%', height: '70%' },
+      colors: ['#4CAF50', '#2196F3', '#FFC107', '#FF5722'],
+      pointSize: 6,
+      lineWidth: 3,
+      series: {
+        0: { pointShape: 'circle' },
+        1: { pointShape: 'triangle' },
+      },
+      hAxis: {
+        title: 'Month',
+        textStyle: { fontSize: 12 },
+      },
+      vAxis: {
+        title: 'Count',
+        gridlines: { color: '#e0e0e0' },
+        textStyle: { color: '#555' },
+        format: 'short',
+        viewWindow: { min: 0 },
+      },
+      animation: {
+        startup: true,
+        duration: 1200,
+        easing: 'out',
+      },
+    },
+  };
+
+  s2clientdatachart = {
+    type: ChartType.LineChart,
+    columns: ['Month', 'Client', 'Treatment', 'Medicine', 'Skincare'],
+    data: [['', 0, 0, 0, 0]],
+    options: {
+      title: `Client Visits / Treatment Sales Count (${this.selectedyear})`,
+      height: 300,
+      curveType: 'function', // smooth lines
+      legend: {
+        position: 'top',
+        alignment: 'center',
+        textStyle: { fontSize: 12, bold: true },
+      },
+      backgroundColor: '#fafafa',
+      chartArea: { left: 50, top: 40, width: '85%', height: '70%' },
+      colors: ['#4CAF50', '#2196F3', '#FFC107', '#FF5722'],
+      pointSize: 6,
+      lineWidth: 3,
+      series: {
+        0: { pointShape: 'circle' },
+        1: { pointShape: 'triangle' },
+      },
+      hAxis: {
+        title: 'Month',
+        textStyle: { fontSize: 12 },
+      },
+      vAxis: {
+        title: 'Count',
+        gridlines: { color: '#e0e0e0' },
+        textStyle: { color: '#555' },
+        format: 'short',
+        viewWindow: { min: 0 },
+      },
+      animation: {
+        startup: true,
+        duration: 1200,
+        easing: 'out',
       },
     },
   };
@@ -160,7 +371,10 @@ export class DashboardComponent {
 
   invoiceData: any[] = [];
 
-  constructor(private route: ActivatedRoute, private router: Router) {}
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+  ) {}
   ngOnInit(): void {
     this.generalservice.setPageTitle('Dashboard');
 
@@ -238,6 +452,32 @@ export class DashboardComponent {
               sale.TotalIncome,
             ]);
           }
+
+          // Chart 2: Shop 1 vs Shop 2 Income
+          const allMonths = [...new Set(sales.map((x: any) => x.Month))];
+          const compareIncomeData = allMonths.map((month) => {
+            const s1 = sales.find(
+              (x: any) => x.Month === month && x.ShopID === '001',
+            );
+            const s2 = sales.find(
+              (x: any) => x.Month === month && x.ShopID === '002',
+            );
+            return [month, s1?.TotalIncome || 0, s2?.TotalIncome || 0];
+          });
+
+          this.compareMonthlyIncomeChart.data = compareIncomeData;
+
+          const compareSalesData = allMonths.map((month) => {
+            const s1 = sales.find(
+              (x: any) => x.Month === month && x.ShopID === '001',
+            );
+            const s2 = sales.find(
+              (x: any) => x.Month === month && x.ShopID === '002',
+            );
+            return [month, s1?.TotalSales || 0, s2?.TotalSales || 0];
+          });
+
+          this.compareMonthlySalesChart.data = compareSalesData;
         } else {
           console.error('Failed to fetch monthly sales:', response.message);
         }
@@ -257,15 +497,68 @@ export class DashboardComponent {
       next: (response) => {
         if (response.status) {
           const sales = response.data?.data;
-          if (Array.isArray(sales)) {
-            this.clientdatachart.data = sales.map((sale: any) => [
-              sale.Month,
-              sale.TotalClient,
-              sale.TotalTreatment,
-              sale.TotalMedicine,
-              sale.TotalSkincare,
-            ]);
-          }
+          // 1. Filter sales to include ONLY the shops you want to sum (001 and 002)
+          const combinedSales = sales.filter(
+            (s: any) => s.ShopID === '001' || s.ShopID === '002',
+          );
+
+          // 2. Use a Map to aggregate data by Month
+          const monthlyAggregations = new Map<string, any>();
+
+          combinedSales.forEach((sale: any) => {
+            const month = sale.Month;
+
+            // Initialize the monthly entry if it doesn't exist
+            if (!monthlyAggregations.has(month)) {
+              monthlyAggregations.set(month, {
+                Month: month,
+                TotalClient: 0,
+                TotalTreatment: 0,
+                TotalMedicine: 0,
+                TotalSkincare: 0,
+              });
+            }
+
+            // Get the current aggregated object for the month
+            const aggregated = monthlyAggregations.get(month);
+
+            // Sum the values
+            aggregated.TotalClient += sale.TotalClient;
+            aggregated.TotalTreatment += sale.TotalTreatment;
+            aggregated.TotalMedicine += sale.TotalMedicine;
+            aggregated.TotalSkincare += sale.TotalSkincare;
+          });
+
+          // 3. Map the aggregated data to the final chart format
+          this.clientdatachart.data = Array.from(
+            monthlyAggregations.values(),
+          ).map((monthlyData: any) => [
+            monthlyData.Month,
+            monthlyData.TotalClient,
+            monthlyData.TotalTreatment,
+            monthlyData.TotalMedicine,
+            monthlyData.TotalSkincare,
+          ]);
+
+          // ✅ Shop 1
+          const shop1Sales = sales.filter((s: any) => s.ShopID === '001');
+          this.s1clientdatachart.data = shop1Sales.map((sale: any) => [
+            sale.Month,
+            sale.TotalClient,
+            sale.TotalTreatment,
+            sale.TotalMedicine,
+            sale.TotalSkincare,
+          ]);
+
+          // ✅ Shop 2
+          const shop2Sales = sales.filter((s: any) => s.ShopID === '002');
+          this.s2clientdatachart.data = shop2Sales.map((sale: any) => [
+            sale.Month,
+            sale.TotalClient,
+            sale.TotalTreatment,
+            sale.TotalMedicine,
+            sale.TotalSkincare,
+          ]);
         } else {
           console.error('Failed to fetch monthly sales:', response.message);
         }
@@ -288,7 +581,7 @@ export class DashboardComponent {
           const sales = response.data?.data;
 
           const treatmentsales = sales.filter(
-            (sale: any) => sale.ItemType === 'T'
+            (sale: any) => sale.ItemType === 'T',
           );
           if (Array.isArray(treatmentsales)) {
             this.topsellingtreatmentchart.data = treatmentsales.map(
@@ -297,12 +590,12 @@ export class DashboardComponent {
                 sale.ItemName,
                 sale.TotalQty,
                 sale.TotalAmount,
-              ]
+              ],
             );
           }
 
           const medicinesales = sales.filter(
-            (sale: any) => sale.ItemType === 'M'
+            (sale: any) => sale.ItemType === 'M',
           );
           if (Array.isArray(medicinesales)) {
             this.topsellingmedicinechart.data = medicinesales.map(
@@ -311,12 +604,12 @@ export class DashboardComponent {
                 sale.ItemName,
                 sale.TotalQty,
                 sale.TotalAmount,
-              ]
+              ],
             );
           }
 
           const skincaresales = sales.filter(
-            (sale: any) => sale.ItemType === 'S'
+            (sale: any) => sale.ItemType === 'S',
           );
           if (Array.isArray(skincaresales)) {
             this.topsellingskincarechart.data = skincaresales.map(
@@ -325,7 +618,7 @@ export class DashboardComponent {
                 sale.ItemName,
                 sale.TotalQty,
                 sale.TotalAmount,
-              ]
+              ],
             );
           }
         } else {
@@ -392,7 +685,7 @@ export class DashboardComponent {
         '/invoice/invoice-register',
         invoiceNo,
         'deleteapproval',
-      ])
+      ]),
     );
     window.open(url, '_blank');
   }

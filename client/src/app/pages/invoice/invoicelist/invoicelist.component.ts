@@ -57,6 +57,9 @@ export class InvoicelistComponent {
   sortAsc: boolean = false;
   sortColumn: string = 'InvoiceDate';
 
+  userrole: string = '';
+  shopid: string = '';
+
   constructor(private router: Router) {}
 
   ngAfterViewInit(): void {
@@ -85,6 +88,10 @@ export class InvoicelistComponent {
 
   ngOnInit(): void {
     this.generalservice.setPageTitle('Invoice List');
+
+    this.userrole = this.generalservice.getUserRole() ?? '';
+    this.shopid = this.generalservice.getShopID() ?? '';
+
     this.loadItem();
 
     this.invoiceDateFrom = this.generalservice.getOneWeekBeforeFormattedDate();
@@ -122,6 +129,7 @@ export class InvoicelistComponent {
       TreatmentCD: this.treatmentCD,
       MedicineCD: this.medicineCD,
       SkincareCD: this.skincareCD,
+      ShopID: this.shopid,
     });
 
     this.invoiceservice.getInvoice(model).subscribe({
@@ -166,10 +174,11 @@ export class InvoicelistComponent {
         totals: {
           TotalPrice: rows.reduce((sum, r) => sum + r.TotalPrice, 0),
           TotalPayment: rows.reduce((sum, r) => sum + r.TotalPayment, 0),
+          MemberPayment: rows.reduce((sum, r) => sum + r.MemberPayment, 0),
           Discount: rows.reduce((sum, r) => sum + r.Discount, 0),
           OutstandingBalance: rows.reduce(
             (sum, r) => sum + r.OutstandingBalance,
-            0
+            0,
           ),
         },
       };
@@ -177,7 +186,7 @@ export class InvoicelistComponent {
   }
 
   newInvoice() {
-    this.router.navigate(['/invoice/invoice-register']);
+    this.router.navigate(['/invoice/invoice-register', this.shopid]);
   }
 
   async gotoregister(invoiceNo: string, mode: string) {
@@ -238,7 +247,7 @@ export class InvoicelistComponent {
       column,
       this.invoiceData,
       this.sortAsc,
-      toggle
+      toggle,
     );
     this.invoiceData = result.sortedData;
     this.sortAsc = result.sortAsc;
@@ -276,7 +285,7 @@ export class InvoicelistComponent {
 
   gotoprint(invoiceNo: string) {
     const url = this.router.serializeUrl(
-      this.router.createUrlTree(['/invoice/invoice-print', invoiceNo])
+      this.router.createUrlTree(['/invoice/invoice-print', invoiceNo]),
     );
     window.open(url, '_blank');
   }
@@ -293,5 +302,10 @@ export class InvoicelistComponent {
     });
 
     this.invoiceservice.invoiceExport(model);
+  }
+
+  shopIdChange(id: string) {
+    this.shopid = id;
+    this.loadInvoice();
   }
 }

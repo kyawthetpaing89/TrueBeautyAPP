@@ -1,0 +1,80 @@
+<form autocomplete="off">
+  <h3 mat-dialog-title>
+    <span
+      ><i
+        class="fa-solid fa-money-bill-transfer text-warning fa-lg action-icon me-3"
+      ></i>
+      Transaction Log</span
+    >
+    <a (click)="closeDialog()" aria-label="Close">
+      <mat-icon>close</mat-icon>
+    </a>
+  </h3>
+  <mat-dialog-content>
+    <div class="table-responsive-scroll">
+      <table class="table table-striped table-bordered table-sm">
+        <thead class="table-header">
+          <tr>
+            <th class="text-center">Transaction ID</th>
+            <th class="text-center">Transaction Date</th>
+            <th class="text-right">Amount</th>
+            <th>Remark</th>
+          </tr>
+        </thead>
+        <!-- Replaced *ngIf with @if / @else if / @else blocks -->
+        @if (membershipTransactionLoading) {
+          <tbody>
+            <tr>
+              <td colspan="4" class="text-center">
+                <div
+                  class="spinner-border spinner-border-sm text-primary"
+                  role="status"
+                ></div>
+                <span class="ms-2">Loading data...</span>
+              </td>
+            </tr>
+          </tbody>
+        } @else if (membershipTransactionData.length === 0) {
+          <tbody>
+            <tr>
+              <td colspan="4" class="text-center text-muted">
+                There is no data to display.
+              </td>
+            </tr>
+          </tbody>
+        } @else {
+          <tbody>
+            @for (data of membershipTransactionData; track data.TransactionID) {
+              <tr>
+                <td class="text-center">{{ data.TransactionID }}</td>
+                <td class="text-center">
+                  {{ data.TransactionDate | date: "dd MMM yyyy" }}
+                </td>
+                <td
+                  class="text-right"
+                  [ngClass]="{
+                    'text-success': data.Amount > 0,
+                    'text-danger': data.Amount < 0,
+                  }"
+                >
+                  {{ data.Amount.toLocaleString() }}
+                </td>
+                <td>{{ data.Remark }}</td>
+              </tr>
+            }
+          </tbody>
+        }
+      </table>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button
+      id="btncancel"
+      type="button"
+      (click)="closeDialog()"
+      class="btn w100 btn-dark btn-sm mr5"
+    >
+      Close
+    </button>
+  </mat-dialog-actions>
+</form>

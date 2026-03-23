@@ -3,6 +3,7 @@ import 'package:truebeauty/pages/widgets/tb_textfield.dart';
 import 'package:truebeauty/services/api_service.dart';
 import 'package:truebeauty/services/auth_service.dart';
 import 'package:truebeauty/utilities/api_url.dart';
+import 'package:intl/intl.dart';
 // import your TBTextField widget file here
 // import 'tb_textfield.dart';
 
@@ -23,6 +24,7 @@ class _UserEditPageState extends State<UserEditPage> {
   final TextEditingController _phoneController = TextEditingController();
 
   String? _gender;
+  bool loading = false;
 
   @override
   void initState() {
@@ -34,7 +36,9 @@ class _UserEditPageState extends State<UserEditPage> {
     try {
       final userInfo = await AuthService.getUserInfo();
       _clientIdController.text = userInfo["clientID"] ?? '';
-      final Map<String, dynamic> params = {"ClientID": userInfo["clientName"]};
+      final Map<String, dynamic> params = {
+        "ClientID": userInfo["clientID"] ?? '',
+      };
       final ApiService apiService = ApiService();
 
       final response = await apiService.post(ApiUrls.getclientinfo, params);
@@ -44,13 +48,14 @@ class _UserEditPageState extends State<UserEditPage> {
           response['data'] is Map &&
           response['data'].containsKey('data')) {
         // Drill down to the actual list
-        var data = response['data']['data'];
+        var data = response['data']['data'][0];
 
         setState(() {
           _nameController.text = data['Name'] ?? '';
           _addressController.text = data['Address'] ?? '';
-          _dobController.text = data['DOB'] ?? '';
+          _dobController.text = data['FormattedDOB'] ?? '';
           _phoneController.text = data['PhoneNo'] ?? '';
+          _gender = data['Gender'] ?? '';
         });
       } else {
         if (mounted) {
@@ -99,45 +104,96 @@ class _UserEditPageState extends State<UserEditPage> {
       firstDate: DateTime(1900),
       lastDate: DateTime.now(),
     );
+
     if (picked != null) {
       setState(() {
-        _dobController.text =
-            "${picked.day.toString().padLeft(2, '0')}/"
-            "${picked.month.toString().padLeft(2, '0')}/"
-            "${picked.year}";
+        _dobController.text = DateFormat('dd MMM yyyy', 'en_US').format(picked);
       });
     }
   }
 
-  void _saveForm() {
-    final clientData = {
-      "ClientID": _clientIdController.text,
-      "ClientName": _nameController.text,
-      "Address": _addressController.text,
-      "DOB": _dobController.text,
-      "PhoneNo": _phoneController.text,
-      "Gender": _gender,
-    };
+  void _saveForm() async {
+    setState(() => loading = true);
+    try {
+      final params = {
+        "ClientID": _clientIdController.text,
+        "ClientName": _nameController.text,
+        "Address": _addressController.text,
+        "DOB": _dobController.text,
+        "PhoneNo": _phoneController.text,
+        "Gender": _gender,
+      };
 
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text("Client Info"),
-        content: Text(clientData.toString()),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text("OK"),
-          ),
-        ],
-      ),
-    );
+      final ApiService apiService = ApiService();
+
+      final response = await apiService.post(ApiUrls.clientinfoupdate, params);
+
+      if (response is Map && response['status'] == true) {
+        if (mounted) {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: const Text("Success"),
+                content: Text('Saved Successfully!'),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: const Text("OK"),
+                  ),
+                ],
+              );
+            },
+          );
+        }
+      } else {
+        if (mounted) {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: const Text("Error"),
+                content: Text('Error: Saved Failed.'),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: const Text("OK"),
+                  ),
+                ],
+              );
+            },
+          );
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: const Text("Error"),
+              content: Text('Error: $e'),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text("OK"),
+                ),
+              ],
+            );
+          },
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => loading = false);
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Edit Client")),
+      appBar: AppBar(title: const Text("Edit Info")),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
@@ -176,6 +232,7 @@ class _UserEditPageState extends State<UserEditPage> {
                 label: "Phone No",
                 controller: _phoneController,
                 keyboardType: TextInputType.phone,
+                readOnly: true,
               ),
               const SizedBox(height: 12),
 
@@ -194,7 +251,7 @@ class _UserEditPageState extends State<UserEditPage> {
                       Row(
                         children: [
                           Radio<String>(
-                            value: "Male",
+                            value: "1",
                             groupValue: _gender,
                             onChanged: (value) {
                               setState(() {
@@ -209,7 +266,7 @@ class _UserEditPageState extends State<UserEditPage> {
                       Row(
                         children: [
                           Radio<String>(
-                            value: "Female",
+                            value: "2",
                             groupValue: _gender,
                             onChanged: (value) {
                               setState(() {
@@ -226,7 +283,26 @@ class _UserEditPageState extends State<UserEditPage> {
               ),
               const SizedBox(height: 20),
 
-              ElevatedButton(onPressed: _saveForm, child: const Text("Save")),
+              const SizedBox(height: 24),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: loading ? null : _saveForm,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFFdf8284),
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  child: loading
+                      ? const CircularProgressIndicator(color: Colors.white)
+                      : const Text(
+                          "Save",
+                          style: TextStyle(fontSize: 16, color: Colors.white),
+                        ),
+                ),
+              ),
             ],
           ),
         ),

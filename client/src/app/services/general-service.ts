@@ -82,6 +82,19 @@ export class GeneralService {
     }
   }
 
+  getShopID(): string | null {
+    const token = localStorage.getItem('tb-accessToken');
+    if (!token) return null;
+
+    try {
+      const decoded = jwtDecode<Record<string, any>>(token);
+      return decoded['shopid'];
+    } catch {
+      this.router.navigate(['/users/login']);
+      return '';
+    }
+  }
+
   getFormattedDate(inputDate?: Date | string): string {
     const date = inputDate ? new Date(inputDate) : new Date();
 

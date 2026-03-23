@@ -47,7 +47,7 @@ export class ItemusageregisterDialogComponent {
 
   constructor(
     private dialogRef: MatDialogRef<ItemusageregisterDialogComponent>,
-    private dialog: MatDialog
+    private dialog: MatDialog,
   ) {}
 
   ngAfterViewInit(): void {
@@ -71,9 +71,8 @@ export class ItemusageregisterDialogComponent {
   }
 
   onItemTypeChange() {
-    debugger;
     this.selectedData = this.itemData.filter(
-      (x) => x.ItemType === this.itemtype
+      (x) => x.ItemType === this.itemtype,
     );
 
     this.itemcd = this.selectedData[0].ItemCD;
@@ -106,14 +105,14 @@ export class ItemusageregisterDialogComponent {
       .pipe(
         finalize(() => {
           this.isSubmitting = false;
-        })
+        }),
       )
       .subscribe({
         next: (response) => {
           if (response.status) {
             this.dialogservice.showMessage(
               'Success',
-              response.data?.data?.[0]?.MessageText
+              response.data?.data?.[0]?.MessageText,
             );
             this.dialogRef.close(response);
           } else {

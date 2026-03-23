@@ -8,6 +8,7 @@ namespace server.Models.Invoice
     public class InvoiceDetailProcessRequestDTO
     {
         public string InvoiceNo { get; set; } = string.Empty;
+        public required string ShopID { get; set; }
         public required string InvoiceDate { get; set; }
         public required string ClientID { get; set; }
         public required string Notes { get; set; } = string.Empty;

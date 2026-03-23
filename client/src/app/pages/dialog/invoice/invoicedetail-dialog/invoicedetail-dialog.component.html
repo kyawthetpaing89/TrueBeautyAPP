@@ -29,9 +29,9 @@
           >
             <!-- Replaced *ngFor with @for block. Added a 'track' function for performance. -->
             @for (item of itemData; track item.ItemCD) {
-            <option [value]="item.ItemCD">
-              {{ item.ItemName }}
-            </option>
+              <option [value]="item.ItemCD">
+                {{ item.ItemName }}
+              </option>
             }
           </select>
         </div>
@@ -70,7 +70,7 @@
         <div class="col-lg-12 col-xl-12 mb10">
           <input
             type="text"
-            maxlength="2"
+            maxlength="4"
             class="form-control form-control-sm text-right"
             id="txtQuantity"
             [(ngModel)]="quantity"
@@ -191,7 +191,7 @@
         [ngClass]="{
           'btn-success': mode === 'New',
           'btn-info': mode === 'Edit',
-          'btn-danger': mode === 'Delete'
+          'btn-danger': mode === 'Delete',
         }"
         (click)="save()"
         [disabled]="isSubmitting"
@@ -200,10 +200,10 @@
           mode === "New"
             ? "Save"
             : mode === "Edit"
-            ? "Update"
-            : mode === "Delete"
-            ? "Delete"
-            : "Submit"
+              ? "Update"
+              : mode === "Delete"
+                ? "Delete"
+                : "Submit"
         }}
       </button>
     </mat-dialog-actions>

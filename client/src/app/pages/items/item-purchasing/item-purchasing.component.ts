@@ -86,7 +86,7 @@ export class ItemPurchasingComponent {
       .pipe(
         finalize(() => {
           this.itemPurchaseLoading = false;
-        })
+        }),
       )
       .subscribe({
         next: (response) => {
@@ -120,7 +120,7 @@ export class ItemPurchasingComponent {
       column,
       this.itemPurchaseData,
       this.sortAsc,
-      toggle
+      toggle,
     );
     this.itemPurchaseData = result.sortedData;
     this.sortAsc = result.sortAsc;
@@ -191,7 +191,7 @@ export class ItemPurchasingComponent {
       if (result.status) {
         this.dialogservice.showMessage(
           'Success',
-          result.data?.data?.[0]?.MessageText
+          result.data?.data?.[0]?.MessageText,
         );
 
         this.loadItemPurchaseList();

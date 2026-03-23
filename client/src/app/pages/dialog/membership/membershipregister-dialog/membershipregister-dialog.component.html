@@ -1,0 +1,201 @@
+<form autocomplete="off">
+  <h3
+    mat-dialog-title
+    class="d-flex justify-content-between align-items-center"
+  >
+    <span>Membership Register</span>
+    <a (click)="closeDialog()" aria-label="Close">
+      <mat-icon>close</mat-icon>
+    </a>
+  </h3>
+
+  <mat-dialog-content>
+    <div class="row g-3 mb-3">
+      <!-- Membership ID -->
+      <div class="col-12 d-flex align-items-center">
+        <label for="txtMembershipID" class="w150">ID:</label>
+        <input
+          type="text"
+          class="form-control form-control-sm text-center"
+          id="txtMembershipID"
+          readonly
+          [(ngModel)]="membershipID"
+          name="membershipID"
+        />
+      </div>
+
+      <!-- Client ID -->
+      <div class="col-12 d-flex align-items-center">
+        <label for="txtClientID" class="w150">Client ID:</label>
+        <div class="input-group">
+          <input
+            type="text"
+            class="form-control form-control-sm"
+            id="txtClientID"
+            [(ngModel)]="clientID"
+            name="clientID"
+            readonly
+          />
+          <button
+            type="button"
+            class="btn btn-sm btn-info btn-search"
+            (click)="openClientSearchDialog()"
+          >
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Client Name -->
+      <div class="col-12 d-flex align-items-center">
+        <label for="txtClientName" class="w150">Client Name:</label>
+        <input
+          type="text"
+          class="form-control form-control-sm"
+          id="txtClientName"
+          [(ngModel)]="clientName"
+          name="clientName"
+          readonly
+        />
+      </div>
+
+      <!-- Membership Type -->
+      <div class="col-12 d-flex align-items-center">
+        <label for="ddlMembershipType" class="w150">Type:</label>
+        <select
+          class="form-control form-control-sm"
+          id="ddlMembershipType"
+          [(ngModel)]="selectedMembershipTypeID"
+          name="selectedMembershipTypeID"
+          (change)="onMembershipTypeChange('')"
+        >
+          @for (row of membershipTypeData; track $index) {
+            <option [value]="row.MembershipTypeID">
+              {{ row.Description }}
+            </option>
+          }
+        </select>
+      </div>
+
+      <!-- Amount -->
+      <div class="col-12 d-flex align-items-center">
+        <label for="ddlAmount" class="w150">Amount:</label>
+        <select
+          class="form-control form-control-sm"
+          id="ddlAmount"
+          [(ngModel)]="selectedAmount"
+          name="ddlAmount"
+          (change)="calculateTotal()"
+        >
+          @for (row of membershipAmount; track $index) {
+            <option [value]="row.ItemCD">
+              {{ row.ItemName + " | " + (row.Price | number) }}
+            </option>
+          }
+        </select>
+      </div>
+
+      <!-- CashBack -->
+      <div class="col-12 d-flex align-items-center">
+        <label for="ddlCashback" class="w150">Cashback:</label>
+        <select
+          class="form-control form-control-sm"
+          id="ddlCashback"
+          [(ngModel)]="selectedCashBack"
+          name="ddlCashback"
+          (change)="calculateTotal()"
+        >
+          @for (row of membershipCashback; track $index) {
+            <option [value]="row.ItemCD">
+              {{ row.ItemName + " | " + (row.Price | number) }}
+            </option>
+          }
+        </select>
+      </div>
+
+      <!-- Total -->
+      <div class="col-12 d-flex align-items-center">
+        <label for="txtCashback" class="w150">Total:</label>
+        <input
+          type="text"
+          class="form-control form-control-sm text-end"
+          id="txtTotal"
+          [(ngModel)]="total"
+          name="total"
+          readonly
+        />
+      </div>
+
+      <!-- Valid Months -->
+      <div class="col-12 d-flex align-items-center">
+        <label for="txtValidFor" class="w150">Valid Months:</label>
+        <input
+          type="text"
+          class="form-control form-control-sm text-end"
+          id="txtValidFor"
+          [(ngModel)]="validForMonths"
+          name="validForMonths"
+          (input)="calculateExpiredDate()"
+        />
+      </div>
+
+      <!-- Start Date -->
+      <div class="col-12 d-flex align-items-center">
+        <label for="txtStartDate" class="w150">Start Date:</label>
+        <input
+          type="text"
+          class="form-control form-control-sm text-center"
+          id="txtStartDate"
+          [(ngModel)]="startDate"
+          name="startDate"
+          #txtStartDate
+        />
+      </div>
+
+      <!-- Expired Date -->
+      <div class="col-12 d-flex align-items-center">
+        <label for="txtExpiredDate" class="w150">Expired Date:</label>
+        <input
+          type="text"
+          class="form-control form-control-sm text-center"
+          id="txtExpiredDate"
+          [(ngModel)]="expiredDate"
+          name="expiredDate"
+          readonly
+        />
+      </div>
+
+      <!-- Note -->
+      <div
+        class="col-12 col-md-12 col-lg-12 col-xl-12 d-flex align-items-center"
+      >
+        <label for="txtNote" class="w150">Notes:</label>
+        <textarea
+          id="txtNote"
+          class="form-control form-control-sm h100"
+          [(ngModel)]="note"
+          name="instructionNotes"
+        ></textarea>
+      </div>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button
+      type="button"
+      (click)="closeDialog()"
+      class="btn btn-dark btn-sm me-2 w100"
+    >
+      Cancel
+    </button>
+
+    <button
+      type="button"
+      class="btn btn-success btn-sm w100"
+      (click)="save()"
+      [disabled]="isSubmitting"
+    >
+      Save
+    </button>
+  </mat-dialog-actions>
+</form>

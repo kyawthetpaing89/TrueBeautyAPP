@@ -157,7 +157,29 @@ class _ItemListPageState extends State<ItemListPage> {
                             ),
                           ],
                         ),
-                        trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                        trailing: Row(
+                          mainAxisSize:
+                              MainAxisSize.min, // important to keep it compact
+                          children: [
+                            IconButton(
+                              icon: Icon(
+                                item['isFavorite'] == true
+                                    ? Icons.favorite
+                                    : Icons.favorite_border,
+                                color: item['isFavorite'] == true
+                                    ? Colors.red
+                                    : Colors.grey,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  item['isFavorite'] =
+                                      !(item['isFavorite'] == true);
+                                });
+                              },
+                            ),
+                            const Icon(Icons.arrow_forward_ios, size: 16),
+                          ],
+                        ),
                         onTap: () {
                           // Handle item click
                         },

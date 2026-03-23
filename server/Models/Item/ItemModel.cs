@@ -28,6 +28,15 @@ namespace server.Models.Item
         public required string InstructionCD { get; set; }
     }
 
+    public class ClientItemRequestDTO
+    {
+        public required string ClientID { get; set; }
+        public required string ItemCD { get; set; }
+        public required string ItemName { get; set; }
+        public required string ItemType { get; set; }
+        public required string InstructionCD { get; set; }
+    }
+
     public class ItemPriceLogRequestDTO
     {
         public required string ItemCD { get; set; }

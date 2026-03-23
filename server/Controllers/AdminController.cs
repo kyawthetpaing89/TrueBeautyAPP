@@ -29,30 +29,30 @@ namespace server.Controllers
             {
                 if (response.Data != null && response.Data.Count != 0)
                 {
-                    var accessToken = _tokenService.GenerateAccessToken(admin.LoginID, response.Data[0].UserRole, response.Data[0].AdminName);
-                    var refreshToken = _tokenService.GenerateRefreshToken();
-                    var refreshTokenExpiredDate = DateTime.UtcNow.AddYears(1);
+                    var accessToken = _tokenService.GenerateAccessToken(admin.LoginID, response.Data[0].UserRole, response.Data[0].AdminName, response.Data[0].ShopID);
+                    // var refreshToken = _tokenService.GenerateRefreshToken();
+                    // var refreshTokenExpiredDate = DateTime.UtcNow.AddYears(1);
 
-                    AdminRefreshTokenUpdateDTO userRefreshToken = new()
-                    {
-                        LoginID = admin.LoginID,
-                        DeviceID = admin.DeviceID,
-                        RefreshToken = refreshToken,
-                        RefreshTokenExpiredDate = refreshTokenExpiredDate
-                    };
+                    // AdminRefreshTokenUpdateDTO userRefreshToken = new()
+                    // {
+                    //     LoginID = admin.LoginID,
+                    //     DeviceID = admin.DeviceID,
+                    //     RefreshToken = refreshToken,
+                    //     RefreshTokenExpiredDate = refreshTokenExpiredDate
+                    // };
 
-                    var paramUserRefreshToken = Converter.DtoToParam(userRefreshToken);
+                    // var paramUserRefreshToken = Converter.DtoToParam(userRefreshToken);
 
-                    await _userRepo.ExecAsync<AdminRefreshTokenUpdateDTO>("sp_Users_UpdateRefreshToken", paramUserRefreshToken, false);
+                    // await _userRepo.ExecAsync<AdminRefreshTokenUpdateDTO>("sp_Users_UpdateRefreshToken", paramUserRefreshToken, false);
 
-                    // Store refresh token in a HttpOnly Secure cookie (prevents XSS attacks)
-                    Response.Cookies.Append("refreshToken", refreshToken, new CookieOptions
-                    {
-                        HttpOnly = true,
-                        Secure = false,
-                        SameSite = SameSiteMode.Lax,
-                        Expires = refreshTokenExpiredDate
-                    });
+                    // // Store refresh token in a HttpOnly Secure cookie (prevents XSS attacks)
+                    // Response.Cookies.Append("refreshToken", refreshToken, new CookieOptions
+                    // {
+                    //     HttpOnly = true,
+                    //     Secure = false,
+                    //     SameSite = SameSiteMode.Lax,
+                    //     Expires = refreshTokenExpiredDate
+                    // });
 
                     return Ok(new ApiResponse<object>(true, "Login successful", new { accessToken, user = response.Data[0] }));
                 }

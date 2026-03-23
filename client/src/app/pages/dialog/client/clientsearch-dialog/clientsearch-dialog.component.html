@@ -79,6 +79,7 @@
           <tr>
             <th class="text-center">Client ID</th>
             <th>Client Name</th>
+            <th class="text-center">Membership</th>
             <th>Gender</th>
             <th class="text-center">Age</th>
             <th>Phone Number</th>
@@ -88,50 +89,53 @@
         </thead>
         <!-- Replaced *ngIf with @if / @else if / @else blocks -->
         @if (clientLoading) {
-        <tbody>
-          <tr>
-            <td colspan="7" class="text-center">
-              <div
-                class="spinner-border spinner-border-sm text-primary"
-                role="status"
-              ></div>
-              <span class="ms-2">Loading data...</span>
-            </td>
-          </tr>
-        </tbody>
+          <tbody>
+            <tr>
+              <td colspan="8" class="text-center">
+                <div
+                  class="spinner-border spinner-border-sm text-primary"
+                  role="status"
+                ></div>
+                <span class="ms-2">Loading data...</span>
+              </td>
+            </tr>
+          </tbody>
         } @else if (clientData.length === 0) {
-        <tbody>
-          <tr>
-            <td colspan="7" class="text-center text-muted">
-              There is no data to display.
-            </td>
-          </tr>
-        </tbody>
+          <tbody>
+            <tr>
+              <td colspan="8" class="text-center text-muted">
+                There is no data to display.
+              </td>
+            </tr>
+          </tbody>
         } @else {
-        <tbody>
-          <!-- Replaced *ngFor with @for block. Added a 'track' function for performance. -->
-          @for (row of clientData; track row.ClientID) {
-          <tr>
-            <td class="text-center align-middle">{{ row.ClientID }}</td>
-            <td class="align-middle">{{ row.Name }}</td>
-            <td class="text-center align-middle">{{ row.GenderText }}</td>
-            <td class="text-center align-middle">{{ row.Age }}</td>
-            <td class="align-middle">{{ row.PhoneNo }}</td>
-            <td class="text-center align-middle">
-              {{ generalservice.getFormattedDate(row.CreatedDate) }}
-            </td>
-            <td class="text-center align-middle">
-              <button
-                class="btn btn-sm btn-secondary"
-                (click)="clientSelect(row)"
-              >
-                <i class="fa-solid fa-circle-check fa-lg action-icon me-1"></i>
-                Select
-              </button>
-            </td>
-          </tr>
-          }
-        </tbody>
+          <tbody>
+            <!-- Replaced *ngFor with @for block. Added a 'track' function for performance. -->
+            @for (row of clientData; track row.ClientID) {
+              <tr>
+                <td class="text-center align-middle">{{ row.ClientID }}</td>
+                <td class="align-middle">{{ row.Name }}</td>
+                <td class="text-center">{{ row.Membership }}</td>
+                <td class="text-center align-middle">{{ row.GenderText }}</td>
+                <td class="text-center align-middle">{{ row.Age }}</td>
+                <td class="align-middle">{{ row.PhoneNo }}</td>
+                <td class="text-center align-middle">
+                  {{ generalservice.getFormattedDate(row.CreatedDate) }}
+                </td>
+                <td class="text-center align-middle">
+                  <button
+                    class="btn btn-sm btn-secondary"
+                    (click)="clientSelect(row)"
+                  >
+                    <i
+                      class="fa-solid fa-circle-check fa-lg action-icon me-1"
+                    ></i>
+                    Select
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
         }
       </table>
     </div>

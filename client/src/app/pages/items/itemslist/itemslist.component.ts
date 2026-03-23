@@ -23,6 +23,7 @@ import { ItempricelogDialogComponent } from '../../dialog/item/itempricelog-dial
   styleUrl: './itemslist.component.scss',
 })
 export class ItemslistComponent {
+  @ViewChild('memberScroll') private memberScroll!: ElementRef;
   @ViewChild('treatmentScroll') private treatmentScroll!: ElementRef;
   @ViewChild('medicineScroll') private medicineScroll!: ElementRef;
   @ViewChild('skincareScroll') private skincareScroll!: ElementRef;
@@ -32,12 +33,13 @@ export class ItemslistComponent {
   generalservice = inject(GeneralService);
   private dialog = inject(MatDialog);
 
-  selectedTab: string = 'T';
+  selectedTab: string = 'C';
   search_itemname: string = '';
   search_itemcode: string = '';
 
   itemLoading: boolean = false;
   itemData: any[] = [];
+  memberData: any[] = [];
   treatmentData: any[] = [];
   medicineData: any[] = [];
   skincareData: any[] = [];
@@ -64,7 +66,7 @@ export class ItemslistComponent {
     this.itemLoading = true;
 
     let currentScrollTop = this.generalservice.getCurrentScroll(
-      this.getCurrentScrollElement()!
+      this.getCurrentScrollElement()!,
     );
 
     this.itemservice
@@ -72,7 +74,7 @@ export class ItemslistComponent {
       .pipe(
         finalize(() => {
           this.itemLoading = false;
-        })
+        }),
       )
       .subscribe({
         next: (response) => {
@@ -85,7 +87,7 @@ export class ItemslistComponent {
               this.generalservice.setCurrentScroll(
                 this.getCurrentScrollElement(),
                 this.renderer,
-                currentScrollTop
+                currentScrollTop,
               );
             }
           } else {
@@ -103,6 +105,9 @@ export class ItemslistComponent {
 
     let key: string = '';
     switch (this.selectedTab) {
+      case 'C':
+        key = 'memberData';
+        break;
       case 'T':
         key = 'treatmentData';
         break;
@@ -123,7 +128,7 @@ export class ItemslistComponent {
       column,
       (this as any)[key],
       this.sortAsc,
-      toggle
+      toggle,
     );
 
     (this as any)[key] = result.sortedData;
@@ -134,6 +139,9 @@ export class ItemslistComponent {
     this.selectedTab = tab;
 
     switch (tab) {
+      case 'C':
+        this.treatmentData = this.itemData.filter((x) => x.ItemType === 'C');
+        break;
       case 'T':
         this.treatmentData = this.itemData.filter((x) => x.ItemType === 'T');
         break;
@@ -203,6 +211,8 @@ export class ItemslistComponent {
 
   private getCurrentScrollElement(): ElementRef | null {
     switch (this.selectedTab) {
+      case 'C':
+        return this.memberScroll;
       case 'T':
         return this.treatmentScroll;
       case 'M':

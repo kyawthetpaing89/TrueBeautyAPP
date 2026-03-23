@@ -1,0 +1,236 @@
+<form autocomplete="off">
+  <div class="card">
+    <h6 class="card-header">
+      <i class="material-icons">card_giftcard</i> Membership List
+    </h6>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-lg-12 col-xl-12 mb10">
+          <div class="row g-3">
+            <!-- Membership ID -->
+            <div
+              class="col-12 col-md-4 col-lg-4 col-xl-3 d-flex align-items-center"
+            >
+              <label for="txtSearchMembershipID" class="w150"
+                >Membership ID:</label
+              >
+              <input
+                type="text"
+                class="form-control form-control-sm"
+                id="txtSearchMembershipID"
+                [(ngModel)]="searchMembershipId"
+                name="searchMembershipId"
+              />
+            </div>
+
+            <!-- Client ID/Name -->
+            <div
+              class="col-12 col-md-4 col-lg-4 col-xl-3 d-flex align-items-center"
+            >
+              <label for="txtSearchClientIDName" class="w150"
+                >Client ID/Name:</label
+              >
+              <input
+                type="text"
+                class="form-control form-control-sm"
+                id="txtSearchClientIDName"
+                [(ngModel)]="searchClientIDName"
+                name="searchClientIDName"
+              />
+            </div>
+
+            <!-- Membership Type -->
+            <div
+              class="col-12 col-md-4 col-lg-4 col-xl-3 d-flex align-items-center"
+            >
+              <label for="ddlStatusMembershipType" class="w150"
+                >Membership:</label
+              >
+              <select
+                class="form-control form-control-sm"
+                id="ddlStatusMembershipType"
+                [(ngModel)]="searchMembershipType"
+                name="selectedMembershipTypeID"
+              >
+                <option value="">All</option>
+                @for (row of membershipTypeData; track row.MembershipTypeID) {
+                  <option [value]="row.MembershipTypeID">
+                    {{ row.Description }}
+                  </option>
+                }
+              </select>
+            </div>
+
+            <!-- Status -->
+            <div
+              class="col-12 col-md-4 col-lg-4 col-xl-3 d-flex align-items-center"
+            >
+              <label for="txtSearchStatus" class="w150">Status:</label>
+              <select
+                class="form-control form-control-sm"
+                id="txtSearchStatus"
+                [(ngModel)]="searchStatus"
+                name="searchStatus"
+              >
+                <option value="">All</option>
+                <option value="1">Active</option>
+                <option value="0">In-active</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row div-center mt5">
+        <button
+          id="btnsearch"
+          type="button"
+          class="btn w100 btn-info btn-sm mr5"
+          (click)="loadMembership()"
+        >
+          Search
+        </button>
+        <button
+          id="btnclear"
+          (click)="clearSearch()"
+          type="button"
+          class="btn w100 btn-dark btn-sm"
+        >
+          Clear
+        </button>
+      </div>
+      <hr />
+      <div class="row mb10">
+        <div class="col-lg-12 col-xl-12 d-flex justify-content-end">
+          <button
+            id="btnExportItem"
+            class="btn btn-sm btn-primary w100 me-2"
+            type="button"
+            (click)="exportMembership()"
+          >
+            Export
+          </button>
+          <button
+            class="btn btn-sm btn-success btnRegister w200"
+            type="button"
+            (click)="newMembership()"
+          >
+            Register Membership
+          </button>
+        </div>
+      </div>
+      <div class="table-responsive-scroll" #scrollContainer>
+        <table
+          id="tblMembershipList"
+          class="table table-sm table-hover table-striped table-bordered w100p"
+        >
+          <thead class="table-header">
+            <tr>
+              <th class="text-center">Membership ID</th>
+              <th class="text-center">Primary Client ID</th>
+              <th>Primary Client Name</th>
+              <th>Members</th>
+              <th>Membership Type</th>
+              <th class="text-center">Start Date</th>
+              <th class="text-center">Expired Date</th>
+              <th class="text-right">Days Remaining</th>
+              <th class="text-right">Balance</th>
+              <th class="text-center">Action</th>
+            </tr>
+          </thead>
+          @if (membershipDataLoading) {
+            <tbody>
+              <tr>
+                <td colspan="10" class="text-center">
+                  <div
+                    class="spinner-border spinner-border-sm text-primary"
+                    role="status"
+                  ></div>
+                  <span class="ms-2">Loading data...</span>
+                </td>
+              </tr>
+            </tbody>
+          } @else if (membershipData.length === 0) {
+            <tbody>
+              <tr>
+                <td colspan="10" class="text-center text-muted">
+                  There is no data to display.
+                </td>
+              </tr>
+            </tbody>
+          } @else {
+            <tbody>
+              @for (row of membershipData; track row.MembershipID) {
+                <tr>
+                  <td class="text-center">
+                    {{ row.MembershipID }}
+                  </td>
+                  <td class="text-center">
+                    {{ row.PrimaryClientID }}
+                  </td>
+                  <td>
+                    {{ row.PrimaryClientName }}
+                  </td>
+                  <td>
+                    {{ row.MemberList }}
+                  </td>
+                  <td
+                    [class.silver]="row.MembershipType === 'Silver'"
+                    [class.gold]="row.MembershipType === 'Gold'"
+                    [class.diamond]="row.MembershipType === 'Diamond'"
+                  >
+                    {{ row.MembershipType }}
+                  </td>
+                  <td class="text-center">
+                    {{ row.StartDate | date: "dd MMM yyyy" }}
+                  </td>
+                  <td class="text-center">
+                    {{ row.ExpiredDate | date: "dd MMM yyyy" }}
+                  </td>
+                  <td class="text-right">{{ row.RemainingDays }}</td>
+                  <td class="text-right">{{ row.Balance | number }}</td>
+                  <td class="text-center">
+                    <a
+                      (click)="row.Balance > 0 && openRenewMembership(row)"
+                      title="Renew Membership"
+                      ><i
+                        class="fa-solid fa-arrows-rotate fa-lg action-icon me-3"
+                        [ngClass]="
+                          row.Balance > 0 ? 'text-success' : 'text-muted'
+                        "
+                      ></i
+                    ></a>
+                    <a (click)="openTransactionLog(row)" title="Transaction Log"
+                      ><i
+                        class="fa-solid fa-money-bill-transfer text-warning fa-lg action-icon me-3"
+                      ></i
+                    ></a>
+                    <a (click)="openMemberList('Edit', row)" title="Member List"
+                      ><i
+                        class="fa-solid fa-people-group text-primary fa-lg action-icon me-3"
+                      ></i
+                    ></a>
+                    <a
+                      (click)="row.Balance > 0 && cancelMembership(row)"
+                      [title]="
+                        row.Balance > 0
+                          ? 'Cancel Membership'
+                          : 'No balance to cancel'
+                      "
+                    >
+                      <i
+                        class="fa-solid fa-ban fa-lg action-icon"
+                        [ngClass]="
+                          row.Balance > 0 ? 'text-danger' : 'text-muted'
+                        "
+                      ></i>
+                    </a>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          }
+        </table>
+      </div>
+    </div>
+  </div>
+</form>

@@ -56,13 +56,28 @@
           <li class="nav-item" role="presentation">
             <button
               class="nav-link active"
+              id="member-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#member-tab-pane"
+              type="button"
+              role="tab"
+              aria-controls="home-tab-pane"
+              aria-selected="true"
+              (click)="onTabChange('C')"
+            >
+              Membership
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link"
               id="treatment-tab"
               data-bs-toggle="tab"
               data-bs-target="#treatment-tab-pane"
               type="button"
               role="tab"
               aria-controls="home-tab-pane"
-              aria-selected="true"
+              aria-selected="false"
               (click)="onTabChange('T')"
             >
               Treatment
@@ -118,9 +133,9 @@
         <div class="tab-content">
           <div
             class="tab-pane fade show active"
-            id="treatment-tab-pane"
+            id="member-tab-pane"
             role="tabpanel"
-            aria-labelledby="treatment-tab"
+            aria-labelledby="member-tab"
             tabindex="0"
           >
             <div class="row mb10">
@@ -133,14 +148,164 @@
                 >
                   Export
                 </button>
-                @if (generalservice.getUserRole() === 'admin') {
+                @if (generalservice.getUserRole() === "admin") {
+                  <button
+                    class="btn btn-sm btn-success btnRegister w200"
+                    type="button"
+                    (click)="openRegisterDialog('New', '')"
+                  >
+                    Register Membership
+                  </button>
+                }
+              </div>
+            </div>
+            <div class="table-responsive-scroll" #memberScroll>
+              <table
+                id="tblMember"
+                class="table table-sm table-hover table-striped table-bordered w-100"
+              >
+                <thead class="table-header">
+                  <tr>
+                    <th class="text-center">Item Code</th>
+                    <th (click)="onSort('ItemName')">
+                      Item Name
+                      <mat-icon
+                        class="sort-icon float-end"
+                        [ngClass]="{ active: sortColumn === 'ItemName' }"
+                      >
+                        {{
+                          sortColumn === "ItemName" && !sortAsc
+                            ? "keyboard_double_arrow_down"
+                            : "keyboard_double_arrow_up"
+                        }}
+                      </mat-icon>
+                    </th>
+                    <th class="text-end">Quantity</th>
+                    <th class="text-end" (click)="onSort('Price')">
+                      Price
+                      <mat-icon
+                        class="sort-icon float-end"
+                        [ngClass]="{ active: sortColumn === 'Price' }"
+                      >
+                        {{
+                          sortColumn === "Price" && !sortAsc
+                            ? "keyboard_double_arrow_down"
+                            : "keyboard_double_arrow_up"
+                        }}
+                      </mat-icon>
+                    </th>
+                    <th>Description</th>
+                    <th class="text-center mw150">Registered By</th>
+                    <th
+                      class="text-center mw150"
+                      (click)="onSort('CreatedDate')"
+                    >
+                      Registered Date
+                      <mat-icon
+                        class="sort-icon float-end"
+                        [ngClass]="{ active: sortColumn === 'CreatedDate' }"
+                      >
+                        {{
+                          sortColumn === "CreatedDate" && !sortAsc
+                            ? "keyboard_double_arrow_down"
+                            : "keyboard_double_arrow_up"
+                        }}
+                      </mat-icon>
+                    </th>
+                    @if (generalservice.getUserRole() === "admin") {
+                      <th></th>
+                    }
+                  </tr>
+                </thead>
+                @if (itemLoading) {
+                  <tbody>
+                    <tr>
+                      <td colspan="12" class="text-center">
+                        <div
+                          class="spinner-border spinner-border-sm text-primary"
+                          role="status"
+                        ></div>
+                        <span class="ms-2">Loading data...</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                } @else if (treatmentData.length === 0) {
+                  <tbody>
+                    <tr>
+                      <td colspan="12" class="text-center text-muted">
+                        There is no data to display.
+                      </td>
+                    </tr>
+                  </tbody>
+                } @else {
+                  <tbody>
+                    @for (row of treatmentData; track row.ItemCD) {
+                      <tr>
+                        <td class="text-center w150">{{ row.ItemCD }}</td>
+                        <td>{{ row.ItemName }}</td>
+                        <td class="text-end">{{ row.Quantity }}</td>
+                        <td class="text-end">
+                          @if (row.PriceChangeCount > 1) {
+                            <a (click)="openPriceLogDialog(row)" class="link">
+                              {{ row.Price.toLocaleString() }}
+                            </a>
+                          } @else {
+                            <span>
+                              {{ row.Price.toLocaleString() }}
+                            </span>
+                          }
+                        </td>
+                        <td class="mw150">{{ row.Description }}</td>
+                        <td class="text-center">{{ row.CreatedBy }}</td>
+                        <td class="text-center">
+                          {{ generalservice.getFormattedDate(row.CreatedDate) }}
+                        </td>
+                        @if (generalservice.getUserRole() === "admin") {
+                          <td class="text-center w100">
+                            <a (click)="openRegisterDialog('Edit', row)"
+                              ><i
+                                class="fa-solid fa-pen-to-square text-primary fa-lg action-icon me-3"
+                              ></i
+                            ></a>
+                            <a (click)="openRegisterDialog('Delete', row)"
+                              ><i
+                                class="fa-solid fa-trash-can text-danger fa-lg action-icon"
+                              ></i
+                            ></a>
+                          </td>
+                        }
+                      </tr>
+                    }
+                  </tbody>
+                }
+              </table>
+            </div>
+          </div>
+          <div
+            class="tab-pane fade"
+            id="treatment-tab-pane"
+            role="tabpanel"
+            aria-labelledby="treatment-tab"
+            tabindex="1"
+          >
+            <div class="row mb10">
+              <div class="col-lg-12 col-xl-12 d-flex justify-content-end">
                 <button
-                  class="btn btn-sm btn-success btnRegister w200"
+                  id="btnExportItem"
+                  class="btn btn-sm btn-primary w100 me-2"
                   type="button"
-                  (click)="openRegisterDialog('New', '')"
+                  (click)="exportItem()"
                 >
-                  Register Treatment
+                  Export
                 </button>
+                @if (generalservice.getUserRole() === "admin") {
+                  <button
+                    class="btn btn-sm btn-success btnRegister w200"
+                    type="button"
+                    (click)="openRegisterDialog('New', '')"
+                  >
+                    Register Treatment
+                  </button>
                 }
               </div>
             </div>
@@ -197,71 +362,71 @@
                         }}
                       </mat-icon>
                     </th>
-                    @if (generalservice.getUserRole() === 'admin') {
-                    <th></th>
+                    @if (generalservice.getUserRole() === "admin") {
+                      <th></th>
                     }
                   </tr>
                 </thead>
                 @if (itemLoading) {
-                <tbody>
-                  <tr>
-                    <td colspan="12" class="text-center">
-                      <div
-                        class="spinner-border spinner-border-sm text-primary"
-                        role="status"
-                      ></div>
-                      <span class="ms-2">Loading data...</span>
-                    </td>
-                  </tr>
-                </tbody>
+                  <tbody>
+                    <tr>
+                      <td colspan="12" class="text-center">
+                        <div
+                          class="spinner-border spinner-border-sm text-primary"
+                          role="status"
+                        ></div>
+                        <span class="ms-2">Loading data...</span>
+                      </td>
+                    </tr>
+                  </tbody>
                 } @else if (treatmentData.length === 0) {
-                <tbody>
-                  <tr>
-                    <td colspan="12" class="text-center text-muted">
-                      There is no data to display.
-                    </td>
-                  </tr>
-                </tbody>
+                  <tbody>
+                    <tr>
+                      <td colspan="12" class="text-center text-muted">
+                        There is no data to display.
+                      </td>
+                    </tr>
+                  </tbody>
                 } @else {
-                <tbody>
-                  @for (row of treatmentData; track row.ItemCD) {
-                  <tr>
-                    <td class="text-center w150">{{ row.ItemCD }}</td>
-                    <td>{{ row.ItemName }}</td>
-                    <td class="text-end">{{ row.Quantity }}</td>
-                    <td class="text-end">
-                      @if (row.PriceChangeCount > 1) {
-                      <a (click)="openPriceLogDialog(row)" class="link">
-                        {{ row.Price.toLocaleString() }}
-                      </a>
-                      } @else {
-                      <span>
-                        {{ row.Price.toLocaleString() }}
-                      </span>
-                      }
-                    </td>
-                    <td class="mw150">{{ row.Description }}</td>
-                    <td class="text-center">{{ row.CreatedBy }}</td>
-                    <td class="text-center">
-                      {{ generalservice.getFormattedDate(row.CreatedDate) }}
-                    </td>
-                    @if (generalservice.getUserRole() === 'admin') {
-                    <td class="text-center w100">
-                      <a (click)="openRegisterDialog('Edit', row)"
-                        ><i
-                          class="fa-solid fa-pen-to-square text-primary fa-lg action-icon me-3"
-                        ></i
-                      ></a>
-                      <a (click)="openRegisterDialog('Delete', row)"
-                        ><i
-                          class="fa-solid fa-trash-can text-danger fa-lg action-icon"
-                        ></i
-                      ></a>
-                    </td>
+                  <tbody>
+                    @for (row of treatmentData; track row.ItemCD) {
+                      <tr>
+                        <td class="text-center w150">{{ row.ItemCD }}</td>
+                        <td>{{ row.ItemName }}</td>
+                        <td class="text-end">{{ row.Quantity }}</td>
+                        <td class="text-end">
+                          @if (row.PriceChangeCount > 1) {
+                            <a (click)="openPriceLogDialog(row)" class="link">
+                              {{ row.Price.toLocaleString() }}
+                            </a>
+                          } @else {
+                            <span>
+                              {{ row.Price.toLocaleString() }}
+                            </span>
+                          }
+                        </td>
+                        <td class="mw150">{{ row.Description }}</td>
+                        <td class="text-center">{{ row.CreatedBy }}</td>
+                        <td class="text-center">
+                          {{ generalservice.getFormattedDate(row.CreatedDate) }}
+                        </td>
+                        @if (generalservice.getUserRole() === "admin") {
+                          <td class="text-center w100">
+                            <a (click)="openRegisterDialog('Edit', row)"
+                              ><i
+                                class="fa-solid fa-pen-to-square text-primary fa-lg action-icon me-3"
+                              ></i
+                            ></a>
+                            <a (click)="openRegisterDialog('Delete', row)"
+                              ><i
+                                class="fa-solid fa-trash-can text-danger fa-lg action-icon"
+                              ></i
+                            ></a>
+                          </td>
+                        }
+                      </tr>
                     }
-                  </tr>
-                  }
-                </tbody>
+                  </tbody>
                 }
               </table>
             </div>
@@ -271,7 +436,7 @@
             id="medicine-tab-pane"
             role="tabpanel"
             aria-labelledby="medicine-tab"
-            tabindex="0"
+            tabindex="2"
           >
             <div class="row mb10">
               <div class="col-lg-12 col-xl-12 d-flex justify-content-end">
@@ -283,14 +448,14 @@
                 >
                   Export
                 </button>
-                @if (generalservice.getUserRole() === 'admin') {
-                <button
-                  class="btn btn-sm btn-success btnRegister w200"
-                  type="button"
-                  (click)="openRegisterDialog('New', '')"
-                >
-                  Register Medicine
-                </button>
+                @if (generalservice.getUserRole() === "admin") {
+                  <button
+                    class="btn btn-sm btn-success btnRegister w200"
+                    type="button"
+                    (click)="openRegisterDialog('New', '')"
+                  >
+                    Register Medicine
+                  </button>
                 }
               </div>
             </div>
@@ -347,61 +512,63 @@
                         }}
                       </mat-icon>
                     </th>
-                    @if (generalservice.getUserRole() === 'admin') {
-                    <th></th>
+                    @if (generalservice.getUserRole() === "admin") {
+                      <th></th>
                     }
                   </tr>
                 </thead>
                 @if (itemLoading) {
-                <tbody>
-                  <tr>
-                    <td colspan="12" class="text-center">
-                      <div
-                        class="spinner-border spinner-border-sm text-primary"
-                        role="status"
-                      ></div>
-                      <span class="ms-2">Loading data...</span>
-                    </td>
-                  </tr>
-                </tbody>
+                  <tbody>
+                    <tr>
+                      <td colspan="12" class="text-center">
+                        <div
+                          class="spinner-border spinner-border-sm text-primary"
+                          role="status"
+                        ></div>
+                        <span class="ms-2">Loading data...</span>
+                      </td>
+                    </tr>
+                  </tbody>
                 } @else if (medicineData.length === 0) {
-                <tbody>
-                  <tr>
-                    <td colspan="12" class="text-center text-muted">
-                      There is no data to display.
-                    </td>
-                  </tr>
-                </tbody>
+                  <tbody>
+                    <tr>
+                      <td colspan="12" class="text-center text-muted">
+                        There is no data to display.
+                      </td>
+                    </tr>
+                  </tbody>
                 } @else {
-                <tbody>
-                  @for (row of medicineData; track row.ItemCD) {
-                  <tr>
-                    <td class="text-center">{{ row.ItemCD }}</td>
-                    <td>{{ row.ItemName }}</td>
-                    <td class="text-end">{{ row.Quantity }}</td>
-                    <td class="text-end">{{ row.Price.toLocaleString() }}</td>
-                    <td>{{ row.Description }}</td>
-                    <td class="text-center">{{ row.CreatedBy }}</td>
-                    <td class="text-center">
-                      {{ generalservice.getFormattedDate(row.CreatedDate) }}
-                    </td>
-                    @if (generalservice.getUserRole() === 'admin') {
-                    <td class="text-center w100">
-                      <a (click)="openRegisterDialog('Edit', row)"
-                        ><i
-                          class="fa-solid fa-pen-to-square text-primary fa-lg action-icon me-3"
-                        ></i
-                      ></a>
-                      <a (click)="openRegisterDialog('Delete', row)"
-                        ><i
-                          class="fa-solid fa-trash-can text-danger fa-lg action-icon"
-                        ></i
-                      ></a>
-                    </td>
+                  <tbody>
+                    @for (row of medicineData; track row.ItemCD) {
+                      <tr>
+                        <td class="text-center">{{ row.ItemCD }}</td>
+                        <td>{{ row.ItemName }}</td>
+                        <td class="text-end">{{ row.Quantity }}</td>
+                        <td class="text-end">
+                          {{ row.Price.toLocaleString() }}
+                        </td>
+                        <td>{{ row.Description }}</td>
+                        <td class="text-center">{{ row.CreatedBy }}</td>
+                        <td class="text-center">
+                          {{ generalservice.getFormattedDate(row.CreatedDate) }}
+                        </td>
+                        @if (generalservice.getUserRole() === "admin") {
+                          <td class="text-center w100">
+                            <a (click)="openRegisterDialog('Edit', row)"
+                              ><i
+                                class="fa-solid fa-pen-to-square text-primary fa-lg action-icon me-3"
+                              ></i
+                            ></a>
+                            <a (click)="openRegisterDialog('Delete', row)"
+                              ><i
+                                class="fa-solid fa-trash-can text-danger fa-lg action-icon"
+                              ></i
+                            ></a>
+                          </td>
+                        }
+                      </tr>
                     }
-                  </tr>
-                  }
-                </tbody>
+                  </tbody>
                 }
               </table>
             </div>
@@ -411,7 +578,7 @@
             id="skincare-tab-pane"
             role="tabpanel"
             aria-labelledby="skincare-tab"
-            tabindex="0"
+            tabindex="3"
           >
             <div class="row mb10">
               <div class="col-lg-12 col-xl-12 d-flex justify-content-end">
@@ -422,14 +589,14 @@
                 >
                   Export
                 </button>
-                @if (generalservice.getUserRole() === 'admin') {
-                <button
-                  class="btn btn-sm btn-success btnRegister w200"
-                  type="button"
-                  (click)="openRegisterDialog('New', '')"
-                >
-                  Register Skin Care
-                </button>
+                @if (generalservice.getUserRole() === "admin") {
+                  <button
+                    class="btn btn-sm btn-success btnRegister w200"
+                    type="button"
+                    (click)="openRegisterDialog('New', '')"
+                  >
+                    Register Skin Care
+                  </button>
                 }
               </div>
             </div>
@@ -486,61 +653,63 @@
                         }}
                       </mat-icon>
                     </th>
-                    @if (generalservice.getUserRole() === 'admin') {
-                    <th></th>
+                    @if (generalservice.getUserRole() === "admin") {
+                      <th></th>
                     }
                   </tr>
                 </thead>
                 @if (itemLoading) {
-                <tbody>
-                  <tr>
-                    <td colspan="12" class="text-center">
-                      <div
-                        class="spinner-border spinner-border-sm text-primary"
-                        role="status"
-                      ></div>
-                      <span class="ms-2">Loading data...</span>
-                    </td>
-                  </tr>
-                </tbody>
+                  <tbody>
+                    <tr>
+                      <td colspan="12" class="text-center">
+                        <div
+                          class="spinner-border spinner-border-sm text-primary"
+                          role="status"
+                        ></div>
+                        <span class="ms-2">Loading data...</span>
+                      </td>
+                    </tr>
+                  </tbody>
                 } @else if (skincareData.length === 0) {
-                <tbody>
-                  <tr>
-                    <td colspan="12" class="text-center text-muted">
-                      There is no data to display.
-                    </td>
-                  </tr>
-                </tbody>
+                  <tbody>
+                    <tr>
+                      <td colspan="12" class="text-center text-muted">
+                        There is no data to display.
+                      </td>
+                    </tr>
+                  </tbody>
                 } @else {
-                <tbody>
-                  @for (row of skincareData; track row.ItemCD) {
-                  <tr>
-                    <td class="text-center">{{ row.ItemCD }}</td>
-                    <td>{{ row.ItemName }}</td>
-                    <td class="text-end">{{ row.Quantity }}</td>
-                    <td class="text-end">{{ row.Price.toLocaleString() }}</td>
-                    <td>{{ row.Description }}</td>
-                    <td class="text-center">{{ row.CreatedBy }}</td>
-                    <td class="text-center">
-                      {{ generalservice.getFormattedDate(row.CreatedDate) }}
-                    </td>
-                    @if (generalservice.getUserRole() === 'admin') {
-                    <td class="text-center w100">
-                      <a (click)="openRegisterDialog('Edit', row)"
-                        ><i
-                          class="fa-solid fa-pen-to-square text-primary fa-lg action-icon me-3"
-                        ></i
-                      ></a>
-                      <a (click)="openRegisterDialog('Delete', row)"
-                        ><i
-                          class="fa-solid fa-trash-can text-danger fa-lg action-icon"
-                        ></i
-                      ></a>
-                    </td>
+                  <tbody>
+                    @for (row of skincareData; track row.ItemCD) {
+                      <tr>
+                        <td class="text-center">{{ row.ItemCD }}</td>
+                        <td>{{ row.ItemName }}</td>
+                        <td class="text-end">{{ row.Quantity }}</td>
+                        <td class="text-end">
+                          {{ row.Price.toLocaleString() }}
+                        </td>
+                        <td>{{ row.Description }}</td>
+                        <td class="text-center">{{ row.CreatedBy }}</td>
+                        <td class="text-center">
+                          {{ generalservice.getFormattedDate(row.CreatedDate) }}
+                        </td>
+                        @if (generalservice.getUserRole() === "admin") {
+                          <td class="text-center w100">
+                            <a (click)="openRegisterDialog('Edit', row)"
+                              ><i
+                                class="fa-solid fa-pen-to-square text-primary fa-lg action-icon me-3"
+                              ></i
+                            ></a>
+                            <a (click)="openRegisterDialog('Delete', row)"
+                              ><i
+                                class="fa-solid fa-trash-can text-danger fa-lg action-icon"
+                              ></i
+                            ></a>
+                          </td>
+                        }
+                      </tr>
                     }
-                  </tr>
-                  }
-                </tbody>
+                  </tbody>
                 }
               </table>
             </div>
@@ -550,7 +719,7 @@
             id="others-tab-pane"
             role="tabpanel"
             aria-labelledby="others-tab"
-            tabindex="0"
+            tabindex="4"
           >
             <div class="row mb10">
               <div class="col-lg-12 col-xl-12 d-flex justify-content-end">
@@ -562,14 +731,14 @@
                 >
                   Export
                 </button>
-                @if (generalservice.getUserRole() === 'admin') {
-                <button
-                  class="btn btn-sm btn-success btnRegister w200"
-                  type="button"
-                  (click)="openRegisterDialog('New', '')"
-                >
-                  Register Others
-                </button>
+                @if (generalservice.getUserRole() === "admin") {
+                  <button
+                    class="btn btn-sm btn-success btnRegister w200"
+                    type="button"
+                    (click)="openRegisterDialog('New', '')"
+                  >
+                    Register Others
+                  </button>
                 }
               </div>
             </div>
@@ -626,61 +795,63 @@
                         }}
                       </mat-icon>
                     </th>
-                    @if (generalservice.getUserRole() === 'admin') {
-                    <th></th>
+                    @if (generalservice.getUserRole() === "admin") {
+                      <th></th>
                     }
                   </tr>
                 </thead>
                 @if (itemLoading) {
-                <tbody>
-                  <tr>
-                    <td colspan="12" class="text-center">
-                      <div
-                        class="spinner-border spinner-border-sm text-primary"
-                        role="status"
-                      ></div>
-                      <span class="ms-2">Loading data...</span>
-                    </td>
-                  </tr>
-                </tbody>
+                  <tbody>
+                    <tr>
+                      <td colspan="12" class="text-center">
+                        <div
+                          class="spinner-border spinner-border-sm text-primary"
+                          role="status"
+                        ></div>
+                        <span class="ms-2">Loading data...</span>
+                      </td>
+                    </tr>
+                  </tbody>
                 } @else if (othersData.length === 0) {
-                <tbody>
-                  <tr>
-                    <td colspan="12" class="text-center text-muted">
-                      There is no data to display.
-                    </td>
-                  </tr>
-                </tbody>
+                  <tbody>
+                    <tr>
+                      <td colspan="12" class="text-center text-muted">
+                        There is no data to display.
+                      </td>
+                    </tr>
+                  </tbody>
                 } @else {
-                <tbody>
-                  @for (row of othersData; track row.ItemCD) {
-                  <tr>
-                    <td class="text-center">{{ row.ItemCD }}</td>
-                    <td>{{ row.ItemName }}</td>
-                    <td class="text-end">{{ row.Quantity }}</td>
-                    <td class="text-end">{{ row.Price.toLocaleString() }}</td>
-                    <td>{{ row.Description }}</td>
-                    <td class="text-center">{{ row.CreatedBy }}</td>
-                    <td class="text-center">
-                      {{ generalservice.getFormattedDate(row.CreatedDate) }}
-                    </td>
-                    @if (generalservice.getUserRole() === 'admin') {
-                    <td class="text-center w100">
-                      <a (click)="openRegisterDialog('Edit', row)"
-                        ><i
-                          class="fa-solid fa-pen-to-square text-primary fa-lg action-icon me-3"
-                        ></i
-                      ></a>
-                      <a (click)="openRegisterDialog('Delete', row)"
-                        ><i
-                          class="fa-solid fa-trash-can text-danger fa-lg action-icon"
-                        ></i
-                      ></a>
-                    </td>
+                  <tbody>
+                    @for (row of othersData; track row.ItemCD) {
+                      <tr>
+                        <td class="text-center">{{ row.ItemCD }}</td>
+                        <td>{{ row.ItemName }}</td>
+                        <td class="text-end">{{ row.Quantity }}</td>
+                        <td class="text-end">
+                          {{ row.Price.toLocaleString() }}
+                        </td>
+                        <td>{{ row.Description }}</td>
+                        <td class="text-center">{{ row.CreatedBy }}</td>
+                        <td class="text-center">
+                          {{ generalservice.getFormattedDate(row.CreatedDate) }}
+                        </td>
+                        @if (generalservice.getUserRole() === "admin") {
+                          <td class="text-center w100">
+                            <a (click)="openRegisterDialog('Edit', row)"
+                              ><i
+                                class="fa-solid fa-pen-to-square text-primary fa-lg action-icon me-3"
+                              ></i
+                            ></a>
+                            <a (click)="openRegisterDialog('Delete', row)"
+                              ><i
+                                class="fa-solid fa-trash-can text-danger fa-lg action-icon"
+                              ></i
+                            ></a>
+                          </td>
+                        }
+                      </tr>
                     }
-                  </tr>
-                  }
-                </tbody>
+                  </tbody>
                 }
               </table>
             </div>

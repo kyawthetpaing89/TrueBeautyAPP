@@ -7,7 +7,7 @@ namespace server.Data
 {
     public class DataRepository<T>(IConfiguration configuration, ILogger<DataRepository<T>> logger) : IDataRepository<T> where T : BaseModel, new()
     {
-        private readonly string _connectionString = configuration.GetConnectionString("CIMS") ?? "";
+        private readonly string _connectionString = configuration.GetConnectionString("TB") ?? "";
         private readonly ILogger<DataRepository<T>> _logger = logger;
 
         public async Task<ApiResponse<List<TResult>>> ExecAsync<TResult>(string storeProc, object param, bool useTransaction = false)

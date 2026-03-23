@@ -1,0 +1,272 @@
+<form autocomplete="off">
+  <h3
+    mat-dialog-title
+    class="d-flex justify-content-between align-items-center"
+  >
+    <span>Renew Membership</span>
+    <a (click)="closeDialog()" aria-label="Close">
+      <mat-icon>close</mat-icon>
+    </a>
+  </h3>
+
+  <mat-dialog-content>
+    <div class="row g-3 mb-3">
+      <div class="col-6">
+        <div class="card">
+          <div class="card-header">
+            <h6>Current Membership</h6>
+          </div>
+          <div class="card-body">
+            <div class="row g-3 mb-3">
+              <!-- Membership ID -->
+              <div class="col-12 d-flex align-items-center">
+                <label for="txtMembershipID" class="w150">ID:</label>
+                <input
+                  type="text"
+                  class="form-control form-control-sm text-center"
+                  id="txtMembershipID"
+                  readonly
+                  name="membershipID"
+                  [value]="membershipData.MembershipID"
+                />
+              </div>
+
+              <!-- Client ID -->
+              <div class="col-12 d-flex align-items-center">
+                <label for="txtClientID" class="w150">Client ID:</label>
+                <div class="input-group">
+                  <input
+                    type="text"
+                    class="form-control form-control-sm text-center"
+                    id="txtClientID"
+                    name="clientID"
+                    readonly
+                    [value]="membershipData.PrimaryClientID"
+                  />
+                </div>
+              </div>
+
+              <!-- Client Name -->
+              <div class="col-12 d-flex align-items-center">
+                <label for="txtClientName" class="w150">Client Name:</label>
+                <input
+                  type="text"
+                  class="form-control form-control-sm"
+                  id="txtClientName"
+                  name="clientName"
+                  readonly
+                  [value]="membershipData.PrimaryClientName"
+                />
+              </div>
+
+              <!-- Current Membership Type -->
+              <div class="col-12 d-flex align-items-center">
+                <label for="txtMembershipType" class="w150"
+                  >Membership Type:</label
+                >
+                <input
+                  type="text"
+                  class="form-control form-control-sm"
+                  id="txtMembershipType"
+                  name="currentMembershipType"
+                  readonly
+                  [value]="membershipData.MembershipType"
+                />
+              </div>
+
+              <!-- Balance -->
+              <div class="col-12 d-flex align-items-center">
+                <label for="txtCurrentBalance" class="w150">Balnce:</label>
+                <input
+                  type="text"
+                  class="form-control form-control-sm text-end"
+                  id="txtCurrentBalance"
+                  readonly
+                  name="currentBalance"
+                  [value]="membershipData.Balance | number"
+                />
+              </div>
+
+              <!-- Start Date -->
+              <div class="col-12 d-flex align-items-center">
+                <label for="txtCurrentStartDate" class="w150"
+                  >Start Date:</label
+                >
+                <input
+                  type="text"
+                  class="form-control form-control-sm text-center"
+                  id="txtCurrentStartDate"
+                  name="currentstartdate"
+                  readonly
+                  [value]="membershipData.StartDate | date: 'dd MMM yyyy'"
+                />
+              </div>
+
+              <!-- Expired Date -->
+              <div class="col-12 d-flex align-items-center">
+                <label for="txtExpiredDate" class="w150">Expired Date:</label>
+                <input
+                  type="text"
+                  class="form-control form-control-sm text-center"
+                  id="txtCurrentExpiredDate"
+                  readonly
+                  [value]="membershipData.ExpiredDate | date: 'dd MMM yyyy'"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="card">
+          <div class="card-header">
+            <h6>Renew Membership</h6>
+          </div>
+          <div class="card-body">
+            <div class="row g-3 mb-3">
+              <!-- Membership Type -->
+              <div class="col-12 d-flex align-items-center">
+                <label for="txtMembershipType" class="w150">Type:</label>
+                <select
+                  class="form-control form-control-sm"
+                  id="txtMembershipType"
+                  [(ngModel)]="selectedMembershipTypeID"
+                  name="selectedMembershipTypeID"
+                  (change)="onMembershipTypeChange()"
+                >
+                  @for (row of membershipTypeData; track row.MembershipTypeID) {
+                    <option [value]="row.MembershipTypeID">
+                      {{ row.Description }}
+                    </option>
+                  }
+                </select>
+              </div>
+              <!-- Amount -->
+              <div class="col-12 d-flex align-items-center">
+                <label for="txtAmount" class="w150">Amount:</label>
+                <input
+                  type="text"
+                  class="form-control form-control-sm text-end"
+                  id="txtAmount"
+                  readonly
+                  [(ngModel)]="amount"
+                  name="amount"
+                />
+              </div>
+
+              <!-- Cashback -->
+              <div class="col-12 d-flex align-items-center">
+                <label for="txtCashback" class="w150">Cashback:</label>
+                <input
+                  type="text"
+                  class="form-control form-control-sm text-end"
+                  id="txtCashback"
+                  [(ngModel)]="cashback"
+                  name="cashback"
+                  (input)="onCashbackChange()"
+                  (keydown)="generalservice.allowNumbersOnly($event)"
+                />
+              </div>
+
+              <!-- Total -->
+              <div class="col-12 d-flex align-items-center">
+                <label for="txtCashback" class="w150">Total:</label>
+                <input
+                  type="text"
+                  class="form-control form-control-sm text-end"
+                  id="txtTotal"
+                  [(ngModel)]="total"
+                  name="total"
+                  readonly
+                />
+              </div>
+
+              <div class="col-12 d-flex align-items-center">
+                <label for="txtRenewalAmount" class="w150">Afer Renewal:</label>
+                <input
+                  type="text"
+                  class="form-control form-control-sm text-end"
+                  id="txtRenewalAmount"
+                  [(ngModel)]="renewalamount"
+                  name="renewalamount"
+                  readonly
+                />
+              </div>
+
+              <!-- Valid Months -->
+              <div class="col-12 d-flex align-items-center">
+                <label for="txtValidFor" class="w150">Valid Months:</label>
+                <input
+                  type="text"
+                  class="form-control form-control-sm text-end"
+                  id="txtValidFor"
+                  [(ngModel)]="validForMonths"
+                  name="validForMonths"
+                  (input)="calculateExpiredDate()"
+                />
+              </div>
+
+              <!-- Start Date -->
+              <div class="col-12 d-flex align-items-center">
+                <label for="txtStartDate" class="w150">Start Date:</label>
+                <input
+                  type="text"
+                  class="form-control form-control-sm text-center"
+                  id="txtStartDate"
+                  [(ngModel)]="startDate"
+                  name="startDate"
+                  #txtStartDate
+                />
+              </div>
+
+              <!-- Expired Date -->
+              <div class="col-12 d-flex align-items-center">
+                <label for="txtExpiredDate" class="w150">Expired Date:</label>
+                <input
+                  type="text"
+                  class="form-control form-control-sm text-center"
+                  id="txtExpiredDate"
+                  [(ngModel)]="expiredDate"
+                  name="expiredDate"
+                  readonly
+                />
+              </div>
+
+              <!-- Note -->
+              <div
+                class="col-12 col-md-12 col-lg-12 col-xl-12 d-flex align-items-center"
+              >
+                <label for="txtNote" class="w150">Notes:</label>
+                <textarea
+                  id="txtNote"
+                  class="form-control form-control-sm h100"
+                  [(ngModel)]="note"
+                  name="instructionNotes"
+                ></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button
+      type="button"
+      (click)="closeDialog()"
+      class="btn btn-dark btn-sm me-2 w100"
+    >
+      Cancel
+    </button>
+
+    <button
+      type="button"
+      class="btn btn-success btn-sm w100"
+      (click)="save()"
+      [disabled]="isSubmitting"
+    >
+      Save
+    </button>
+  </mat-dialog-actions>
+</form>

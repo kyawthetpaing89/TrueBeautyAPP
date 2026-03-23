@@ -32,6 +32,21 @@
         <div
           class="col-sm-12 col-md-4 col-lg-3 col-xl-2 d-flex align-items-center"
         >
+          <label for="txtSMemberType" class="w150">Member Type:</label>
+          <select
+            class="form-control form-control-sm"
+            id="ddlSMemberType"
+            [(ngModel)]="search_memberType"
+            name="search_memberType"
+          >
+            <option value="">All</option>
+            <option value="1">Member</option>
+            <option value="0">Non-Member</option>
+          </select>
+        </div>
+        <div
+          class="col-sm-12 col-md-4 col-lg-3 col-xl-2 d-flex align-items-center"
+        >
           <label for="ddlSGender" class="w150">Gender:</label>
           <select
             class="form-control form-control-sm"
@@ -42,6 +57,21 @@
             <option value="">All</option>
             <option value="1">Male</option>
             <option value="2">Female</option>
+          </select>
+        </div>
+        <div
+          class="col-sm-12 col-md-4 col-lg-3 col-xl-2 d-flex align-items-center"
+        >
+          <label for="ddlSShop" class="w150">Shop:</label>
+          <select
+            class="form-control form-control-sm"
+            id="ddlSShop"
+            [(ngModel)]="search_shop"
+            name="search_shop"
+          >
+            <option value="">All</option>
+            <option value="001">Shop 1</option>
+            <option value="002">Shop 2</option>
           </select>
         </div>
         <div
@@ -78,12 +108,60 @@
       <hr />
       <div class="row mb-3 align-items-center">
         <!-- Left: Total Records -->
-        <div class="col-md-6">
-          <strong>Total Records:</strong> {{ clientData.length }}
+        <div class="col-md-4">
+          <strong>Total Records:</strong> {{ totalCount }}
         </div>
 
-        <!-- Right: Button -->
-        <div class="col-md-6 d-flex justify-content-end">
+        <!-- Center: Paging -->
+        <div class="col-md-4 d-flex justify-content-center">
+          <div class="paging d-flex align-items-center">
+            <button
+              (click)="prevPage()"
+              class="btn btn-sm btn-prevnext"
+              [disabled]="currentPage === 1"
+            >
+              Previous
+            </button>
+
+            @for (page of pageIndexes; track page) {
+              <button
+                class="btn btn-sm"
+                [class.active]="page === currentPage"
+                (click)="goToPage(page)"
+              >
+                {{ page }}
+              </button>
+            }
+
+            <button
+              class="btn btn-sm btn-prevnext"
+              (click)="nextPage()"
+              [disabled]="currentPage === totalPages"
+            >
+              Next
+            </button>
+          </div>
+
+          <!-- Go to page input -->
+          <div class="goto-page d-flex align-items-center gap-1">
+            <label for="gotoPage" class="w100p">Go to:</label>
+            <input
+              type="number"
+              name="gotoPage"
+              id="gotoPage"
+              min="1"
+              [max]="totalPages"
+              [(ngModel)]="gotoPageNumber"
+              class="form-control form-control-sm w100"
+            />
+            <button class="btn btn-sm btn-info w-100" (click)="jumpToPage()">
+              Go
+            </button>
+          </div>
+        </div>
+
+        <!-- Right: Register Button -->
+        <div class="col-md-4 d-flex justify-content-end">
           <button
             id="btnRegister"
             class="btn btn-sm btn-success w150"
@@ -107,11 +185,11 @@
                 <mat-icon
                   class="sort-icon float-end"
                   [ngClass]="{
-                    active: sortColumn === 'ClientID'
+                    active: sortColumn === 'ClientID',
                   }"
                 >
                   {{
-                    sortColumn === "Balance" && !sortAsc
+                    sortColumn === "ClientID" && !sortAsc
                       ? "keyboard_double_arrow_down"
                       : "keyboard_double_arrow_up"
                   }}
@@ -130,6 +208,7 @@
                   }}
                 </mat-icon>
               </th>
+              <th class="text-center">Membership</th>
               <th>Gender</th>
               <th class="text-center" (click)="onSort('Age')">
                 Age
@@ -152,7 +231,7 @@
                 <mat-icon
                   class="sort-icon float-end"
                   [ngClass]="{
-                    active: sortColumn === 'CreatedDate'
+                    active: sortColumn === 'CreatedDate',
                   }"
                 >
                   {{
@@ -162,67 +241,76 @@
                   }}
                 </mat-icon>
               </th>
+              <th class="text-center">Registered Shop</th>
               <th class="text-center">Action</th>
             </tr>
           </thead>
           @if (clientDataLoading) {
-          <tbody>
-            <tr>
-              <td colspan="12" class="text-center">
-                <div
-                  class="spinner-border spinner-border-sm text-primary"
-                  role="status"
-                ></div>
-                <span class="ms-2">Loading data...</span>
-              </td>
-            </tr>
-          </tbody>
+            <tbody>
+              <tr>
+                <td colspan="13" class="text-center">
+                  <div
+                    class="spinner-border spinner-border-sm text-primary"
+                    role="status"
+                  ></div>
+                  <span class="ms-2">Loading data...</span>
+                </td>
+              </tr>
+            </tbody>
           } @else if (clientData.length === 0) {
-          <tbody>
-            <tr>
-              <td colspan="12" class="text-center text-muted">
-                There is no data to display.
-              </td>
-            </tr>
-          </tbody>
+            <tbody>
+              <tr>
+                <td colspan="13" class="text-center text-muted">
+                  There is no data to display.
+                </td>
+              </tr>
+            </tbody>
           } @else {
-          <tbody>
-            @for (row of clientData; track row.ClientID; let i = $index) {
-            <tr>
-              <td class="text-center w150">{{ i + 1 }}</td>
-              <td class="text-center">{{ row.ClientID }}</td>
-              <td>
-                <a
-                  target="_blank"
-                  [routerLink]="['/client/clienttreatment', row.ClientID]"
-                  class="clientname"
+            <tbody>
+              @for (row of clientData; track row.ClientID; let i = $index) {
+                <tr
+                  [class.silver]="row.Membership === 'Silver'"
+                  [class.gold]="row.Membership === 'Gold'"
+                  [class.diamond]="row.Membership === 'Diamond'"
                 >
-                  {{ row.Name }}
-                </a>
-              </td>
-              <td>{{ row.GenderText }}</td>
-              <td class="text-center">{{ row.Age }}</td>
-              <td class="text-center">{{ row.PhoneNo }}</td>
-              <td>{{ row.Address }}</td>
-              <td class="text-center">{{ row.CreatedBy }}</td>
-              <td class="text-center">
-                {{ generalservice.getFormattedDate(row.CreatedDate) }}
-              </td>
-              <td class="text-center">
-                <a (click)="openRegisterDialog('Edit', row)"
-                  ><i
-                    class="fa-solid fa-pen-to-square text-primary fa-lg action-icon me-3"
-                  ></i
-                ></a>
-                <a (click)="openRegisterDialog('Delete', row)"
-                  ><i
-                    class="fa-solid fa-trash-can text-danger fa-lg action-icon"
-                  ></i
-                ></a>
-              </td>
-            </tr>
-            }
-          </tbody>
+                  <td class="text-center w150">
+                    {{ (currentPage - 1) * pageSize + i + 1 }}
+                  </td>
+                  <td class="text-center">{{ row.ClientID }}</td>
+                  <td>
+                    <a
+                      target="_blank"
+                      [routerLink]="['/client/clienttreatment', row.ClientID]"
+                      class="clientname"
+                    >
+                      {{ row.Name }}
+                    </a>
+                  </td>
+                  <td class="text-center">{{ row.Membership }}</td>
+                  <td>{{ row.GenderText }}</td>
+                  <td class="text-center">{{ row.Age }}</td>
+                  <td class="text-center">{{ row.PhoneNo }}</td>
+                  <td>{{ row.Address }}</td>
+                  <td class="text-center">{{ row.CreatedBy }}</td>
+                  <td class="text-center">
+                    {{ generalservice.getFormattedDate(row.CreatedDate) }}
+                  </td>
+                  <td class="text-center">{{ row.ShopName }}</td>
+                  <td class="text-center">
+                    <a (click)="openRegisterDialog('Edit', row)"
+                      ><i
+                        class="fa-solid fa-pen-to-square text-primary fa-lg action-icon me-3"
+                      ></i
+                    ></a>
+                    <a (click)="openRegisterDialog('Delete', row)"
+                      ><i
+                        class="fa-solid fa-trash-can text-danger fa-lg action-icon"
+                      ></i
+                    ></a>
+                  </td>
+                </tr>
+              }
+            </tbody>
           }
         </table>
       </div>

@@ -13,5 +13,6 @@ namespace server.Models.Admin
         public required string LoginPassword { get; set; }
         public required string ProfilePhoto { get; set; }
         public required string UserRole { get; set; }
+        public required string ShopID { get; set; }
     }
 }

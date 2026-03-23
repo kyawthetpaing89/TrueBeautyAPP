@@ -65,7 +65,7 @@ namespace server.Controllers
             }
         }
 
-        [HttpPost("getdailysales")]
+        [HttpPost("getsalesreport")]
         [Authorize]
         public async Task<IActionResult> GetDailySalesReport([FromBody] InvoiceDailySalesRequestDTO invoice)
         {
@@ -190,7 +190,7 @@ namespace server.Controllers
                 return validationResponse;
 
             var parameters = Converter.DtoToParam(invoice);
-            var response = await _invoiceRepo.ExecAsync<object>("turebeauty_Invoice_CopyAccessCheck", parameters, true);
+            var response = await _invoiceRepo.ExecAsync<object>("truebeauty_Invoice_CopyAccessCheck", parameters, true);
 
             if (response.Status)
             {

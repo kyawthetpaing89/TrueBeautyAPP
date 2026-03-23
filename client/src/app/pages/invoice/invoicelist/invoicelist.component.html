@@ -79,9 +79,9 @@
                 <option value="">All</option>
                 <!-- Replaced *ngFor with @for block. -->
                 @for (item of treatmentData; track item.ItemCD) {
-                <option [value]="item.ItemCD">
-                  {{ item.ItemName }}
-                </option>
+                  <option [value]="item.ItemCD">
+                    {{ item.ItemName }}
+                  </option>
                 }
               </select>
             </div>
@@ -100,9 +100,9 @@
                 <option value="">All</option>
                 <!-- Replaced *ngFor with @for block. -->
                 @for (item of medicineData; track item.ItemCD) {
-                <option [value]="item.ItemCD">
-                  {{ item.ItemName }}
-                </option>
+                  <option [value]="item.ItemCD">
+                    {{ item.ItemName }}
+                  </option>
                 }
               </select>
             </div>
@@ -121,9 +121,9 @@
                 <option value="">All</option>
                 <!-- Replaced *ngFor with @for block. -->
                 @for (item of skincareData; track item.ItemCD) {
-                <option [value]="item.ItemCD">
-                  {{ item.ItemName }}
-                </option>
+                  <option [value]="item.ItemCD">
+                    {{ item.ItemName }}
+                  </option>
                 }
               </select>
             </div>
@@ -149,15 +149,45 @@
         </button>
       </div>
       <hr />
-      <div class="row mb10">
-        <div class="col-lg-12 col-xl-12 d-flex justify-content-end">
+      <div class="row mb10 align-items-center">
+        <!-- Left side: Shop toggle -->
+        <div class="col-lg-6 col-xl-6 d-flex align-items-center">
+          @if (userrole === "admin") {
+            <div class="btn-group" role="group" aria-label="Shop selection">
+              <input
+                type="radio"
+                class="btn-check"
+                name="shopOptions"
+                id="shop1"
+                value="shop1"
+                [checked]="shopid === '001'"
+                (change)="shopIdChange('001')"
+              />
+              <label class="btn btn-outline-primary" for="shop1">Shop 1</label>
+
+              <input
+                type="radio"
+                class="btn-check"
+                name="shopOptions"
+                id="shop2"
+                value="shop2"
+                [checked]="shopid === '002'"
+                (change)="shopIdChange('002')"
+              />
+              <label class="btn btn-outline-primary" for="shop2">Shop 2</label>
+            </div>
+          }
+        </div>
+
+        <!-- Right side: Buttons -->
+        <div class="col-lg-6 col-xl-6 d-flex justify-content-end">
           <button
             id="btnExportInvoice"
             class="btn btn-sm btn-primary w100 me-2"
             type="button"
             (click)="exportInvoice()"
           >
-            Export
+            <i class="bi bi-download me-1"></i> Export
           </button>
           <button
             id="btnNewInvoice"
@@ -165,7 +195,7 @@
             type="button"
             (click)="newInvoice()"
           >
-            New Invoice
+            <i class="bi bi-plus-circle me-1"></i> New Invoice
           </button>
         </div>
       </div>
@@ -180,7 +210,7 @@
                 Invoice No<mat-icon
                   class="sort-icon float-end"
                   [ngClass]="{
-                    active: sortColumn === 'InvoiceNo'
+                    active: sortColumn === 'InvoiceNo',
                   }"
                 >
                   {{
@@ -194,7 +224,7 @@
                 Invoice Date<mat-icon
                   class="sort-icon float-end"
                   [ngClass]="{
-                    active: sortColumn === 'InvoiceDate'
+                    active: sortColumn === 'InvoiceDate',
                   }"
                 >
                   {{
@@ -208,7 +238,7 @@
                 Client Name<mat-icon
                   class="sort-icon float-end"
                   [ngClass]="{
-                    active: sortColumn === 'ClientName'
+                    active: sortColumn === 'ClientName',
                   }"
                 >
                   {{
@@ -221,6 +251,7 @@
               <th>Item List</th>
               <th class="text-end">Total Price</th>
               <th class="text-end">Total Payment</th>
+              <th class="text-end">Member Payment</th>
               <th class="text-end">Discount</th>
               <th class="text-end">Balance</th>
               <th></th>
@@ -228,119 +259,134 @@
           </thead>
           <!-- Replaced *ngIf with @if block -->
           @if (invoiceLoading) {
-          <tbody> 
-            <tr>
-              <td colspan="9" class="text-center">
-                <div
-                  class="spinner-border spinner-border-sm text-primary"
-                  role="status"
-                ></div>
-                <span class="ms-2">Loading data...</span>
-              </td>
-            </tr>
-          </tbody>
+            <tbody>
+              <tr>
+                <td colspan="10" class="text-center">
+                  <div
+                    class="spinner-border spinner-border-sm text-primary"
+                    role="status"
+                  ></div>
+                  <span class="ms-2">Loading data...</span>
+                </td>
+              </tr>
+            </tbody>
           } @else {
-          <!-- Replaced *ngFor with @for block. Used @empty for no data. -->
-          <tbody>
-            @for (group of groupedInvoices; track group.date) {
-            <!-- subtotal row at the top -->
-            <tr class="subtotal fw-bold">
-              <td colspan="4" class="text-end">
-                Total ({{ group.date | date : "dd MMM yyyy" }})
-              </td>
-              <td class="text-end">
-                {{ group.totals.TotalPrice | number : "1.0-0" }}
-              </td>
-              <td class="text-end">
-                {{ group.totals.TotalPayment | number : "1.0-0" }}
-              </td>
-              <td class="text-end">
-                {{ group.totals.Discount | number : "1.0-0" }}
-              </td>
-              <td class="text-end">
-                {{ group.totals.OutstandingBalance | number : "1.0-0" }}
-              </td>
-              <td></td>
-            </tr>
+            <!-- Replaced *ngFor with @for block. Used @empty for no data. -->
+            <tbody>
+              @for (group of groupedInvoices; track group.date) {
+                <!-- subtotal row at the top -->
+                <tr class="subtotal fw-bold">
+                  <td colspan="4" class="text-end">
+                    Total ({{ group.date | date: "dd MMM yyyy" }})
+                  </td>
+                  <td class="text-end">
+                    {{ group.totals.TotalPrice | number: "1.0-0" }}
+                  </td>
+                  <td class="text-end">
+                    {{ group.totals.TotalPayment | number: "1.0-0" }}
+                  </td>
+                  <td class="text-end">
+                    {{ group.totals.MemberPayment | number: "1.0-0" }}
+                  </td>
+                  <td class="text-end">
+                    {{ group.totals.Discount | number: "1.0-0" }}
+                  </td>
+                  <td class="text-end">
+                    {{ group.totals.OutstandingBalance | number: "1.0-0" }}
+                  </td>
+                  <td></td>
+                </tr>
 
-            <!-- invoice rows -->
-            @for (row of group.rows; track row.InvoiceNo) {
-            <tr>
-              <td class="text-center align-middle">{{ row.InvoiceNo }}</td>
-              <td class="text-center align-middle">
-                {{ row.FormattedInvoiceDate }}
-              </td>
-              <td class="align-middle">{{ row.ClientName }}</td>
-              <td
-                class="align-middle"
-                [innerHTML]="generalservice.formatItemList(row.ItemList)"
-              ></td>
-              <td class="text-end align-middle">
-                {{ row.TotalPrice | number : "1.0-0" }}
-              </td>
-              <td class="text-end align-middle">
-                {{ row.TotalPayment | number : "1.0-0" }}
-              </td>
-              <td class="text-end align-middle">
-                {{ row.Discount | number : "1.0-0" }}
-              </td>
-              <td class="text-end align-middle">
-                {{ row.OutstandingBalance | number : "1.0-0" }}
-              </td>
-              <td class="text-center align-middle">
-                <a (click)="gotoprint(row.InvoiceNo)" title="Print"
-                  ><i class="material-icons print fa-xl action-icon"
-                    >local_print_shop</i
-                  ></a
-                >
-                <a (click)="gotoregister(row.InvoiceNo, 'copy')" title="Copy"
-                  ><i class="fa-solid fa-clone fa-lg ms-2 action-icon copy"></i
-                ></a>
-                <!-- Replaced *ngIf with @if block -->
-                @if (generalservice.getUserRole() === 'admin') {
-                <a (click)="gotoregister(row.InvoiceNo, 'edit')" title="Edit"
-                  ><i
-                    class="fa-solid fa-pen-to-square text-primary fa-lg action-icon ms-2"
-                  ></i
-                ></a>
+                <!-- invoice rows -->
+                @for (row of group.rows; track row.InvoiceNo) {
+                  <tr>
+                    <td class="text-center align-middle">
+                      {{ row.InvoiceNo }}
+                    </td>
+                    <td class="text-center align-middle">
+                      {{ row.FormattedInvoiceDate }}
+                    </td>
+                    <td class="align-middle">{{ row.ClientName }}</td>
+                    <td
+                      class="align-middle"
+                      [innerHTML]="generalservice.formatItemList(row.ItemList)"
+                    ></td>
+                    <td class="text-end align-middle">
+                      {{ row.TotalPrice | number: "1.0-0" }}
+                    </td>
+                    <td class="text-end align-middle">
+                      {{ row.TotalPayment | number: "1.0-0" }}
+                    </td>
+                    <td class="text-end align-middle">
+                      {{ row.MemberPayment | number: "1.0-0" }}
+                    </td>
+                    <td class="text-end align-middle">
+                      {{ row.Discount | number: "1.0-0" }}
+                    </td>
+                    <td class="text-end align-middle">
+                      {{ row.OutstandingBalance | number: "1.0-0" }}
+                    </td>
+                    <td class="text-center align-middle">
+                      <a (click)="gotoprint(row.InvoiceNo)" title="Print"
+                        ><i class="material-icons print fa-xl action-icon"
+                          >local_print_shop</i
+                        ></a
+                      >
+                      <a
+                        (click)="gotoregister(row.InvoiceNo, 'copy')"
+                        title="Copy"
+                        ><i
+                          class="fa-solid fa-clone fa-lg ms-2 action-icon copy"
+                        ></i
+                      ></a>
+                      <!-- Replaced *ngIf with @if block -->
+                      @if (generalservice.getUserRole() === "admin") {
+                        <a
+                          (click)="gotoregister(row.InvoiceNo, 'edit')"
+                          title="Edit"
+                          ><i
+                            class="fa-solid fa-pen-to-square text-primary fa-lg action-icon ms-2"
+                          ></i
+                        ></a>
+                      }
+                      <a
+                        (click)="gotoregister(row.InvoiceNo, 'detail')"
+                        title="Detail"
+                        ><i class="material-icons detail fa-xl action-icon ms-2"
+                          >receipt_long</i
+                        ></a
+                      >
+                      <!-- Replaced *ngIf with @if block -->
+                      @if (generalservice.getUserRole() === "admin") {
+                        <a
+                          (click)="gotoregister(row.InvoiceNo, 'delete')"
+                          title="Delete"
+                          ><i
+                            class="fa-solid fa-trash-can text-danger fa-lg action-icon ms-2"
+                          ></i
+                        ></a>
+                      }
+                      <!-- Replaced *ngIf with @if block -->
+                      @if (generalservice.getUserRole() !== "admin") {
+                        <a
+                          (click)="gotoregister(row.InvoiceNo, 'deleterequest')"
+                          title="Delete Request"
+                          ><i class="material-icons deleterequest ms-2"
+                            >auto_delete</i
+                          ></a
+                        >
+                      }
+                    </td>
+                  </tr>
                 }
-                <a
-                  (click)="gotoregister(row.InvoiceNo, 'detail')"
-                  title="Detail"
-                  ><i class="material-icons detail fa-xl action-icon ms-2"
-                    >receipt_long</i
-                  ></a
-                >
-                <!-- Replaced *ngIf with @if block -->
-                @if (generalservice.getUserRole() === 'admin') {
-                <a
-                  (click)="gotoregister(row.InvoiceNo, 'delete')"
-                  title="Delete"
-                  ><i
-                    class="fa-solid fa-trash-can text-danger fa-lg action-icon ms-2"
-                  ></i
-                ></a>
-                }
-                <!-- Replaced *ngIf with @if block -->
-                @if (generalservice.getUserRole() !== 'admin') {
-                <a
-                  (click)="gotoregister(row.InvoiceNo, 'deleterequest')"
-                  title="Delete Request"
-                  ><i class="material-icons deleterequest ms-2"
-                    >auto_delete</i
-                  ></a
-                >
-                }
-              </td>
-            </tr>
-            } } @empty {
-            <tr>
-              <td colspan="9" class="text-center text-muted">
-                There is no data to display.
-              </td>
-            </tr>
-            }
-          </tbody>
+              } @empty {
+                <tr>
+                  <td colspan="9" class="text-center text-muted">
+                    There is no data to display.
+                  </td>
+                </tr>
+              }
+            </tbody>
           }
         </table>
       </div>

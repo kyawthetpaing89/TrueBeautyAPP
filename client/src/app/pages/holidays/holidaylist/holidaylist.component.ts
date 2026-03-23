@@ -73,7 +73,7 @@ export class HolidaylistComponent {
     this.calendar.render();
 
     this.loadHolidays();
-  } 
+  }
 
   ngOnDestroy() {
     this.calendar.destroy();
@@ -127,7 +127,7 @@ export class HolidaylistComponent {
     this.openRegisterDialog(
       'Delete',
       this.generalservice.getFormattedDate(clickedDate),
-      clickedEvent.title
+      clickedEvent.title,
     );
   }
 
@@ -215,8 +215,6 @@ export class HolidaylistComponent {
       HolidayDate: date,
       Description: title ?? '',
     };
-    debugger;
-
     const dialogRef = this.dialog.open(HolidayregisterDialogComponent, {
       data: param,
       disableClose: true,

@@ -1,0 +1,98 @@
+<form autocomplete="off">
+  <h3 mat-dialog-title>
+    <span
+      ><i
+        class="fa-solid fa-people-group text-primary fa-lg action-icon me-3"
+      ></i>
+      Family Member List</span
+    >
+    <a (click)="closeDialog()" aria-label="Close">
+      <mat-icon>close</mat-icon>
+    </a>
+  </h3>
+  <mat-dialog-content>
+    @if (balance > 0) {
+      <div class="row mb10">
+        <div class="col-lg-12 col-xl-12 d-flex justify-content-end">
+          <button
+            class="btn btn-sm btn-success btnRegister w200"
+            type="button"
+            (click)="selectClient()"
+            [disabled]="isSubmitting"
+          >
+            Add Member
+          </button>
+        </div>
+      </div>
+    }
+    <div class="table-responsive-scroll">
+      <table class="table table-striped table-bordered table-sm">
+        <thead class="table-header">
+          <tr>
+            <th class="text-center">Client ID</th>
+            <th>Name</th>
+            <th class="text-center">Account Type</th>
+            <th class="text-center">Action</th>
+          </tr>
+        </thead>
+        @if (membershipClientsLoading) {
+          <tbody>
+            <tr>
+              <td colspan="4" class="text-center">
+                <div
+                  class="spinner-border spinner-border-sm text-primary"
+                  role="status"
+                ></div>
+                <span class="ms-2">Loading data...</span>
+              </td>
+            </tr>
+          </tbody>
+        } @else if (membershipClientsData.length === 0) {
+          <tbody>
+            <tr>
+              <td colspan="4" class="text-center text-muted">
+                There is no data to display.
+              </td>
+            </tr>
+          </tbody>
+        } @else {
+          <tbody>
+            @for (data of membershipClientsData; track data.ClientID) {
+              <tr>
+                <td class="text-center">{{ data.ClientID }}</td>
+                <td>{{ data.ClientName }}</td>
+                <td class="text-center">
+                  <span
+                    class="badge rounded-pill px-3"
+                    [ngClass]="data.IsPrimary ? 'bg-primary' : 'bg-secondary'"
+                  >
+                    {{ data.IsPrimary ? "Primary" : "Member" }}
+                  </span>
+                </td>
+                <td class="text-center">
+                  @if (!data.IsPrimary && balance > 0) {
+                    <a (click)="deleteMember(data)" title="Delete Membership">
+                      <i
+                        class="fa-solid fa-trash-can text-danger fa-lg action-icon"
+                      ></i>
+                    </a>
+                  }
+                </td>
+              </tr>
+            }
+          </tbody>
+        }
+      </table>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button
+      id="btncancel"
+      type="button"
+      (click)="closeDialog()"
+      class="btn w100 btn-dark btn-sm mr5"
+    >
+      Close
+    </button>
+  </mat-dialog-actions>
+</form>

@@ -8,6 +8,7 @@ import { GeneralService } from '../../../services/general-service';
 import { ClienttreatmenthistoryDialogComponent } from '../../dialog/client/clienttreatmenthistory-dialog/clienttreatmenthistory-dialog.component';
 import { TreatmentinstructionDialogComponent } from '../../dialog/client/treatmentinstruction-dialog/treatmentinstruction-dialog.component';
 import { finalize } from 'rxjs';
+import { client_get_model } from '../../../models/client-model';
 
 @Component({
   selector: 'app-clienttreatment',
@@ -35,7 +36,10 @@ export class ClienttreatmentComponent {
   treatmentLoading: boolean = false;
   treatmentHistoryData: any[] = [];
 
-  constructor(private route: ActivatedRoute, private router: Router) {}
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+  ) {}
 
   ngOnInit(): void {
     this.generalservice.setPageTitle('Client Treatment');
@@ -46,9 +50,9 @@ export class ClienttreatmentComponent {
   }
 
   loadClientInfo() {
-    const model = {
+    const model = client_get_model({
       ClientID: this.param_clientID,
-    };
+    });
 
     this.clientservice.getClient(model).subscribe({
       next: (response) => {
@@ -85,7 +89,7 @@ export class ClienttreatmentComponent {
       .pipe(
         finalize(() => {
           this.doctorInstructionLoading = false;
-        })
+        }),
       )
       .subscribe({
         next: (response) => {
@@ -116,7 +120,7 @@ export class ClienttreatmentComponent {
       .pipe(
         finalize(() => {
           this.treatmentLoading = false;
-        })
+        }),
       )
       .subscribe({
         next: (response) => {
@@ -157,7 +161,7 @@ export class ClienttreatmentComponent {
   openTreatmentInstruction(
     mode: string,
     instructionCD: string,
-    notes: string
+    notes: string,
   ): void {
     const param = {
       ClientID: this.param_clientID,

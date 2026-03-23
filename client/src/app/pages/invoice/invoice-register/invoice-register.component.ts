@@ -24,6 +24,7 @@ import { InvoicepaymentDialogComponent } from '../../dialog/invoice/invoicepayme
 import { Validator } from '../../../utilities/validator';
 import { finalize, firstValueFrom } from 'rxjs';
 import { ConfirmDialogComponent } from '../../dialog/confirm-dialog/confirm-dialog.component';
+import { MembershipService } from '../../../services/membership-service';
 @Component({
   selector: 'app-invoice-register',
   imports: [CommonModule, MatDialogModule, FormsModule],
@@ -37,6 +38,7 @@ export class InvoiceRegisterComponent {
   private invoiceservice = inject(InvoiceService);
   private itemservice = inject(ItemService);
   private clientservice = inject(ClientService);
+  private membershipservice = inject(MembershipService);
   private doctorinstructionservice = inject(DoctorInstructionService);
   generalservice = inject(GeneralService);
   dialogservice = inject(DialogService);
@@ -44,10 +46,16 @@ export class InvoiceRegisterComponent {
 
   copyinvoiceNo: string = '';
 
+  shopID: string = '';
+  userRole: string = '';
+
   invoiceNo: string = '';
   invoiceDate: string = this.generalservice.getFormattedDateTime();
   clientID: string = '';
   clientName: string = '';
+  membership: string = '';
+  membershipbalance: string = '';
+  clientmembercardID: string = '';
 
   totalAmount: string = '';
   totalPayment: string = '';
@@ -63,6 +71,8 @@ export class InvoiceRegisterComponent {
   mode: string = '';
   itemData: any[] = [];
 
+  clientMembershipData: any[] = [];
+
   invoiceDetailLoading: boolean = false;
   invoiceDetailData: any[] = [];
 
@@ -73,7 +83,10 @@ export class InvoiceRegisterComponent {
 
   isalllow = false;
 
-  constructor(private route: ActivatedRoute, private router: Router) {}
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+  ) {}
 
   ngAfterViewInit(): void {
     this.flatpickrInstance = flatpickr(this.datePickerRef.nativeElement, {
@@ -87,6 +100,11 @@ export class InvoiceRegisterComponent {
   }
 
   ngOnInit(): void {
+    this.generalservice.setPageTitle('Invoice Register');
+
+    this.userRole = this.generalservice.getUserRole() ?? '';
+    this.shopID = this.generalservice.getShopID() ?? '';
+
     const path = this.route.snapshot.routeConfig?.path ?? '';
     if (path.endsWith('/copy')) {
       this.mode = 'Copy';
@@ -94,7 +112,7 @@ export class InvoiceRegisterComponent {
       this.loadDetail();
     } else if (path.endsWith('/edit')) {
       this.mode = 'Edit';
-      if (this.generalservice.getUserRole() !== 'admin') {
+      if (this.userRole !== 'admin') {
         this.router.navigate(['/error404']);
       }
       this.invoiceNo = this.route.snapshot.paramMap.get('invoiceNo') || '';
@@ -105,7 +123,7 @@ export class InvoiceRegisterComponent {
       this.loadDetail();
     } else if (path.endsWith('/delete')) {
       this.mode = 'Delete';
-      if (this.generalservice.getUserRole() !== 'admin') {
+      if (this.userRole !== 'admin') {
         this.router.navigate(['/error404']);
       }
       this.invoiceNo = this.route.snapshot.paramMap.get('invoiceNo') || '';
@@ -118,8 +136,15 @@ export class InvoiceRegisterComponent {
       this.mode = 'DeleteApproval';
       this.invoiceNo = this.route.snapshot.paramMap.get('invoiceNo') || '';
       this.loadDetail();
-    } else if (path === 'invoice-register') {
+    } else if (path.endsWith('/:shopID')) {
       this.mode = 'New';
+      if (this.userRole === 'admin') {
+        this.shopID = this.route.snapshot.paramMap.get('shopID') || '';
+
+        if (!this.shopID) {
+          this.router.navigate(['/error404']);
+        }
+      }
     } else {
       // Invalid path mode — redirect to error
       this.router.navigate(['/error404']);
@@ -127,7 +152,7 @@ export class InvoiceRegisterComponent {
 
     this.isalllow =
       this.mode == 'Copy' ||
-      (this.generalservice.getUserRole() === 'admin' &&
+      (this.userRole === 'admin' &&
         this.mode !== 'Delete' &&
         this.mode !== 'Detail' &&
         this.mode !== 'DeleteApproval');
@@ -157,14 +182,17 @@ export class InvoiceRegisterComponent {
             this.clientID = data[0].ClientID;
             this.clientName = data[0].ClientName;
             this.invoiceDate = data[0].FormattedInvoiceDate;
-
             this.flatpickrInstance.setDate(this.invoiceDate, true);
 
             this.totalAmount = data[0].FTotalPrice;
-            this.totalPayment = data[0].FTotalPayment;
+            this.totalPayment = data[0].FTotalPaid;
             this.discount = data[0].FDiscount;
             this.outstandingBalance = data[0].FOutstandingBalance;
             this.notes = data[0].Notes;
+
+            this.membership = data[0].MembershipID;
+
+            this.loadClientActiveMembership();
 
             this.copyConfirm();
           } else {
@@ -248,7 +276,7 @@ export class InvoiceRegisterComponent {
       .pipe(
         finalize(() => {
           this.invoiceDetailLoading = false;
-        })
+        }),
       )
       .subscribe({
         next: (response) => {
@@ -314,21 +342,46 @@ export class InvoiceRegisterComponent {
       if (selectedrow) {
         this.clientID = selectedrow.ClientID;
         this.clientName = selectedrow.Name;
+        this.membership = selectedrow.MembershipID;
+
+        this.loadClientActiveMembership();
         this.loadDoctorLastInstruction();
       }
+    });
+  }
+
+  loadClientActiveMembership() {
+    const model = {
+      ClientID: this.clientID,
+    };
+
+    this.membershipservice.getClientsActiveMembership(model).subscribe({
+      next: (response) => {
+        if (response.status) {
+          this.clientMembershipData = response.data?.data;
+
+          this.membershipChange();
+        } else {
+          console.error('Failed to fetch item summary:', response.message);
+        }
+      },
+      error: (error) => {
+        console.error('Error fetching item summary:', error);
+      },
     });
   }
 
   async openItemAddDialog(
     itemType: string,
     mode: string,
-    row: any
+    row: any,
   ): Promise<void> {
     const isValid = await this.addItemErrorcheck();
     if (!isValid) return;
 
     const param = {
       InvoiceNo: this.invoiceNo,
+      ShopID: this.shopID,
       InvoiceDate: this.invoiceDate,
       ClientID: this.clientID,
       Discount: this.discount,
@@ -425,6 +478,9 @@ export class InvoiceRegisterComponent {
       TransactionID: row?.TransactionID || '',
       PaymentDate: row?.FPaymentDate || '',
       Amount: row?.FAmount || '',
+      MembershipID: this.membership,
+      ClientMembershipData: this.clientMembershipData,
+      OutstandingBalance: this.outstandingBalance,
       Mode: mode,
     };
 
@@ -467,7 +523,7 @@ export class InvoiceRegisterComponent {
       .pipe(
         finalize(() => {
           this.isSubmitting = false;
-        })
+        }),
       )
       .subscribe({
         next: (response) => {
@@ -476,7 +532,7 @@ export class InvoiceRegisterComponent {
               response.data?.data?.[0]?.MessageType === 'error'
                 ? 'Error'
                 : 'Success',
-              response.data?.data?.[0]?.MessageText
+              response.data?.data?.[0]?.MessageText,
             );
           } else {
             this.dialogservice.showMessage('Error', response.message);
@@ -559,8 +615,20 @@ export class InvoiceRegisterComponent {
 
   gotoprint() {
     const url = this.router.serializeUrl(
-      this.router.createUrlTree(['/invoice/invoice-print', this.invoiceNo])
+      this.router.createUrlTree(['/invoice/invoice-print', this.invoiceNo]),
     );
     window.open(url, '_blank');
+  }
+
+  membershipChange() {
+    const selected = this.clientMembershipData.find(
+      (x) => x.MembershipID === this.membership,
+    );
+
+    if (selected) {
+      this.membershipbalance = selected.Balance.toLocaleString();
+    } else {
+      this.membershipbalance = '0';
+    }
   }
 }

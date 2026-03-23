@@ -44,7 +44,19 @@ export class InvoicepaymentDialogComponent {
   invoiceNo: string = this.data.InvoiceNo;
   clientID: string = this.data.ClientID;
   paymentdate: string = this.generalservice.getFormattedDate();
+  membershipID: string = this.data.MembershipID;
+  membershipbalance: string = '0';
+  clientMembershipData: any[] = this.data.ClientMembershipData;
+  outstandingBalance: string = this.data.OutstandingBalance;
+  balance: number = 0;
+
   _amount: number = 0;
+
+  payFrom: string =
+    Number((this.data.MembershipBalance || '0').toString().replace(/,/g, '')) >
+    0
+      ? 'Membership'
+      : 'Normal';
 
   mode: string = '';
 
@@ -62,7 +74,7 @@ export class InvoicepaymentDialogComponent {
   constructor(
     private dialogRef: MatDialogRef<InvoicepaymentDialogComponent>,
     private dialog: MatDialog,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngAfterViewInit(): void {
@@ -90,6 +102,8 @@ export class InvoicepaymentDialogComponent {
         this.flatpickrInstance.setDate(this.paymentdate, true);
       }
     }
+
+    this.membershipChange();
   }
 
   closeDialog(): void {
@@ -109,6 +123,9 @@ export class InvoicepaymentDialogComponent {
       ClientID: this.clientID,
       InvoiceNo: this.invoiceNo,
       PaymentDate: this.paymentdate,
+      PaymentType: this.payFrom,
+      MembershipID:
+        this.payFrom === 'Membership' ? this.data.MembershipID.toString() : '',
       Amount: this.amount,
       Mode: this.mode,
       LoginID: this.generalservice.getLoginID(),
@@ -119,7 +136,7 @@ export class InvoicepaymentDialogComponent {
         if (response.status) {
           this.dialogservice.showMessage(
             'Success',
-            response.data?.data?.[0]?.MessageText
+            response.data?.data?.[0]?.MessageText,
           );
           this.dialogRef.close(true);
         } else {
@@ -156,6 +173,48 @@ export class InvoicepaymentDialogComponent {
       return false;
     }
 
+    if (this.mode === 'Delete') return true; // below error check only for new payment
+
+    const amt: number = Number(this.amount.replace(/,/g, ''));
+    const membal: number = Number(
+      this.membershipbalance.toString().replace(/,/g, ''),
+    );
+    const outbal: number = Number(this.outstandingBalance.replace(/,/g, ''));
+
+    if (amt <= 0) {
+      const htmlContent = `
+              <p>
+                Amount must be greater than zero.
+              </p>
+            `;
+
+      this.dialogservice.showMessage('Error', htmlContent);
+      return false;
+    }
+
+    if (amt > outbal) {
+      const htmlContent = `
+              <p>
+                Amount must be less than or equal Outstanding Balance.
+              </p>
+            `;
+
+      this.dialogservice.showMessage('Error', htmlContent);
+      return false;
+    }
+
+    if (this.payFrom === 'Membership') {
+      if (amt > membal) {
+        const htmlContent = `
+              <p>
+                Amount exceeds Membership Balance.
+              </p>
+            `;
+        this.dialogservice.showMessage('Error', htmlContent);
+        return false;
+      }
+    }
+
     return true;
   }
 
@@ -173,5 +232,17 @@ export class InvoicepaymentDialogComponent {
 
     const result = await firstValueFrom(dialogRef.afterClosed());
     return result === true;
+  }
+
+  membershipChange() {
+    const selected = this.clientMembershipData.find(
+      (x) => x.MembershipID === this.membershipID,
+    );
+
+    if (selected) {
+      this.membershipbalance = selected.Balance.toLocaleString();
+    } else {
+      this.membershipbalance = '0';
+    }
   }
 }

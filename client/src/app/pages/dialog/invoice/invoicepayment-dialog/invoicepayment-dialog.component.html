@@ -38,6 +38,49 @@
         />
       </div>
 
+      @if (clientMembershipData.length) {
+        <!-- Membership -->
+        <label for="txtMembership" class="w150 col-form-label"
+          >Membership:</label
+        >
+        <div class="col-lg-12 col-xl-12 mb10">
+          <select
+            class="form-control form-control-sm"
+            id="ddlMembership"
+            [(ngModel)]="membershipID"
+            name="membership"
+            (change)="membershipChange()"
+          >
+            @for (row of clientMembershipData; track $index) {
+              <option [value]="row.MembershipID">
+                {{
+                  row.MembershipID +
+                    " | " +
+                    row.Description +
+                    " | " +
+                    (row.IsPrimary ? "Primary" : "Member")
+                }}
+              </option>
+            }
+          </select>
+        </div>
+
+        <!-- Membership Balance -->
+        <label for="txtMembership" class="w200 col-form-label"
+          >Membership Amount:</label
+        >
+        <div class="col-lg-12 col-xl-12 mb10">
+          <input
+            type="text"
+            class="form-control form-control-sm text-right"
+            id="txtMembershipBalance"
+            [(ngModel)]="membershipbalance"
+            name="membershipbalance"
+            readonly
+          />
+        </div>
+      }
+
       <!-- Amount -->
       <label for="txtAmount" class="w200 col-form-label">Amount:</label>
       <div class="col-lg-12 col-xl-12 mb10">
@@ -52,6 +95,40 @@
           [readonly]="mode === 'Delete'"
         />
       </div>
+
+      @if (clientMembershipData.length) {
+        <!-- Pay From -->
+        <label class="w200 col-form-label">Payment Type:</label>
+        <div class="col-lg-12 col-xl-12 mb10">
+          <div class="form-check form-check-inline">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="payFrom"
+              id="rdoNormal"
+              value="Normal"
+              [(ngModel)]="payFrom"
+              [disabled]="mode === 'Delete'"
+            />
+            <label class="form-check-label" for="rdoNormal"> Normal </label>
+          </div>
+
+          <div class="form-check form-check-inline">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="payFrom"
+              id="rdoMembership"
+              value="Membership"
+              [(ngModel)]="payFrom"
+              [disabled]="mode === 'Delete'"
+            />
+            <label class="form-check-label" for="rdoMembership">
+              Membership
+            </label>
+          </div>
+        </div>
+      }
     </div>
   </mat-dialog-content>
   <mat-dialog-actions align="end">
@@ -70,7 +147,7 @@
       [ngClass]="{
         'btn-success': mode === 'New',
         'btn-info': mode === 'Edit',
-        'btn-danger': mode === 'Delete'
+        'btn-danger': mode === 'Delete',
       }"
       (click)="save()"
       [disabled]="isSubmitting"
@@ -79,10 +156,10 @@
         mode === "New"
           ? "Save"
           : mode === "Edit"
-          ? "Update"
-          : mode === "Delete"
-          ? "Delete"
-          : "Submit"
+            ? "Update"
+            : mode === "Delete"
+              ? "Delete"
+              : "Submit"
       }}
     </button>
   </mat-dialog-actions>

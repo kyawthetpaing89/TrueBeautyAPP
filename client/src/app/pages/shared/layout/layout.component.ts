@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, HostListener, inject } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatListModule } from '@angular/material/list';
@@ -30,11 +30,34 @@ export class LayoutComponent {
   adminservcie = inject(AdminService);
 
   role: string = this.generalservcie.getUserRole() || '';
+  currentSystem = 1;
+  showSystemList = false;
+
+  systems = [
+    {
+      id: 1,
+      name: 'Shop',
+      route: '/dashboard',
+      icon: 'storefront',
+      background: '#12b7c4',
+    },
+    {
+      id: 2,
+      name: 'Payroll',
+      route: '/payroll/employee/employeelist',
+      icon: 'payments',
+      background: '#6676f1',
+    },
+  ];
 
   constructor(private router: Router) {}
 
   isClientRouteActive(): boolean {
     return this.router.url.startsWith('/client');
+  }
+
+  isMembershipRouteActive(): boolean {
+    return this.router.url.startsWith('/membership');
   }
 
   isAdminRouteActive(): boolean {
@@ -51,5 +74,21 @@ export class LayoutComponent {
 
   logout() {
     this.adminservcie.logout();
+  }
+
+  toggleSystemList() {
+    this.showSystemList = !this.showSystemList;
+  }
+
+  switchSystem(system: any) {
+    this.currentSystem = system.id;
+    this.router.navigate([system.route]);
+    this.showSystemList = false; // hide box after selecting
+  }
+
+  // Listen for clicks anywhere in the document
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: Event) {
+    this.showSystemList = false;
   }
 }

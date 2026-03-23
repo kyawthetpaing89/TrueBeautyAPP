@@ -1,0 +1,78 @@
+import { Component, HostListener, inject } from '@angular/core';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatListModule } from '@angular/material/list';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { RouterModule, Router } from '@angular/router';
+import { MatMenuModule } from '@angular/material/menu';
+import { CommonModule } from '@angular/common';
+import { GeneralService } from '../../../../services/general-service';
+import { AdminService } from '../../../../services/admin-service';
+
+@Component({
+  selector: 'app-layout',
+  imports: [
+    MatSidenavModule,
+    MatToolbarModule,
+    MatListModule,
+    MatIconModule,
+    MatButtonModule,
+    RouterModule,
+    MatMenuModule,
+    CommonModule,
+  ],
+  templateUrl: './layout.component.html',
+  styleUrl: './layout.component.scss',
+})
+export class PayrollLayoutComponent {
+  generalservcie = inject(GeneralService);
+  adminservcie = inject(AdminService);
+
+  role: string = this.generalservcie.getUserRole() || '';
+  currentSystem = 1;
+  showSystemList = false;
+
+  systems = [
+    {
+      id: 1,
+      name: 'Shop',
+      route: '/dashboard',
+      icon: 'storefront',
+      background: '#12b7c4',
+    },
+    {
+      id: 2,
+      name: 'Payroll',
+      route: '/payroll/employee/employeelist',
+      icon: 'payments',
+      background: '#6676f1',
+    },
+  ];
+
+  constructor(private router: Router) {}
+
+  isEmployeeRouteActive(): boolean {
+    return this.router.url.startsWith('/payroll/employee');
+  }
+
+  logout() {
+    this.adminservcie.logout();
+  }
+
+  toggleSystemList() {
+    this.showSystemList = !this.showSystemList;
+  }
+
+  switchSystem(system: any) {
+    this.currentSystem = system.id;
+    this.router.navigate([system.route]);
+    this.showSystemList = false; // hide box after selecting
+  }
+
+  // Listen for clicks anywhere in the document
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: Event) {
+    this.showSystemList = false;
+  }
+}

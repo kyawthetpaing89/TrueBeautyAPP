@@ -10,4 +10,8 @@ class ApiUrls {
   static const String clientchangepassword =
       'client/mobile/clientchangepassword';
   static const String getclientinfo = 'client/mobile/getclientinfo';
+  static const String clientinfoupdate = 'client/mobile/clientinfoupdate';
+
+  //Item
+  static const String getitem = 'item/getclientitem';
 }

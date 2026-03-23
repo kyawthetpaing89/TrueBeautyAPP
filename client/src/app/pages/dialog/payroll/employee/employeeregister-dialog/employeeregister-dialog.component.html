@@ -1,0 +1,153 @@
+<form autocomplete="off">
+  <h3 mat-dialog-title>
+    <span>Employee Register</span>
+    <a (click)="closeDialog()" aria-label="Close">
+      <mat-icon>close</mat-icon>
+    </a>
+  </h3>
+  <mat-dialog-content>
+    <div class="row">
+      <div class="col-lg-12 col-xl-12 mb-3">
+        <label for="txtClientID" class="form-label">EmployeeID</label>
+        <input
+          type="text"
+          class="form-control form-control-sm"
+          readonly
+          id="txtEmployeeID"
+          [(ngModel)]="employeeID"
+          name="employeeID"
+          tabindex="-1"
+        />
+      </div>
+      <div class="col-lg-12 col-xl-12 mb-3">
+        <label for="txtClientName" class="form-label">Name</label>
+        <input
+          type="text"
+          class="form-control form-control-sm"
+          id="txtEmployeeName"
+          [(ngModel)]="employeeName"
+          name="employeeName"
+          [disabled]="mode === 'Delete'"
+          autofocus
+        />
+      </div>
+      <div class="col-lg-12 col-xl-12 mb-3">
+        <label for="ddlPosition" class="form-label">Position</label>
+        <select
+          class="form-control form-control-sm"
+          id="ddlSPOsitoin"
+          [(ngModel)]="positionCD"
+          name="positionCD"
+          [disabled]="mode === 'Delete'"
+        >
+          @for (position of positionData; track position.PositionCD) {
+          <option [value]="position.PositionCD">
+            {{ position.PositionName }}
+          </option>
+          }
+        </select>
+      </div>
+      <div class="col-lg-12 col-xl-12 mb-3">
+        <label for="txtDOB" class="form-label">DOB</label>
+        <input
+          type="text"
+          class="form-control form-control-sm text-center"
+          id="txtDOB"
+          #txtDOB
+          [(ngModel)]="dob"
+          name="DOB"
+          [disabled]="mode === 'Delete'"
+        />
+      </div>
+      <div class="col-lg-12 col-xl-12 mb-3">
+        <label for="txtDOB" class="form-label">Joined Date</label>
+        <input
+          type="text"
+          class="form-control form-control-sm text-center"
+          id="txtJoinedDate"
+          #txtJoinedDate
+          [(ngModel)]="joinedDate"
+          name="joinedDate"
+          [disabled]="mode === 'Delete'"
+        />
+      </div>
+      <div class="col-lg-12 col-xl-12 mb-3">
+        <label for="txtPhoneNo" class="form-label">Phone Number</label>
+        <input
+          type="tel"
+          class="form-control form-control-sm"
+          id="txtPhoneNo"
+          [(ngModel)]="phoneNo"
+          name="PhoneNo"
+          [disabled]="mode === 'Delete'"
+        />
+      </div>
+      <div class="col-lg-12 col-xl-12 mb-3">
+        <label for="txtEmail" class="form-label">Email</label>
+        <input
+          type="text"
+          class="form-control form-control-sm"
+          id="txtEmail"
+          [(ngModel)]="email"
+          name="email"
+          [disabled]="mode === 'Delete'"
+        />
+      </div>
+      <div class="col-lg-12 col-xl-12 mb-3">
+        <label for="txtAddress" class="form-label">Address</label>
+        <textarea
+          id="txtAddress"
+          class="form-control form-control-sm"
+          [(ngModel)]="address"
+          name="Address"
+          [disabled]="mode === 'Delete'"
+        ></textarea>
+      </div>
+      <div class="col-lg-12 col-xl-12 mb-3">
+        <label for="txtSalary" class="form-label">Salary</label>
+        <input
+          type="tel"
+          class="form-control form-control-sm text-right"
+          id="txtSalary"
+          [(ngModel)]="salary"
+          name="Salary"
+          (ngModelChange)="onSalaryChange($event)"
+          (keydown)="generalservice.allowNumbersOnly($event)"
+          [disabled]="mode === 'Delete'"
+        />
+      </div>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button
+      id="btncancel"
+      type="button"
+      (click)="closeDialog()"
+      class="btn w100 btn-dark btn-sm mr5"
+    >
+      Cancel
+    </button>
+    <button
+      type="button"
+      id="btnSaveInvoice"
+      class="btn w100 btn-sm mr5"
+      [ngClass]="{
+        'btn-success': mode === 'New',
+        'btn-info': mode === 'Edit',
+        'btn-danger': mode === 'Delete'
+      }"
+      (click)="save()"
+      [disabled]="isSubmitting"
+    >
+      {{
+        mode === "New"
+          ? "Save"
+          : mode === "Edit"
+          ? "Update"
+          : mode === "Delete"
+          ? "Delete"
+          : "Submit"
+      }}
+    </button>
+  </mat-dialog-actions>
+</form>
