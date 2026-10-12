@@ -55,4 +55,9 @@ namespace server.Models.Membership
     {
         public required string ClientID { get; set; }
     }
+
+    public class MembershipPrintRequestDTO
+    {
+        public required string MembershipID { get; set; }
+    }
 }

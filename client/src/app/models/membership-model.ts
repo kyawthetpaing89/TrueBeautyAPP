@@ -117,3 +117,16 @@ export function membershipclients_process_model(
     ...overrides,
   };
 }
+
+interface membership_print_model {
+  MembershipID: string;
+}
+
+export function membership_print_model(
+  overrides: Partial<membership_print_model> = {},
+): membership_print_model {
+  return {
+    MembershipID: '',
+    ...overrides,
+  };
+}

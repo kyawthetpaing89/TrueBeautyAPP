@@ -130,18 +130,24 @@ export class SalesreportComponent {
       SkinCareAmount: 0,
 
       S1TotalMembershipSales: 0,
+      S1TotalMembershipCashback: 0,
       S1TotalSales: 0,
       S1TotalDiscount: 0,
+      S1TotalMembershipPayment: 0,
       S1TotalPayment: 0,
 
       S2TotalMembershipSales: 0,
+      S2TotalMembershipCashback: 0,
       S2TotalSales: 0,
       S2TotalDiscount: 0,
+      S2TotalMembershipPayment: 0,
       S2TotalPayment: 0,
 
       TotalMembershipSales: 0,
+      TotalMembershipCashback: 0,
       TotalSales: 0,
       TotalDiscount: 0,
+      TotalMembershipPayment: 0,
       TotalPayment: 0,
     };
 
@@ -158,18 +164,24 @@ export class SalesreportComponent {
       t.SkinCareAmount += r.SkinCareAmount;
 
       t.S1TotalMembershipSales += r.S1TotalMembershipSales;
+      t.S1TotalMembershipCashback += r.S1TotalMembershipCashback;
       t.S1TotalSales += r.S1TotalSales;
       t.S1TotalDiscount += r.S1TotalDiscount;
+      t.S1TotalMembershipPayment += r.S1TotalMembershipPayment;
       t.S1TotalPayment += r.S1TotalPayment;
 
       t.S2TotalMembershipSales += r.S2TotalMembershipSales;
+      t.S2TotalMembershipCashback += r.S2TotalMembershipCashback;
       t.S2TotalSales += r.S2TotalSales;
       t.S2TotalDiscount += r.S2TotalDiscount;
+      t.S2TotalMembershipPayment += r.S2TotalMembershipPayment;
       t.S2TotalPayment += r.S2TotalPayment;
 
       t.TotalMembershipSales += r.TotalMembershipSales;
+      t.TotalMembershipCashback += r.TotalMembershipCashback;
       t.TotalSales += r.TotalSales;
       t.TotalDiscount += r.TotalDiscount;
+      t.TotalMembershipPayment += r.TotalMembershipPayment;
       t.TotalPayment += r.TotalPayment;
     }
 

@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link
+      rel="icon"
+      type="image/x-icon"
+      sizes="32x32"
+      href="/assets/system-images/truebeauty_logo.webp"
+    />
+  </head>
+  <body>
+    <div class="printheader">
+      <img src="/assets/system-images/logoheader.webp" />
+      <div class="divinvoice">
+        <label class="colorblack">Membership ID:</label>
+        <label class="invoiceNo colorblack">{{ membershipID }}</label>
+      </div>
+    </div>
+    <div class="clientinfo d-flex">
+      <div
+        class="col-sm-6 col-md-6 col-lg-6 col-xl-6 col-6 d-flex align-items-center"
+      >
+        <div class="infotext">Name:</div>
+        <div class="infovalue">{{ clientName }}</div>
+      </div>
+      <div
+        class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-3 d-flex align-items-center"
+      >
+        <div class="infotext-long">Start Date:</div>
+        <div class="infovalue">
+          {{ generalservice.getFormattedDate(joinedDate) }}
+        </div>
+      </div>
+      <div
+        class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-3 d-flex align-items-center"
+      >
+        <div class="infotext-long">Expired Date:</div>
+        <div class="infovalue">
+          {{ generalservice.getFormattedDate(expiredDate) }}
+        </div>
+      </div>
+    </div>
+    <div class="clientinfo d-flex">
+      <div
+        class="col-sm-9 col-md-9 col-lg-9 col-xl-9 col-9 d-flex align-items-center"
+      >
+        <div class="infotext">Address:</div>
+        <div class="infovalue">{{ address }}</div>
+      </div>
+      <div
+        class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-3 d-flex align-items-center"
+      >
+        <div class="infotext">Phone:</div>
+        <div class="infovalue">{{ phoneNo }}</div>
+      </div>
+    </div>
+    <div class="table">
+      <table class="tblInvoiceDetail table-bordered">
+        <thead>
+          <tr>
+            <th class="text-center">No</th>
+            <th class="text-center">Invoice ID</th>
+            <th class="text-center">Transaction Date</th>
+            <th>Particular</th>
+            <th class="text-right">Qty</th>
+            <th class="text-right">Price</th>
+            <th class="text-right">Discount</th>
+            <th class="text-right">Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Replaced *ngIf and *ngFor with @if and @for blocks -->
+          @if (transactionData.length > 0) {
+            <!-- Display invoice details -->
+            @for (row of transactionData; track i; let i = $index) {
+              <tr [style.background-color]="i % 2 === 0 ? '#FFF' : '#c665671c'">
+                <td class="text-center">{{ i + 1 }}</td>
+                <td class="text-center">{{ row.InvoiceNo }}</td>
+                <td class="text-center">
+                  {{ row.TransactionDate | date: "dd MMM yyyy" }}
+                </td>
+                <td>{{ row.ItemName }}</td>
+                <td class="text-right">{{ row.Quantity }}</td>
+                <td class="text-right">
+                  {{ row.UnitPrice | number: "1.0-0" }}
+                </td>
+                <td class="text-right">
+                  {{
+                    row.DiscountAmount !== 0
+                      ? (row.DiscountAmount | number: "1.0-0")
+                      : ""
+                  }}
+                </td>
+                <td class="text-right">
+                  {{ row.AfterDiscount | number: "1.0-0" }}
+                </td>
+              </tr>
+            }
+          } @else {
+            <!-- If no data -->
+            <tr>
+              <td colspan="5" class="text-center">No data available</td>
+            </tr>
+          }
+        </tbody>
+        <tfoot>
+          <tr>
+            <td class="text-right bold" colspan="7">Balance</td>
+            <td class="text-right bold">
+              {{ totalAfterDiscount | number: "1.0-0" }}
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+    <div class="footer">
+      <hr />
+      <div class="row">
+        <!-- Left Address -->
+        <div class="col-6">
+          <i class="fa-solid fa-location-dot"></i>
+          <label class="bold pl5">
+            No.4, 14th Street, Bet: 80th & 81th Streets, </label
+          ><br />
+
+          <label class="bold pl20">
+            Aung Myay Thar Zan Township, Mandalay </label
+          ><br />
+
+          <i class="fa-solid fa-mobile-screen-button"></i>
+          <label class="bold pl5">09-957222177</label>
+        </div>
+
+        <!-- Right Address -->
+        <div class="col-6 text-end">
+          <i class="fa-solid fa-location-dot"></i>
+          <label class="bold pl5">
+            No. (Zya)4/94, Corner of 109 & 61(B) Streets, </label
+          ><br />
+
+          <label class="bold pl20"> Chan Mya Thar Zi Township, Mandalay </label
+          ><br />
+
+          <i class="fa-solid fa-mobile-screen-button"></i>
+          <label class="bold pl5">09-782827103</label>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

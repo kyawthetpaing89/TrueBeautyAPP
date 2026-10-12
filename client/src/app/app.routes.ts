@@ -23,6 +23,7 @@ import { PayrollLayoutComponent } from './pages/payroll/shared/layout/layout.com
 import { EmployeelistComponent } from './pages/payroll/employee/employeelist/employeelist.component';
 import { MembershipTypelistComponent } from './pages/membership/membership-typelist/membership-typelist.component';
 import { MembershipListComponent } from './pages/membership/membership-list/membership-list.component';
+import { MembershipTransactionPrintComponent } from './pages/membership/membership-transaction-print/membership-transaction-print.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'users/login', pathMatch: 'full' },
@@ -99,6 +100,15 @@ export const routes: Routes = [
         path: 'invoice-print/:invoiceNo',
         component: InvoicePrintComponent,
       }, //Invoice Print
+    ],
+  },
+  {
+    path: 'membership',
+    children: [
+      {
+        path: 'membership-print/:membershipID',
+        component: MembershipTransactionPrintComponent,
+      }, //Membership Print
     ],
   },
   {

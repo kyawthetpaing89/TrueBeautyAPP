@@ -62,12 +62,14 @@ export const ApiUrls = {
     membershiptypeitem_get: 'membership/getmembershiptypeitem',
     membershiptype_process: 'membership/membershiptypeprocess',
     membership_get: 'membership/getmembership',
+    membership_export: 'membership/exportmembership',
     membership_process: 'membership/membershipprocess',
     membershiptransaction_get: 'membership/getmembershiptransaction',
     membershipclients_get: 'membership/getmembershipclients',
     membershipclients_process: 'membership/membershipclientprocess',
     membershipclients_getactivemembership:
       'membership/getclientactivemembership',
+    membershiptransaction_print: 'membership/printmembershiptransaction',
   },
 
   requestType: {

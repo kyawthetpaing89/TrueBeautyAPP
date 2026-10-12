@@ -6,7 +6,7 @@
     <div class="row g-3 mb15">
       <div class="row g-3">
         <div
-          class="col-sm-12 col-md-4 col-lg-3 col-xl-3 d-flex align-items-center"
+          class="col-sm-12 col-md-4 col-lg-5 col-xl-4 d-flex align-items-center"
         >
           <label class="w150">Report Type:</label>
           <div
@@ -63,7 +63,7 @@
           </div>
         </div>
         <div
-          class="col-sm-12 col-md-4 col-lg-4 col-xl-3 d-flex align-items-center radio-group"
+          class="col-sm-12 col-md-4 col-lg-5 col-xl-4 d-flex align-items-center radio-group"
         >
           <label class="w150">Shop:</label>
 
@@ -198,10 +198,10 @@
           <th class="text-center medicine-color" colspan="2">Medicine</th>
           <th class="text-center skincare-color" colspan="2">Skin Care</th>
           @if (shopid === "") {
-            <th class="text-center s1" colspan="4">Shop 1 Total</th>
-            <th class="text-center s2" colspan="4">Shop 2 Total</th>
+            <th class="text-center s1" colspan="6">Shop 1 Total</th>
+            <th class="text-center s2" colspan="6">Shop 2 Total</th>
           }
-          <th class="text-center" colspan="4">Total</th>
+          <th class="text-center" colspan="6">Total</th>
         </tr>
         <tr>
           @if (shopid !== "") {
@@ -217,24 +217,30 @@
           <th class="text-end skincare-color">Amount</th>
           @if (shopid === "") {
             <th class="text-end s1">Membership</th>
+            <th class="text-end s1">Membership Cashback</th>
             <th class="text-end s1">Sales</th>
             <th class="text-end s1">Discount</th>
+            <th class="text-end s1">Member Payment</th>
             <th class="text-end s1">Total Income</th>
             <th class="text-end s2">Membership</th>
+            <th class="text-end s2">Membership Cashback</th>
             <th class="text-end s2">Sales</th>
             <th class="text-end s2">Discount</th>
+            <th class="text-end s2">Member Payment</th>
             <th class="text-end s2">Total Income</th>
           }
           <th class="text-end">Membership</th>
+          <th class="text-end">Membership Cashback</th>
           <th class="text-end">Sales</th>
           <th class="text-end">Discount</th>
+          <th class="text-end">Member Payment</th>
           <th class="text-end">Total Income</th>
         </tr>
       </thead>
       <tbody>
         @if (salesLoading) {
           <tr>
-            <td [attr.colspan]="shopid === '' ? 21 : 15" class="text-center">
+            <td [attr.colspan]="shopid === '' ? 27 : 21" class="text-center">
               <div
                 class="spinner-border spinner-border-sm text-primary"
                 role="status"
@@ -264,36 +270,66 @@
               <td class="text-end">
                 {{ totalRow.S1TotalMembershipSales | number }}
               </td>
+              <td class="text-end">
+                {{ totalRow.S1TotalMembershipCashback | number }}
+              </td>
               <td class="text-end">{{ totalRow.S1TotalSales | number }}</td>
               <td class="text-end">{{ totalRow.S1TotalDiscount | number }}</td>
+              <td class="text-end">
+                {{ totalRow.S1TotalMembershipPayment | number }}
+              </td>
               <td class="text-end">{{ totalRow.S1TotalPayment | number }}</td>
 
               <td class="text-end">
                 {{ totalRow.S2TotalMembershipSales | number }}
               </td>
+              <td class="text-end">
+                {{ totalRow.S2TotalMembershipCashback | number }}
+              </td>
               <td class="text-end">{{ totalRow.S2TotalSales | number }}</td>
               <td class="text-end">{{ totalRow.S2TotalDiscount | number }}</td>
+              <td class="text-end">
+                {{ totalRow.S2TotalMembershipPayment | number }}
+              </td>
               <td class="text-end">{{ totalRow.S2TotalPayment | number }}</td>
 
               <td class="text-end">
                 {{ totalRow.TotalMembershipSales | number }}
               </td>
+              <td class="text-end">
+                {{ totalRow.TotalMembershipCashback | number }}
+              </td>
               <td class="text-end">{{ totalRow.TotalSales | number }}</td>
               <td class="text-end">{{ totalRow.TotalDiscount | number }}</td>
+              <td class="text-end">
+                {{ totalRow.TotalMembershipPayment | number }}
+              </td>
               <td class="text-end">{{ totalRow.TotalPayment | number }}</td>
             } @else if (shopid === "001") {
               <td class="text-end">
                 {{ totalRow.S1TotalMembershipSales | number }}
               </td>
+              <td class="text-end">
+                {{ totalRow.S1TotalMembershipCashback | number }}
+              </td>
               <td class="text-end">{{ totalRow.S1TotalSales | number }}</td>
               <td class="text-end">{{ totalRow.S1TotalDiscount | number }}</td>
+              <td class="text-end">
+                {{ totalRow.S1TotalMembershipPayment | number }}
+              </td>
               <td class="text-end">{{ totalRow.S1TotalPayment | number }}</td>
             } @else {
               <td class="text-end">
                 {{ totalRow.S2TotalMembershipSales | number }}
               </td>
+              <td class="text-end">
+                {{ totalRow.S2TotalMembershipCashback | number }}
+              </td>
               <td class="text-end">{{ totalRow.S2TotalSales | number }}</td>
               <td class="text-end">{{ totalRow.S2TotalDiscount | number }}</td>
+              <td class="text-end">
+                {{ totalRow.S2TotalMembershipPayment | number }}
+              </td>
               <td class="text-end">{{ totalRow.S2TotalPayment | number }}</td>
             }
           </tr>
@@ -319,22 +355,40 @@
                 <td class="text-end">
                   {{ row.S1TotalMembershipSales | number }}
                 </td>
+                <td class="text-end">
+                  {{ row.S1TotalMembershipCashback | number }}
+                </td>
                 <td class="text-end">{{ row.S1TotalSales | number }}</td>
                 <td class="text-end">{{ row.S1TotalDiscount | number }}</td>
+                <td class="text-end">
+                  {{ row.S1TotalMembershipPayment | number }}
+                </td>
                 <td class="text-end">{{ row.S1TotalPayment | number }}</td>
 
                 <td class="text-end">
                   {{ row.S2TotalMembershipSales | number }}
                 </td>
+                <td class="text-end">
+                  {{ row.S2TotalMembershipCashback | number }}
+                </td>
                 <td class="text-end">{{ row.S2TotalSales | number }}</td>
                 <td class="text-end">{{ row.S2TotalDiscount | number }}</td>
+                <td class="text-end">
+                  {{ row.S2TotalMembershipPayment | number }}
+                </td>
                 <td class="text-end">{{ row.S2TotalPayment | number }}</td>
 
                 <td class="text-end">
                   {{ row.TotalMembershipSales | number }}
                 </td>
+                <td class="text-end">
+                  {{ row.TotalMembershipCashback | number }}
+                </td>
                 <td class="text-end">{{ row.TotalSales | number }}</td>
                 <td class="text-end">{{ row.TotalDiscount | number }}</td>
+                <td class="text-end">
+                  {{ row.TotalMembershipPayment | number }}
+                </td>
                 <td class="text-end">
                   <a (click)="openIncomeDetail(row)">{{
                     row.TotalPayment | number
@@ -344,8 +398,14 @@
                 <td class="text-end">
                   {{ row.S1TotalMembershipSales | number }}
                 </td>
+                <td class="text-end">
+                  {{ row.S1TotalMembershipCashback | number }}
+                </td>
                 <td class="text-end">{{ row.S1TotalSales | number }}</td>
                 <td class="text-end">{{ row.S1TotalDiscount | number }}</td>
+                <td class="text-end">
+                  {{ row.S1TotalMembershipPayment | number }}
+                </td>
                 <td class="text-end">
                   <a (click)="openIncomeDetail(row)">{{
                     row.S1TotalPayment | number
@@ -355,8 +415,14 @@
                 <td class="text-end">
                   {{ row.S2TotalMembershipSales | number }}
                 </td>
+                <td class="text-end">
+                  {{ row.S2TotalMembershipCashback | number }}
+                </td>
                 <td class="text-end">{{ row.S2TotalSales | number }}</td>
                 <td class="text-end">{{ row.S2TotalDiscount | number }}</td>
+                <td class="text-end">
+                  {{ row.S2TotalMembershipPayment | number }}
+                </td>
                 <td class="text-end">
                   <a (click)="openIncomeDetail(row)">{{
                     row.S2TotalPayment | number
@@ -367,7 +433,7 @@
           } @empty {
             <tr>
               <td
-                [attr.colspan]="shopid === '' ? 18 : 12"
+                [attr.colspan]="shopid === '' ? 24 : 18"
                 class="text-center text-muted"
               >
                 There is no data to display.

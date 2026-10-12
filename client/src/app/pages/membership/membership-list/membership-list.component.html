@@ -189,6 +189,11 @@
                   <td class="text-right">{{ row.RemainingDays }}</td>
                   <td class="text-right">{{ row.Balance | number }}</td>
                   <td class="text-center">
+                    <a (click)="gotoprint(row.MembershipID)" title="Print"
+                      ><i class="material-icons print fa-xl action-icon me-3"
+                        >local_print_shop</i
+                      ></a
+                    >
                     <a
                       (click)="row.Balance > 0 && openRenewMembership(row)"
                       title="Renew Membership"

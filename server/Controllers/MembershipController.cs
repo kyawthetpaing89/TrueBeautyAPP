@@ -1,3 +1,4 @@
+using ClosedXML.Excel;
 using Dapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -166,6 +167,47 @@ namespace server.Controllers
             {
                 return StatusCode(500, response);
             }
+        }
+
+        [HttpPost("printMembershipTransaction")]
+        [Authorize]
+        public async Task<IActionResult> PrintMembershipTransaction([FromBody] MembershipPrintRequestDTO item)
+        {
+            var parameters = Converter.DtoToParam(item);
+            var response = await _membershipRepo.ExecAsync<object>("truebeauty_MembershipTransaction_Print", parameters, false);
+
+            if (response.Status == true)
+            {
+                return Ok(new ApiResponse<object>(true, "Success!", response));
+            }
+            else
+            {
+                return StatusCode(500, response);
+            }
+        }
+
+        [HttpPost("exportmembership")]
+        [Authorize]
+        public async Task<IActionResult> ExportMembership([FromBody] MembershipGetRequestDTO membership)
+        {
+            var parameters = Converter.DtoToParam(membership);
+            var resultTable = await _membershipRepo.ExecDataTableAsync("truebeauty_Membership_Select", parameters);
+
+
+            using var workbook = new XLWorkbook();
+            var worksheet = workbook.Worksheets.Add(resultTable, "membership");
+
+            worksheet.Columns().AdjustToContents();
+
+            using var stream = new MemoryStream();
+            workbook.SaveAs(stream);
+            stream.Seek(0, SeekOrigin.Begin);
+
+            var fileName = "Membership.xlsx";
+
+            return File(stream.ToArray(),
+                        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                        fileName);
         }
     }
 }

@@ -16,7 +16,7 @@ export class GeneralService {
   constructor(
     private location: Location,
     private router: Router,
-    private titleService: Title
+    private titleService: Title,
   ) {}
 
   setPageTitle(title: string): void {
@@ -141,7 +141,7 @@ export class GeneralService {
 
     try {
       const response = await firstValueFrom(
-        this.clientservice.getClient(model)
+        this.clientservice.getClient(model),
       );
 
       if (response.status) {
@@ -183,14 +183,14 @@ export class GeneralService {
   setCurrentScroll(
     scrollContainer: ElementRef<any> | null,
     renderer: Renderer2,
-    currentScrollTop: any
+    currentScrollTop: any,
   ) {
     if (scrollContainer && scrollContainer.nativeElement) {
       setTimeout(() => {
         renderer.setProperty(
           scrollContainer.nativeElement,
           'scrollTop',
-          currentScrollTop
+          currentScrollTop,
         );
       }, 0);
     }
@@ -199,7 +199,7 @@ export class GeneralService {
     column: string,
     data: any[],
     currentSortAsc: boolean,
-    toggle: boolean = true
+    toggle: boolean = true,
   ): { sortedData: any[]; sortAsc: boolean } {
     const sortAsc = toggle ? !currentSortAsc : currentSortAsc;
 

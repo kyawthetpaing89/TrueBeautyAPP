@@ -264,5 +264,21 @@ export class MembershipListComponent {
     this.loadMembership();
   }
 
-  exportMembership() {}
+  exportMembership() {
+    const model = membership_get_model({
+      MembershipID: this.searchMembershipId,
+      ClientID: this.searchClientIDName,
+      MembershipTypeID: this.searchMembershipType,
+      Status: this.searchStatus,
+    });
+
+    this.membershipservice.membershipExport(model);
+  }
+
+  gotoprint(membershipID: string) {
+    const url = this.router.serializeUrl(
+      this.router.createUrlTree(['/membership/membership-print', membershipID]),
+    );
+    window.open(url, '_blank');
+  }
 }
