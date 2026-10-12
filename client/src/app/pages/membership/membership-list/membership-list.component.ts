@@ -137,7 +137,7 @@ export class MembershipListComponent {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result === true) {
-        this.loadMembership();
+        this.loadMembership
       }
     });
   }
