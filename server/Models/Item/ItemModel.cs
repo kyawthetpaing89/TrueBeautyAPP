@@ -106,10 +106,9 @@ namespace server.Models.Item
         public required string PurchaseID { get; set; }
     }
 
-    public class ItemTopSellingRequestDTO
+    public class ItemStockRequestDTO
     {
-        public string YYYY { get; set; } = string.Empty;
-        public string MM { get; set; } = string.Empty;
-        public required string ReportType { get; set; }
+        public string StockUpdateDateFrom { get; set; } = string.Empty;
+        public string StockUpdateDateTo { get; set; } = string.Empty;
     }
 }

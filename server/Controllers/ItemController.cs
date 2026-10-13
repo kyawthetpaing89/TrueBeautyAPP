@@ -273,5 +273,21 @@ namespace server.Controllers
                 return StatusCode(500, response);
             }
         }
+
+        [HttpPost("getitemstockhistory")]
+        public async Task<IActionResult> GetItemStockHistory([FromBody] ItemStockRequestDTO item)
+        {
+            var parameters = Converter.DtoToParam(item);
+            var response = await _itemRepo.ExecAsync<object>("truebeauty_Stock_Select", parameters, false);
+
+            if (response.Status == true)
+            {
+                return Ok(new ApiResponse<object>(true, "Success!", response));
+            }
+            else
+            {
+                return StatusCode(500, response);
+            }
+        }
     }
 }
