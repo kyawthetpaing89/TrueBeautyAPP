@@ -101,6 +101,14 @@
               <i class="fa-solid fa-layer-group fa-lg"></i> Item Usage
             </a>
           }
+          @if (role === "admin") {
+            <a mat-menu-item routerLink="/items/itemstock">
+              <i class="fa-solid fa-clock-rotate-left fa-lg"></i> Item Stock History
+            </a>
+          }
+          <a mat-menu-item routerLink="/items/itemstockbalance">
+            <i class="fa-solid fa-scale-balanced fa-lg"></i> Item Stock Balance
+          </a>
         </mat-menu>
 
         <a

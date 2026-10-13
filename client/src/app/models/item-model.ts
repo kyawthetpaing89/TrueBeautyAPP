@@ -202,3 +202,65 @@ export function item_getpurchasingpayment_model(
     ...overrides,
   };
 }
+
+interface item_getstockhistory_model {
+  StockUpdateDateFrom: string;
+  StockUpdateDateTo: string;
+}
+
+export function item_getstockhistory_model(
+  overrides: Partial<item_getstockhistory_model> = {}
+): item_getstockhistory_model {
+  return {
+    StockUpdateDateFrom: '',
+    StockUpdateDateTo: '',
+    ...overrides,
+  };
+}
+
+interface item_getstockbalance_model {
+  ShopID: string;
+}
+
+export function item_getstockbalance_model(
+  overrides: Partial<item_getstockbalance_model> = {}
+): item_getstockbalance_model {
+  return {
+    ShopID: '',
+    ...overrides,
+  };
+}
+
+interface item_getstockdetail_model {
+  StockCD: string;
+}
+
+export function item_getstockdetail_model(
+  overrides: Partial<item_getstockdetail_model> = {}
+): item_getstockdetail_model {
+  return {
+    StockCD: '',
+    ...overrides,
+  };
+}
+
+interface item_stockprocess_model {
+  Mode: string;
+  ShopID: string;
+  StockUpdateDate: string;
+  CreatedBy: string;
+  ShopDetailJson: string;
+}
+
+export function item_stockprocess_model(
+  overrides: Partial<item_stockprocess_model> = {}
+): item_stockprocess_model {
+  return {
+    Mode: '',
+    ShopID: '',
+    StockUpdateDate: '',
+    CreatedBy: '',
+    ShopDetailJson: '',
+    ...overrides,
+  };
+}

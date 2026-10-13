@@ -1,0 +1,9 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "tb-client-attach",
+      "url": "http://localhost:4201"
+    }
+  ]
+}

@@ -138,4 +138,36 @@ export class ItemService {
       model
     );
   }
+
+  getItemStockHistory(model: any): Observable<any> {
+    return this.apiservice.request(
+      ApiUrls.endpoints.item_getstockhistory,
+      ApiUrls.requestType.POST,
+      model
+    );
+  }
+
+  getItemStockBalance(model: any): Observable<any> {
+    return this.apiservice.request(
+      ApiUrls.endpoints.item_getstockbalance,
+      ApiUrls.requestType.POST,
+      model
+    );
+  }
+
+  getStockDetail(model: any): Observable<any> {
+    return this.apiservice.request(
+      ApiUrls.endpoints.item_getstockdetail,
+      ApiUrls.requestType.POST,
+      model
+    );
+  }
+
+  itemStockProcess(model: any): Observable<any> {
+    return this.apiservice.request(
+      ApiUrls.endpoints.item_stockprocess,
+      ApiUrls.requestType.POST,
+      model
+    );
+  }
 }

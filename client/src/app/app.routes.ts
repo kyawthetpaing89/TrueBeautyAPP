@@ -15,6 +15,8 @@ import { MyprofileComponent } from './pages/admin/myprofile/myprofile.component'
 import { ItemPurchasingComponent } from './pages/items/item-purchasing/item-purchasing.component';
 import { ItemUsagelistComponent } from './pages/items/item-usagelist/item-usagelist.component';
 import { ItemInventoryComponent } from './pages/items/item-inventory/item-inventory.component';
+import { ItemStockComponent } from './pages/items/item-stock/item-stock.component';
+import { ItemStockBalanceComponent } from './pages/items/item-stock-balance/item-stock-balance.component';
 import { HolidaylistComponent } from './pages/holidays/holidaylist/holidaylist.component';
 import { ClientbookinglistComponent } from './pages/client/clientbookinglist/clientbookinglist.component';
 import { ClientreportComponent } from './pages/report/clientreport/clientreport.component';
@@ -35,6 +37,8 @@ export const routes: Routes = [
       { path: 'itempurchasing', component: ItemPurchasingComponent },
       { path: 'itemusage', component: ItemUsagelistComponent },
       { path: 'iteminventory', component: ItemInventoryComponent },
+      { path: 'itemstock', component: ItemStockComponent },
+      { path: 'itemstockbalance', component: ItemStockBalanceComponent },
     ],
   },
   {

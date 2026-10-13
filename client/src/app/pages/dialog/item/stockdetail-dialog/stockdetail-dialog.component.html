@@ -1,0 +1,70 @@
+<form autocomplete="off">
+  <h3 mat-dialog-title>
+    <span
+      ><i class="material-icons">inventory_2</i> Stock Detail ({{
+        stockCD
+      }})</span
+    >
+    <a (click)="closeDialog()" aria-label="Close">
+      <mat-icon>close</mat-icon>
+    </a>
+  </h3>
+  <mat-dialog-content>
+    <div class="table-responsive-scroll">
+      <table class="table table-striped table-bordered table-sm">
+        <thead class="table-header">
+          <tr>
+            <th class="text-center">Item CD</th>
+            <th>Item Name</th>
+            <th class="text-end">Added Qty</th>
+            <th class="text-end">Final Qty</th>
+          </tr>
+        </thead>
+        <!-- Replaced *ngIf with @if / @else if / @else blocks -->
+        @if (stockDetailLoading) {
+        <tbody>
+          <tr>
+            <td colspan="4" class="text-center">
+              <div
+                class="spinner-border spinner-border-sm text-primary"
+                role="status"
+              ></div>
+              <span class="ms-2">Loading data...</span>
+            </td>
+          </tr>
+        </tbody>
+        } @else if (stockDetailData.length === 0) {
+        <tbody>
+          <tr>
+            <td colspan="4" class="text-center text-muted">
+              There is no data to display.
+            </td>
+          </tr>
+        </tbody>
+        } @else {
+        <tbody>
+          <!-- Replaced *ngFor with @for block. Added a 'track' function for performance. -->
+          @for (data of stockDetailData; track data.ItemCD) {
+          <tr>
+            <td class="text-center">{{ data.ItemCD }}</td>
+            <td>{{ data.ItemName }}</td>
+            <td class="text-end">{{ data.AddedQty | number : "1.0-0" }}</td>
+            <td class="text-end">{{ data.FinalQty | number : "1.0-0" }}</td>
+          </tr>
+          }
+        </tbody>
+        }
+      </table>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button
+      id="btncancel"
+      type="button"
+      (click)="closeDialog()"
+      class="btn w100 btn-dark btn-sm mr5"
+    >
+      Close
+    </button>
+  </mat-dialog-actions>
+</form>

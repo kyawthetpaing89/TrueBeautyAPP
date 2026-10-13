@@ -289,5 +289,53 @@ namespace server.Controllers
                 return StatusCode(500, response);
             }
         }
+
+        [HttpPost("getitemstockbalance")]
+        public async Task<IActionResult> GetItemStockBalance([FromBody] ItemStockBalanceRequestDTO item)
+        {
+            var parameters = Converter.DtoToParam(item);
+            var response = await _itemRepo.ExecAsync<object>("truebeauty_Stock_BalanceSelect", parameters, false);
+
+            if (response.Status == true)
+            {
+                return Ok(new ApiResponse<object>(true, "Success!", response));
+            }
+            else
+            {
+                return StatusCode(500, response);
+            }
+        }
+
+        [HttpPost("getstockdetail")]
+        public async Task<IActionResult> GetStockDetail([FromBody] StockDetailRequestDTO item)
+        {
+            var parameters = Converter.DtoToParam(item);
+            var response = await _itemRepo.ExecAsync<object>("truebeauty_StockDetail_Select", parameters, false);
+
+            if (response.Status == true)
+            {
+                return Ok(new ApiResponse<object>(true, "Success!", response));
+            }
+            else
+            {
+                return StatusCode(500, response);
+            }
+        }
+
+        [HttpPost("stockprocess")]
+        public async Task<IActionResult> StockProcess([FromBody] StockProcessRequestDTO item)
+        {
+            var parameters = Converter.DtoToParam(item);
+            var response = await _itemRepo.ExecAsync<object>("truebeauty_Stock_Process", parameters, false);
+
+            if (response.Status == true)
+            {
+                return Ok(new ApiResponse<object>(true, "Success!", response));
+            }
+            else
+            {
+                return StatusCode(500, response);
+            }
+        }
     }
 }
