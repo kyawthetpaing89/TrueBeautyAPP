@@ -29,7 +29,7 @@ export class ItemStockBalanceComponent {
   itemStockBalanceLoading: boolean = false;
 
   sortAsc: boolean = true;
-  sortColumn: string = 'ItemCD';
+  sortColumn: string = 'Balance';
 
   ngOnInit(): void {
     this.generalservice.setPageTitle('Item Stock Balance');
@@ -89,8 +89,11 @@ export class ItemStockBalanceComponent {
       return this.itemStockBalanceData;
     }
 
-    return this.itemStockBalanceData.filter((row) =>
-      row.ItemCD?.toLowerCase().includes(this.itemCD.toLowerCase())
+    const filter = this.itemCD.toLowerCase();
+    return this.itemStockBalanceData.filter(
+      (row) =>
+        row.ItemCD?.toLowerCase().includes(filter) ||
+        row.ItemName?.toLowerCase().includes(filter)
     );
   }
 
@@ -103,12 +106,16 @@ export class ItemStockBalanceComponent {
     this.loadItemStockBalance();
   }
 
-  openAddStockDialog(): void {
+  openAddStockDialog(row: any): void {
     const dialogRef = this.dialog.open(StockregisterDialogComponent, {
-      data: { ShopID: this.shopid },
-      width: '70%',
+      data: {
+        ShopID: this.shopid,
+        ItemCD: row.ItemCD,
+        ItemName: row.ItemName,
+        Balance: row.Balance,
+      },
+      width: '400px',
       maxWidth: '95vw',
-      maxHeight: '85%',
       autoFocus: false,
       disableClose: true,
     });

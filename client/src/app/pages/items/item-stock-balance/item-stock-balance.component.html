@@ -7,11 +7,11 @@
       <div class="row">
         <div class="col-lg-12 col-xl-12 mb10">
           <div class="row g-3">
-            <!-- Item Code -->
+            <!-- Item Code / Name -->
             <div
               class="col-12 col-md-4 col-lg-4 col-xl-3 d-flex align-items-center"
             >
-              <label for="txtSItemCD" class="w150">Item Code:</label>
+              <label for="txtSItemCD" class="w150">Item Code/Name:</label>
               <input
                 type="text"
                 class="form-control form-control-sm"
@@ -74,18 +74,6 @@
         </button>
       </div>
       <hr />
-      <div class="row mb10">
-        <div class="col-lg-12 col-xl-12 d-flex justify-content-end">
-          <button
-            id="btnAddStock"
-            class="btn btn-sm btn-success w150"
-            type="button"
-            (click)="openAddStockDialog()"
-          >
-            Add Stock
-          </button>
-        </div>
-      </div>
       <div class="table-responsive-scroll">
         <table
           id="tblItemStockBalance"
@@ -93,20 +81,6 @@
         >
           <thead class="table-header">
             <tr>
-              <th class="text-center" (click)="onSort('StockCD')">
-                Stock CD<mat-icon
-                  class="sort-icon float-end"
-                  [ngClass]="{
-                    active: sortColumn === 'StockCD'
-                  }"
-                >
-                  {{
-                    sortColumn === "StockCD" && !sortAsc
-                      ? "keyboard_double_arrow_down"
-                      : "keyboard_double_arrow_up"
-                  }}
-                </mat-icon>
-              </th>
               <th class="text-center" (click)="onSort('ItemCD')">
                 Item Code<mat-icon
                   class="sort-icon float-end"
@@ -135,15 +109,15 @@
                   }}
                 </mat-icon>
               </th>
-              <th class="text-end" (click)="onSort('FinalQty')">
-                Final Qty<mat-icon
+              <th class="text-end" (click)="onSort('TotalQty')">
+                Total Qty<mat-icon
                   class="sort-icon float-end"
                   [ngClass]="{
-                    active: sortColumn === 'FinalQty'
+                    active: sortColumn === 'TotalQty'
                   }"
                 >
                   {{
-                    sortColumn === "FinalQty" && !sortAsc
+                    sortColumn === "TotalQty" && !sortAsc
                       ? "keyboard_double_arrow_down"
                       : "keyboard_double_arrow_up"
                   }}
@@ -163,26 +137,29 @@
                   }}
                 </mat-icon>
               </th>
-              <th class="text-end" (click)="onSort('QtyBalance')">
-                Qty Balance<mat-icon
+              <th class="text-end" (click)="onSort('Balance')">
+                Balance<mat-icon
                   class="sort-icon float-end"
                   [ngClass]="{
-                    active: sortColumn === 'QtyBalance'
+                    active: sortColumn === 'Balance'
                   }"
                 >
                   {{
-                    sortColumn === "QtyBalance" && !sortAsc
+                    sortColumn === "Balance" && !sortAsc
                       ? "keyboard_double_arrow_down"
                       : "keyboard_double_arrow_up"
                   }}
                 </mat-icon>
               </th>
+              @if (userrole === "admin") {
+                <th></th>
+              }
             </tr>
           </thead>
           @if (itemStockBalanceLoading) {
           <tbody>
             <tr>
-              <td colspan="6" class="text-center">
+              <td [attr.colspan]="userrole === 'admin' ? 6 : 5" class="text-center">
                 <div
                   class="spinner-border spinner-border-sm text-primary"
                   role="status"
@@ -194,7 +171,7 @@
           } @else if (filteredItemStockBalanceData.length === 0) {
           <tbody>
             <tr>
-              <td colspan="6" class="text-center text-muted">
+              <td [attr.colspan]="userrole === 'admin' ? 6 : 5" class="text-center text-muted">
                 There is no data to display.
               </td>
             </tr>
@@ -203,18 +180,28 @@
           <tbody>
             @for (row of filteredItemStockBalanceData; track $index) {
             <tr>
-              <td class="text-center align-middle">{{ row.StockCD }}</td>
               <td class="text-center align-middle">{{ row.ItemCD }}</td>
               <td class="align-middle">{{ row.ItemName }}</td>
               <td class="text-end align-middle">
-                {{ row.FinalQty | number : "1.0-0" }}
+                {{ row.TotalQty | number : "1.0-0" }}
               </td>
               <td class="text-end align-middle">
                 {{ row.TotalSold | number : "1.0-0" }}
               </td>
               <td class="text-end align-middle">
-                {{ row.QtyBalance | number : "1.0-0" }}
+                {{ row.Balance | number : "1.0-0" }}
               </td>
+              @if (userrole === "admin") {
+                <td class="text-center align-middle">
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-success"
+                    (click)="openAddStockDialog(row)"
+                  >
+                    Add Stock
+                  </button>
+                </td>
+              }
             </tr>
             }
           </tbody>

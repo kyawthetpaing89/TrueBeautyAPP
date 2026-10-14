@@ -247,9 +247,9 @@ export function item_getstockdetail_model(
 interface item_stockprocess_model {
   Mode: string;
   ShopID: string;
-  StockUpdateDate: string;
+  ItemCD: string;
+  AddedQty: string;
   CreatedBy: string;
-  ShopDetailJson: string;
 }
 
 export function item_stockprocess_model(
@@ -258,9 +258,9 @@ export function item_stockprocess_model(
   return {
     Mode: '',
     ShopID: '',
-    StockUpdateDate: '',
+    ItemCD: '',
+    AddedQty: '',
     CreatedBy: '',
-    ShopDetailJson: '',
     ...overrides,
   };
 }

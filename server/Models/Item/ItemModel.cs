@@ -133,8 +133,8 @@ namespace server.Models.Item
     {
         public string Mode { get; set; } = string.Empty;
         public string ShopID { get; set; } = string.Empty;
-        public string StockUpdateDate { get; set; } = string.Empty;
+        public string ItemCD { get; set; } = string.Empty;
+        public string AddedQty { get; set; } = string.Empty;
         public string CreatedBy { get; set; } = string.Empty;
-        public string ShopDetailJson { get; set; } = string.Empty;
     }
 }
