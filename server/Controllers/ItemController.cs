@@ -274,11 +274,10 @@ namespace server.Controllers
             }
         }
 
-        [HttpPost("getitemstockhistory")]
-        public async Task<IActionResult> GetItemStockHistory([FromBody] ItemStockRequestDTO item)
+        [HttpGet("getitemstockhistory")]
+        public async Task<IActionResult> GetItemStockHistory()
         {
-            var parameters = Converter.DtoToParam(item);
-            var response = await _itemRepo.ExecAsync<object>("truebeauty_Stock_Select", parameters, false);
+            var response = await _itemRepo.ExecAsync<object>("truebeauty_Stock_Select", new DynamicParameters(), false);
 
             if (response.Status == true)
             {

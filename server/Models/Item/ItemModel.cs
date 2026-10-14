@@ -113,12 +113,6 @@ namespace server.Models.Item
         public required string ReportType { get; set; }
     }
 
-    public class ItemStockRequestDTO
-    {
-        public string StockUpdateDateFrom { get; set; } = string.Empty;
-        public string StockUpdateDateTo { get; set; } = string.Empty;
-    }
-
     public class ItemStockBalanceRequestDTO
     {
         public string ShopID { get; set; } = string.Empty;
@@ -134,7 +128,7 @@ namespace server.Models.Item
         public string Mode { get; set; } = string.Empty;
         public string ShopID { get; set; } = string.Empty;
         public string ItemCD { get; set; } = string.Empty;
-        public string AddedQty { get; set; } = string.Empty;
+        public int AddedQty { get; set; }
         public string CreatedBy { get; set; } = string.Empty;
     }
 }

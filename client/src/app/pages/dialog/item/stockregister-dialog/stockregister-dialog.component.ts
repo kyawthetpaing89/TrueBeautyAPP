@@ -30,7 +30,7 @@ export class StockregisterDialogComponent {
   itemCD: string = this.data.ItemCD;
   itemName: string = this.data.ItemName;
   balance: number = this.data.Balance || 0;
-  addedQty: string = '';
+  addedQty: number | null = null;
 
   isSubmitting: boolean = false;
 
@@ -48,7 +48,7 @@ export class StockregisterDialogComponent {
   }
 
   get newBalance(): number {
-    return this.balance + (Number(this.addedQty) || 0);
+    return this.balance + (this.addedQty || 0);
   }
 
   closeDialog(): void {
@@ -64,7 +64,7 @@ export class StockregisterDialogComponent {
       Mode: 'New',
       ShopID: this.shopid,
       ItemCD: this.itemCD,
-      AddedQty: this.addedQty,
+      AddedQty: this.addedQty ?? 0,
       CreatedBy: this.generalservice.getLoginID(),
     });
 

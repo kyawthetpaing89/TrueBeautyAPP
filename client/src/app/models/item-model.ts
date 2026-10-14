@@ -203,21 +203,6 @@ export function item_getpurchasingpayment_model(
   };
 }
 
-interface item_getstockhistory_model {
-  StockUpdateDateFrom: string;
-  StockUpdateDateTo: string;
-}
-
-export function item_getstockhistory_model(
-  overrides: Partial<item_getstockhistory_model> = {}
-): item_getstockhistory_model {
-  return {
-    StockUpdateDateFrom: '',
-    StockUpdateDateTo: '',
-    ...overrides,
-  };
-}
-
 interface item_getstockbalance_model {
   ShopID: string;
 }
@@ -248,7 +233,7 @@ interface item_stockprocess_model {
   Mode: string;
   ShopID: string;
   ItemCD: string;
-  AddedQty: string;
+  AddedQty: number;
   CreatedBy: string;
 }
 
@@ -259,7 +244,7 @@ export function item_stockprocess_model(
     Mode: '',
     ShopID: '',
     ItemCD: '',
-    AddedQty: '',
+    AddedQty: 0,
     CreatedBy: '',
     ...overrides,
   };

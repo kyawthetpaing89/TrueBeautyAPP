@@ -139,11 +139,10 @@ export class ItemService {
     );
   }
 
-  getItemStockHistory(model: any): Observable<any> {
+  getItemStockHistory(): Observable<any> {
     return this.apiservice.request(
       ApiUrls.endpoints.item_getstockhistory,
-      ApiUrls.requestType.POST,
-      model
+      ApiUrls.requestType.GET
     );
   }
 
