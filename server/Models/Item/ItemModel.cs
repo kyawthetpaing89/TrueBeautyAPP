@@ -131,4 +131,9 @@ namespace server.Models.Item
         public int AddedQty { get; set; }
         public string CreatedBy { get; set; } = string.Empty;
     }
+
+    public class StockClosingProcessRequestDTO
+    {
+        public string CreatedBy { get; set; } = string.Empty;
+    }
 }

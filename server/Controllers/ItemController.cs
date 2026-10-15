@@ -305,6 +305,28 @@ namespace server.Controllers
             }
         }
 
+        [HttpPost("exportstockbalance")]
+        public async Task<IActionResult> ExportStockBalance([FromBody] ItemStockBalanceRequestDTO item)
+        {
+            var parameters = Converter.DtoToParam(item);
+            var resultTable = await _itemRepo.ExecDataTableAsync("truebeauty_Stock_BalanceSelect", parameters);
+
+            using var workbook = new XLWorkbook();
+            var worksheet = workbook.Worksheets.Add(resultTable, "StockBalance");
+
+            worksheet.Columns().AdjustToContents();
+
+            using var stream = new MemoryStream();
+            workbook.SaveAs(stream);
+            stream.Seek(0, SeekOrigin.Begin);
+
+            var fileName = "StockBalance.xlsx";
+
+            return File(stream.ToArray(),
+                        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                        fileName);
+        }
+
         [HttpPost("getstockdetail")]
         public async Task<IActionResult> GetStockDetail([FromBody] StockDetailRequestDTO item)
         {
@@ -325,7 +347,23 @@ namespace server.Controllers
         public async Task<IActionResult> StockProcess([FromBody] StockProcessRequestDTO item)
         {
             var parameters = Converter.DtoToParam(item);
-            var response = await _itemRepo.ExecAsync<object>("truebeauty_Stock_Process", parameters, false);
+            var response = await _itemRepo.ExecAsync<object>("truebeauty_Stock_Process", parameters, true);
+
+            if (response.Status == true)
+            {
+                return Ok(new ApiResponse<object>(true, "Success!", response));
+            }
+            else
+            {
+                return StatusCode(500, response);
+            }
+        }
+
+        [HttpPost("stockclosingprocess")]
+        public async Task<IActionResult> StockClosingProcess([FromBody] StockClosingProcessRequestDTO item)
+        {
+            var parameters = Converter.DtoToParam(item);
+            var response = await _itemRepo.ExecAsync<object>("truebeauty_StockClosing_Process", parameters, true);
 
             if (response.Status == true)
             {

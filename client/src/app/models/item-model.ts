@@ -249,3 +249,16 @@ export function item_stockprocess_model(
     ...overrides,
   };
 }
+
+interface item_stockclosingprocess_model {
+  CreatedBy: string;
+}
+
+export function item_stockclosingprocess_model(
+  overrides: Partial<item_stockclosingprocess_model> = {}
+): item_stockclosingprocess_model {
+  return {
+    CreatedBy: '',
+    ...overrides,
+  };
+}

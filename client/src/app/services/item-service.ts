@@ -154,6 +154,34 @@ export class ItemService {
     );
   }
 
+  exportItemStockBalance(model: any) {
+    this.apiservice
+      .downloadFile(ApiUrls.endpoints.item_exportstockbalance, model)
+      .subscribe((blob) => {
+        const a = document.createElement('a');
+        const objectUrl = URL.createObjectURL(blob);
+        a.href = objectUrl;
+
+        const now = new Date();
+
+        const pad = (n: number) => n.toString().padStart(2, '0');
+
+        const timestamp = [
+          pad(now.getDate()),
+          pad(now.getMonth() + 1),
+          now.getFullYear(),
+          pad(now.getHours()),
+          pad(now.getMinutes()),
+          pad(now.getSeconds()),
+        ].join('');
+
+        a.download = `stockbalance_${timestamp}.xlsx`;
+        a.click();
+
+        URL.revokeObjectURL(objectUrl);
+      });
+  }
+
   getStockDetail(model: any): Observable<any> {
     return this.apiservice.request(
       ApiUrls.endpoints.item_getstockdetail,
@@ -165,6 +193,14 @@ export class ItemService {
   itemStockProcess(model: any): Observable<any> {
     return this.apiservice.request(
       ApiUrls.endpoints.item_stockprocess,
+      ApiUrls.requestType.POST,
+      model
+    );
+  }
+
+  itemStockClosingProcess(model: any): Observable<any> {
+    return this.apiservice.request(
+      ApiUrls.endpoints.item_stockclosingprocess,
       ApiUrls.requestType.POST,
       model
     );
